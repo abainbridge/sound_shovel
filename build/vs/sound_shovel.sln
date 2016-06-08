@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sound_shovel", "sound_shovel.vcxproj", "{3800C23A-715F-455D-B468-10FABC616620}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C} = {0DD52A68-E8AA-418A-A4A1-D09E74C6934C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "deadfrog-lib", "..\..\..\deadfrog-lib\build\vs\deadfrog-lib.vcxproj", "{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3800C23A-715F-455D-B468-10FABC616620}.Debug|x64.ActiveCfg = Debug|x64
+		{3800C23A-715F-455D-B468-10FABC616620}.Debug|x64.Build.0 = Debug|x64
+		{3800C23A-715F-455D-B468-10FABC616620}.Debug|x86.ActiveCfg = Debug|Win32
+		{3800C23A-715F-455D-B468-10FABC616620}.Debug|x86.Build.0 = Debug|Win32
+		{3800C23A-715F-455D-B468-10FABC616620}.Release|x64.ActiveCfg = Release|x64
+		{3800C23A-715F-455D-B468-10FABC616620}.Release|x64.Build.0 = Release|x64
+		{3800C23A-715F-455D-B468-10FABC616620}.Release|x86.ActiveCfg = Release|Win32
+		{3800C23A-715F-455D-B468-10FABC616620}.Release|x86.Build.0 = Release|Win32
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Debug|x64.ActiveCfg = Debug|x64
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Debug|x64.Build.0 = Debug|x64
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Debug|x86.ActiveCfg = Debug|Win32
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Debug|x86.Build.0 = Debug|Win32
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Release|x64.ActiveCfg = Release|x64
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Release|x64.Build.0 = Release|x64
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Release|x86.ActiveCfg = Release|Win32
+		{0DD52A68-E8AA-418A-A4A1-D09E74C6934C}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
