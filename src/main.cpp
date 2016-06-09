@@ -81,38 +81,35 @@ void CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min
 
     const unsigned lut_item_boundary_mask = SoundBlock::SAMPLES_PER_LUT_ITEM - 1;
 
-    // For each block we need to consider...
-    while (block && num_samples)
+    // Do the slow bit at the start of the range.
     {
-        // Do the slow bit at the start of the range.
+        unsigned num_samples_to_next_lut_item_boundary = (SoundBlock::SAMPLES_PER_LUT_ITEM - idx) & lut_item_boundary_mask;
+        unsigned num_slow_samples = num_samples_to_next_lut_item_boundary;
+        if (num_slow_samples > num_samples)
+            num_slow_samples = num_samples;
+
+        unsigned end_idx = idx + num_slow_samples;
+        while (idx < end_idx)
         {
-            unsigned num_samples_to_next_lut_item_boundary = (SoundBlock::SAMPLES_PER_LUT_ITEM - idx) & lut_item_boundary_mask;
-            unsigned num_slow_samples = num_samples_to_next_lut_item_boundary;
-            if (num_slow_samples > num_samples)
-                num_slow_samples = num_samples;
-
-            unsigned end_idx = idx + num_slow_samples;
-            while (idx < end_idx)
-            {
-                _min = MIN(block->m_samples[idx], _min);
-                _max = MAX(block->m_samples[idx], _max);
-                idx++;
-            }
-
-            num_samples -= num_slow_samples;
+            _min = MIN(block->m_samples[idx], _min);
+            _max = MAX(block->m_samples[idx], _max);
+            idx++;
         }
 
-        if (num_samples == 0)
-            break;
+        num_samples -= num_slow_samples;
+    }
 
+    // Do the fast bit
+    while (block && num_samples > SoundBlock::SAMPLES_PER_LUT_ITEM)
+    {
         if (idx == block->m_len)
         {
             block = block->m_next;
+            if (!block)
+                break;
             idx = 0;
-            continue;
         }
 
-        // Do the fast bit
         {
             // Cases here:
             // 1. There is one or more LUT items in this block that we can use.
@@ -143,27 +140,26 @@ void CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min
 
             idx += num_lut_items_to_use * SoundBlock::SAMPLES_PER_LUT_ITEM;
         }
+    }
 
-        if (idx >= block->m_len)
+    if (idx == block->m_len)
+    {
+        block = block->m_next;
+        idx = 0;
+    }
+
+    // Do the slow bit at the end of the range.
+    if (block)
+    {
+        // Cases here:
+        // 1. Not at end of block and num_samples less than next LUT item boundary.
+
+        unsigned end_idx = idx + num_samples;
+        while (idx < end_idx)
         {
-            block = block->m_next;
-            continue;
-        }
-
-        // Do the slow bit at the end of the range.
-        {
-            // Cases here:
-            // 1. Not at end of block and num_samples less than next LUT item boundary.
-
-            unsigned end_idx = idx + num_samples;
-            while (idx < end_idx)
-            {
-                _min = MIN(block->m_samples[idx], _min);
-                _max = MAX(block->m_samples[idx], _max);
-                idx++;
-            }
-
-            break;
+            _min = MIN(block->m_samples[idx], _min);
+            _max = MAX(block->m_samples[idx], _max);
+            idx++;
         }
     }
 
@@ -177,14 +173,10 @@ void CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min
 
 void CalcDisplayData(int16_t *mins, int16_t *maxes, unsigned width_in_pixels, SoundBlock *first_block, unsigned samples_per_pixel)
 {
-    double start_time = GetHighResTime();
     SoundPos pos(first_block, 0);
 
     for (unsigned x = 0; x < width_in_pixels; x++)
         CalcMinMaxForRange(&pos, samples_per_pixel, mins + x, maxes + x);
-
-    double end_time = GetHighResTime();
-    DebugOut("Time taken: %.3f\n", end_time - start_time);
 }
 
 
@@ -195,7 +187,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     SoundBlock *first = new SoundBlock;
     SoundBlock *current = first;
-    unsigned num_blocks = 80;
+    unsigned num_blocks = 2637; // 2 hours @ 48 kHz.
     for (int i = 0; i < num_blocks; i++)
     {
         current->m_next = new SoundBlock;
@@ -213,8 +205,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     int16_t *display_mins = new int16_t[win_width];
     int16_t *display_maxes = new int16_t[win_width];
 
-    CalcDisplayData(display_mins, display_maxes, win_width, first, h_zoom_ratio);
-
     RGBAColour sound_colour = Colour(40, 40, 255);
 
     while (!g_window->windowClosed && !g_inputManager.keyDowns[KEY_ESC])
@@ -222,18 +212,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         ClearBitmap(g_window->bmp, g_colourBlack);
         InputManagerAdvance();
 
-//         SoundIterator it(first, 0);
-//         for (unsigned x = 0; x < win_width; x++)
-//         {
-//             unsigned start_idx = x * h_zoom_ratio;
-//             unsigned end_idx = (x + 1) * h_zoom_ratio - 1;
-//             int num_samples_this_pixel = end_idx - start_idx + 1;
-//             for (int i = 0; i < num_samples_this_pixel; i++)
-//             {
-//                 int16_t sample = it.GetNextSample();
-//                 PutPix(g_window->bmp, x, y_mid + sample * v_zoom_ratio, sound_colour);
-//             }
-//         }
+        double start_time = GetHighResTime();
+        CalcDisplayData(display_mins, display_maxes, win_width, first, h_zoom_ratio);
+        double end_time = GetHighResTime();
+        DebugOut("Time taken: %.4f\n", end_time - start_time);
+
         for (unsigned x = 0; x < win_width; x++)
         {
             int vline_len = (display_maxes[x] - display_mins[x]) * v_zoom_ratio;
@@ -242,8 +225,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
         HLine(g_window->bmp, 0, win_height / 2, win_width, Colour(255, 255, 255, 60));
 
-        // Draw frames per second counter
-        DrawTextRight(font, g_colourWhite, g_window->bmp, g_window->bmp->width - 5, 0, "FPS:%i", g_window->fps);
+        // Display time taken to calc display buffer
+        DrawTextRight(font, g_colourWhite, g_window->bmp, g_window->bmp->width - 5, 0, "Calc time (ms):%3.1f", (end_time - start_time) * 1000.0);
 
         UpdateWin();
         SleepMillisec(10);
