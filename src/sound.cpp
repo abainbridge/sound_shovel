@@ -55,6 +55,23 @@ unsigned Sound::GetLength()
     return len;
 }
 
+
+Sound::SoundPos Sound::GetSoundPosFromSampleIdx(int sample_idx)
+{
+    int block_idx = 0;
+    
+    while (sample_idx > m_blocks[block_idx]->m_len)
+    {
+        sample_idx -= m_blocks[block_idx]->m_len;
+        block_idx++;
+        if (block_idx > m_blocks.Size())
+            return SoundPos(-1, -1);
+    }
+
+    return SoundPos(block_idx, sample_idx);
+}
+
+
 void Sound::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max)
 {
     SampleBlock *block = m_blocks[pos->m_block_idx];
@@ -161,10 +178,19 @@ void Sound::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *res
 }
 
 
-void Sound::CalcDisplayData(unsigned start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, unsigned samples_per_pixel)
+void Sound::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, unsigned samples_per_pixel)
 {
-    SoundPos pos(0, 0);
+    SoundPos pos = GetSoundPosFromSampleIdx(start_sample_idx);
 
     for (unsigned x = 0; x < width_in_pixels; x++)
+    {
         CalcMinMaxForRange(&pos, samples_per_pixel, mins + x, maxes + x);
+        if (x > 0)
+        {
+            if (mins[x] > maxes[x - 1])
+                mins[x] = maxes[x - 1] + 1;
+            if (maxes[x] < mins[x - 1])
+                maxes[x] = mins[x - 1] - 1;
+        }
+    }
 }

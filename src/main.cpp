@@ -17,7 +17,7 @@
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	CreateWin(800, 600, WT_WINDOWED, "Sound Shovel");
+	CreateWin(1000, 600, WT_WINDOWED, "Sound Shovel");
     TextRenderer *font = CreateTextRenderer("Lucida Console", 10, 4);
 
 //     SoundBlock *first = new SoundBlock;
@@ -36,8 +36,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     unsigned win_width = g_window->bmp->width;
     unsigned win_height = g_window->bmp->height;
     unsigned total_len = sound.GetLength();
-    double zoom = 1.0;
-    double h_zoom_ratio = zoom * (double)total_len / (double)win_width;
+    double h_zoom_ratio = (double)total_len / (double)win_width;
+    int  h_offset = 0;
     double v_zoom_ratio = (double)win_height / 1e5;
     int y_mid = win_height / 2;
 
@@ -53,29 +53,51 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
         if (g_inputManager.mouseVelZ != 0)
         {
+            double const ZOOM_INCREMENT = 1.2;
             if (g_inputManager.mouseVelZ < 0)
-                zoom *= 1.5;
+            {
+                if (h_zoom_ratio * win_width < total_len)
+                {
+                    h_offset -= (ZOOM_INCREMENT - 1.0) / 2.0 * win_width * h_zoom_ratio;
+                    h_zoom_ratio *= ZOOM_INCREMENT;
+                }
+            }
             else
-                zoom /= 1.5;
-
-            h_zoom_ratio = zoom * (double)total_len / (double)win_width;
+            {
+                if (int(h_zoom_ratio) > 1)
+                {
+                    h_offset += (1.0 - 1.0/ZOOM_INCREMENT) / 2.0 * win_width * h_zoom_ratio;
+                    h_zoom_ratio /= ZOOM_INCREMENT;
+                }
+            }
         }
 
+        if (g_inputManager.mmb && g_inputManager.mouseVelX)
+        {
+            h_offset -= g_inputManager.mouseVelX * h_zoom_ratio;
+        }
+
+        if (h_offset < 0)
+            h_offset = 0;
+
         double start_time = GetHighResTime();
-        sound.CalcDisplayData(0, display_mins, display_maxes, win_width, h_zoom_ratio);
+        sound.CalcDisplayData(h_offset, display_mins, display_maxes, win_width, h_zoom_ratio);
         double end_time = GetHighResTime();
         DebugOut("Time taken: %.4f\n", end_time - start_time);
 
+        int prev_y = y_mid;
         for (unsigned x = 0; x < win_width; x++)
         {
-            int vline_len = (display_maxes[x] - display_mins[x]) * v_zoom_ratio;
-            VLine(g_window->bmp, x, y_mid - display_maxes[x] * v_zoom_ratio, vline_len, sound_colour);
+           int vline_len = (display_maxes[x] - display_mins[x]) * v_zoom_ratio;
+           VLine(g_window->bmp, x, y_mid - display_maxes[x] * v_zoom_ratio, vline_len, sound_colour);
         }
 
         HLine(g_window->bmp, 0, win_height / 2, win_width, Colour(255, 255, 255, 60));
 
         // Display time taken to calc display buffer
         DrawTextRight(font, g_colourWhite, g_window->bmp, g_window->bmp->width - 5, 0, "Calc time (ms):%3.1f", (end_time - start_time) * 1000.0);
+
+        DrawTextRight(font, g_colourWhite, g_window->bmp, g_window->bmp->width - 5, win_height - 20, "Zoom: %.1f", h_zoom_ratio);
 
         UpdateWin();
         SleepMillisec(10);
