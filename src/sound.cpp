@@ -5,6 +5,7 @@
 #include "df_hi_res_time.h"
 
 // Standard headers
+#include <math.h>
 #include <stdio.h>
 
 
@@ -94,8 +95,6 @@ SampleBlock *Sound::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
             // Yes
             pos->m_sample_idx += num_samples;
             num_samples = 0;
-
-            ReleaseAssert(pos->m_sample_idx < block->m_len, "kjhkjh");
         }
         else
         {
@@ -215,15 +214,25 @@ void Sound::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *res
 }
 
 
-void Sound::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, unsigned samples_per_pixel)
+void Sound::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, double samples_per_pixel)
 {
     SoundPos pos = GetSoundPosFromSampleIdx(start_sample_idx);
 
+    double width_error_per_pixel = samples_per_pixel - floorf(samples_per_pixel);
+    double error = 0;
     for (unsigned x = 0; x < width_in_pixels; x++)
     {
         if (pos.m_block_idx < m_blocks.Size())
         {
-            CalcMinMaxForRange(&pos, samples_per_pixel, mins + x, maxes + x);
+            int samples_this_pixel = samples_per_pixel;
+            if (error > 1.0)
+            {
+                samples_this_pixel++;
+                error -= 1.0;
+            }
+            error += width_error_per_pixel;
+
+            CalcMinMaxForRange(&pos, samples_this_pixel, mins + x, maxes + x);
 
             // On all but the first iteration of the loop, make vline join onto
             // the previous, so no gaps are visible.
