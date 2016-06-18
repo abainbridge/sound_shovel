@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
+    <ClCompile Include="..\..\src\sound_view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\df_lib_plus_plus\llist.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound.h" />
+    <ClInclude Include="..\..\src\sound_view.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3800C23A-715F-455D-B468-10FABC616620}</ProjectGuid>

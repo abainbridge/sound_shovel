@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
+    <ClCompile Include="..\..\src\sound_view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -15,5 +16,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\sound.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
+    <ClInclude Include="..\..\src\sound_view.h" />
   </ItemGroup>
 </Project>
