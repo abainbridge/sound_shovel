@@ -85,11 +85,10 @@ void SoundView::Render(BitmapRGBA *bmp)
     double v_zoom_ratio = (double)bmp->height / 1e5;
     int y_mid = bmp->height / 2;
 
-    RGBAColour sound_colour = Colour(40, 40, 255);
+    RGBAColour sound_colour = Colour(80, 80, 240);
     double start_time = GetHighResTime();
     m_sound->CalcDisplayData(m_h_offset, m_display_mins, m_display_maxes, m_display_width, m_h_zoom_ratio);
     double end_time = GetHighResTime();
-    DebugOut("Time taken: %.4f\n", end_time - start_time);
 
     int prev_y = y_mid;
     for (unsigned x = 0; x < m_display_width; x++)

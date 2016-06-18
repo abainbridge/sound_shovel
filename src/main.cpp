@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     while (!g_window->windowClosed && !g_inputManager.keyDowns[KEY_ESC])
     {
-        ClearBitmap(g_window->bmp, g_colourBlack);
+        ClearBitmap(g_window->bmp, Colour(50, 50, 50));
         InputManagerAdvance();
 
         sound_view.Advance();
