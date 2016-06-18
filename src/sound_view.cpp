@@ -57,7 +57,7 @@ void SoundView::Advance()
         }
         else
         {
-            if (int(m_h_zoom_ratio) > 1)
+            if (m_h_zoom_ratio > 1.0)
             {
                 m_h_offset += (1.0 - 1.0 / ZOOM_INCREMENT) / 2.0 * m_display_width * m_h_zoom_ratio;
                 m_h_zoom_ratio /= ZOOM_INCREMENT;
