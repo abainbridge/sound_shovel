@@ -26,6 +26,7 @@ private:
     };
 
     SoundPos GetSoundPosFromSampleIdx(int sample_idx);
+    SampleBlock *IncrementSoundPos(SoundPos *pos, int64_t num_samples);
     void CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max);
 
 public:
