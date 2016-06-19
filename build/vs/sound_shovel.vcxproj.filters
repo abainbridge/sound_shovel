@@ -4,6 +4,7 @@
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
     <ClCompile Include="..\..\src\sound_view.cpp" />
+    <ClCompile Include="..\..\src\sample_block.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
