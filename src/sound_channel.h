@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 
-class Sound
+class SoundChannel
 {
 private:
     struct SoundPos

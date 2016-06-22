@@ -1,5 +1,5 @@
 // Own header
-#include "sound.h"
+#include "sound_channel.h"
 
 // Contrib headers
 #include "df_hi_res_time.h"
@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 
-bool Sound::LoadWav(char const *filename)
+bool SoundChannel::LoadWav(char const *filename)
 {
     double start_time = GetHighResTime();
 
@@ -48,7 +48,7 @@ bool Sound::LoadWav(char const *filename)
 }
 
 
-unsigned Sound::GetLength()
+unsigned SoundChannel::GetLength()
 {
     unsigned len = 0;
     for (int i = 0; i < m_blocks.Size(); i++)
@@ -57,7 +57,7 @@ unsigned Sound::GetLength()
 }
 
 
-Sound::SoundPos Sound::GetSoundPosFromSampleIdx(int sample_idx)
+SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int sample_idx)
 {
     int block_idx = 0;
     
@@ -78,7 +78,7 @@ Sound::SoundPos Sound::GetSoundPosFromSampleIdx(int sample_idx)
 //
 // Returns a pointer to the block we end on, or NULL if we go off the end of the
 // Sound.
-SampleBlock *Sound::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
+SampleBlock *SoundChannel::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
 {
     if (pos->m_block_idx >= m_blocks.Size())
         return NULL;
@@ -111,7 +111,7 @@ SampleBlock *Sound::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
 }
 
 
-void Sound::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max)
+void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max)
 {
     // If pos is entirely outside the bounds of the sample, then we set result_min and result_max to zero.
     if (pos->m_block_idx >= m_blocks.Size())
@@ -214,7 +214,7 @@ void Sound::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *res
 }
 
 
-void Sound::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, double samples_per_pixel)
+void SoundChannel::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, double samples_per_pixel)
 {
     SoundPos pos = GetSoundPosFromSampleIdx(start_sample_idx);
 

@@ -5,7 +5,7 @@
 
 
 struct BitmapRGBA;
-class Sound;
+class SoundChannel;
 
 
 class SoundView
@@ -14,7 +14,7 @@ private:
     void UpdateDisplaySize(int pixelWidth);
 
 public:
-    Sound *m_sound;
+    SoundChannel *m_sound;
 
     int64_t m_h_offset;
 
@@ -24,7 +24,7 @@ public:
 
     double m_h_zoom_ratio;
 
-    SoundView(Sound *sound);
+    SoundView(SoundChannel *sound);
 
     void Advance();
     void Render(BitmapRGBA *bmp);

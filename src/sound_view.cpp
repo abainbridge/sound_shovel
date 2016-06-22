@@ -2,7 +2,7 @@
 #include "sound_view.h"
 
 // Project headers
-#include "sound.h"
+#include "sound_channel.h"
 
 // Contrib headers
 #include "df_bitmap.h"
@@ -28,7 +28,7 @@ void SoundView::UpdateDisplaySize(int pixelWidth)
 }
 
 
-SoundView::SoundView(Sound *sound)
+SoundView::SoundView(SoundChannel *sound)
 {
     m_sound = sound;
 
