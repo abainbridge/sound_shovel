@@ -32,8 +32,6 @@ private:
 public:
     LList <SampleBlock *> m_blocks;
 
-    bool LoadWav(char const *filename);
-
     unsigned GetLength();
 
     void CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, double samples_per_pixel);

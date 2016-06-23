@@ -2,6 +2,7 @@
 #include "sound_view.h"
 
 // Project headers
+#include "sound.h"
 #include "sound_channel.h"
 
 // Contrib headers
@@ -28,7 +29,7 @@ void SoundView::UpdateDisplaySize(int pixelWidth)
 }
 
 
-SoundView::SoundView(SoundChannel *sound)
+SoundView::SoundView(Sound *sound)
 {
     m_sound = sound;
 
@@ -87,17 +88,24 @@ void SoundView::Render(BitmapRGBA *bmp)
 
     RGBAColour sound_colour = Colour(80, 80, 240);
     double start_time = GetHighResTime();
-    m_sound->CalcDisplayData(m_h_offset, m_display_mins, m_display_maxes, m_display_width, m_h_zoom_ratio);
-    double end_time = GetHighResTime();
+    double end_time = start_time;
 
-    int prev_y = y_mid;
-    for (unsigned x = 0; x < m_display_width; x++)
+    for (int chan_idx = 0; chan_idx < m_sound->m_num_channels; chan_idx++)
     {
-        int vline_len = (m_display_maxes[x] - m_display_mins[x]) * v_zoom_ratio;
-        VLine(bmp, x, y_mid - m_display_maxes[x] * v_zoom_ratio, vline_len, sound_colour);
-    }
+        SoundChannel *chan = m_sound->m_channels[chan_idx];
 
-    HLine(bmp, 0, bmp->height / 2, m_display_width, Colour(255, 255, 255, 60));
+        chan->CalcDisplayData(m_h_offset, m_display_mins, m_display_maxes, m_display_width, m_h_zoom_ratio);
+        end_time = GetHighResTime();
+
+        int prev_y = y_mid;
+        for (unsigned x = 0; x < m_display_width; x++)
+        {
+            int vline_len = (m_display_maxes[x] - m_display_mins[x]) * v_zoom_ratio;
+            VLine(bmp, x, y_mid - m_display_maxes[x] * v_zoom_ratio, vline_len, sound_colour);
+        }
+
+        HLine(bmp, 0, bmp->height / 2, m_display_width, Colour(255, 255, 255, 60));
+    }
 
     // Display time taken to calc display buffer
     DrawTextRight(g_defaultTextRenderer, g_colourWhite, bmp, bmp->width - 5, 0, "Calc time (ms):%3.1f", (end_time - start_time) * 1000.0);

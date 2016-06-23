@@ -2,50 +2,11 @@
 #include "sound_channel.h"
 
 // Contrib headers
-#include "df_hi_res_time.h"
+#include "df_common.h"
 
 // Standard headers
 #include <math.h>
-#include <stdio.h>
-
-
-bool SoundChannel::LoadWav(char const *filename)
-{
-    double start_time = GetHighResTime();
-
-    FILE *fin = fopen(filename, "rb");
-    if (!fin)
-        return false;
-
-    while (1)
-    {
-        SampleBlock *block = new SampleBlock;
-
-        block->m_len = fread(block->m_samples, sizeof(int16_t), SampleBlock::MAX_SAMPLES, fin);
-
-        block->RecalcLuts();
-
-        if (block->m_len > 0)
-        {
-            m_blocks.PutDataAtEnd(block);
-        }
-        else
-        {
-            delete block;
-            break;
-        }
-
-        if (block->m_len != SampleBlock::MAX_SAMPLES)
-            break;
-    }
-
-    fclose(fin);
-
-    double end_time = GetHighResTime();
-    DebugOut("%6.3f\n", end_time - start_time);
-
-    return true;
-}
+#include <stdlib.h>
 
 
 unsigned SoundChannel::GetLength()

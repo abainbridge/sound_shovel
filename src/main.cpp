@@ -1,5 +1,5 @@
 // Project headers
-#include "sound_channel.h"
+#include "sound.h"
 #include "sound_view.h"
 
 #include "df_bitmap.h"
@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	CreateWin(1000, 600, WT_WINDOWED, "Sound Shovel");
     g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
 
-    SoundChannel sound;
+    Sound sound;
 //    sound.LoadWav("c:/Users/Andy/Desktop/2016-03-18-raspbian-jessie-lite.img");
     sound.LoadWav("c:/Users/Andy/Desktop/EverythingEverything.wav");
     //    SoundBlock *first = LoadWav("h:/video/later_apr23.mpg");
