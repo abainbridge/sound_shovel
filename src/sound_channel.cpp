@@ -22,7 +22,7 @@ SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int sample_idx)
 {
     int block_idx = 0;
     
-    while (sample_idx > m_blocks[block_idx]->m_len)
+    while (sample_idx >= m_blocks[block_idx]->m_len)
     {
         sample_idx -= m_blocks[block_idx]->m_len;
         block_idx++;
@@ -62,9 +62,11 @@ SampleBlock *SoundChannel::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
             // No
             num_samples -= block->m_len - pos->m_sample_idx;
             pos->m_block_idx++;
-            pos->m_sample_idx = 0;
             if (pos->m_block_idx >= m_blocks.Size())
                 return NULL;
+
+            block = m_blocks[pos->m_block_idx];
+            pos->m_sample_idx = 0;
         }
     }
 
