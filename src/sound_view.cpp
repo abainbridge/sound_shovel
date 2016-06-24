@@ -33,43 +33,84 @@ SoundView::SoundView(Sound *sound)
 {
     m_sound = sound;
 
-    m_h_offset = 0;
+    m_h_offset = m_target_h_offset = 0;
+    m_h_zoom_ratio = m_target_h_zoom_ratio = -1.0;
 
     m_display_width = -1;
     m_display_mins = NULL;
     m_display_maxes = NULL;
-
-    m_h_zoom_ratio = -1.0;
 }
 
 
 void SoundView::Advance()
 {
-    if (g_inputManager.mouseVelZ != 0)
-    {
-        double const ZOOM_INCREMENT = 1.2;
-        if (g_inputManager.mouseVelZ < 0)
-        {
-            if (m_h_zoom_ratio * m_display_width < m_sound->GetLength())
-            {
-                m_h_offset -= (ZOOM_INCREMENT - 1.0) / 2.0 * m_display_width * m_h_zoom_ratio;
-                m_h_zoom_ratio *= ZOOM_INCREMENT;
-            }
-        }
-        else
-        {
-            if (m_h_zoom_ratio > 1.0)
-            {
-                m_h_offset += (1.0 - 1.0 / ZOOM_INCREMENT) / 2.0 * m_display_width * m_h_zoom_ratio;
-                m_h_zoom_ratio /= ZOOM_INCREMENT;
-            }
-        }
-    }
+    if (m_h_zoom_ratio < 0.0)
+        return;
+
+    double h_zoom_ratio_before = m_h_zoom_ratio;
+
+
+    //
+    // Take mouse input
+
+    double const ZOOM_INCREMENT = 1.2;
+    if (g_inputManager.mouseVelZ < 0)
+        m_target_h_zoom_ratio *= ZOOM_INCREMENT;
+    else if (g_inputManager.mouseVelZ > 0)
+        m_target_h_zoom_ratio /= ZOOM_INCREMENT;
 
     if (g_inputManager.mmb && g_inputManager.mouseVelX)
     {
         m_h_offset -= g_inputManager.mouseVelX * m_h_zoom_ratio;
     }
+
+
+    //
+    // Take keyboard input
+
+    static double last_time = GetHighResTime();
+    double now = GetHighResTime();
+    double advance_time = now - last_time;
+
+    const double KEY_ZOOM_INCREMENT = 1.03;
+    if (g_inputManager.keys[KEY_UP])
+        m_target_h_zoom_ratio /= KEY_ZOOM_INCREMENT;
+    if (g_inputManager.keys[KEY_DOWN])
+        m_target_h_zoom_ratio *= KEY_ZOOM_INCREMENT;
+
+    double const KEY_H_SCROLL_INCREMENT = 400.0 * m_h_zoom_ratio * advance_time;
+    if (g_inputManager.keys[KEY_LEFT])
+        m_h_offset -= KEY_H_SCROLL_INCREMENT;
+    if (g_inputManager.keys[KEY_RIGHT])
+        m_h_offset += KEY_H_SCROLL_INCREMENT;
+
+
+    //
+    // Enforce constraints
+
+    double max_h_zoom_ratio = m_sound->GetLength() / (double)m_display_width;
+    if (m_target_h_zoom_ratio > max_h_zoom_ratio)
+        m_target_h_zoom_ratio = max_h_zoom_ratio;
+
+    double min_h_zoom_ratio = 1.0;
+    if (m_target_h_zoom_ratio < min_h_zoom_ratio)
+        m_target_h_zoom_ratio = 1.0;
+
+
+    //
+    // Do physics
+
+    double force = advance_time * 8.0;
+    m_h_zoom_ratio = (1.0 - force) * m_h_zoom_ratio + force * m_target_h_zoom_ratio;
+    last_time = now;
+
+    double delta_h_zoom = h_zoom_ratio_before / m_h_zoom_ratio;
+    if (delta_h_zoom < 1.0)
+        m_h_offset += (delta_h_zoom - 1.0) / 2.0 * m_display_width * m_h_zoom_ratio;
+    else
+        m_h_offset -= (1.0 - delta_h_zoom) / 2.0 * m_display_width * m_h_zoom_ratio;
+
+    // Enforce constraints
 
     if (m_h_offset < 0)
         m_h_offset = 0;
@@ -79,7 +120,10 @@ void SoundView::Advance()
 void SoundView::Render(BitmapRGBA *bmp)
 {
     if (m_h_zoom_ratio < 0.0)
+    {
         m_h_zoom_ratio = (double)m_sound->GetLength() / (double)bmp->width;
+        m_target_h_zoom_ratio = m_h_zoom_ratio;
+    }
 
     UpdateDisplaySize(bmp->width);
 
