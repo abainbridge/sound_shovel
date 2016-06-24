@@ -84,11 +84,12 @@ void SoundView::Render(BitmapRGBA *bmp)
     UpdateDisplaySize(bmp->width);
 
     double v_zoom_ratio = (double)bmp->height / 1e5;
-    int y_mid = bmp->height / 2;
 
     RGBAColour sound_colour = Colour(80, 80, 240);
     double start_time = GetHighResTime();
     double end_time = start_time;
+
+    int channel_height = bmp->height / m_sound->m_num_channels;
 
     for (int chan_idx = 0; chan_idx < m_sound->m_num_channels; chan_idx++)
     {
@@ -97,6 +98,8 @@ void SoundView::Render(BitmapRGBA *bmp)
         chan->CalcDisplayData(m_h_offset, m_display_mins, m_display_maxes, m_display_width, m_h_zoom_ratio);
         end_time = GetHighResTime();
 
+        int y_mid = channel_height * chan_idx + channel_height / 2;
+
         int prev_y = y_mid;
         for (unsigned x = 0; x < m_display_width; x++)
         {
@@ -104,7 +107,7 @@ void SoundView::Render(BitmapRGBA *bmp)
             VLine(bmp, x, y_mid - m_display_maxes[x] * v_zoom_ratio, vline_len, sound_colour);
         }
 
-        HLine(bmp, 0, bmp->height / 2, m_display_width, Colour(255, 255, 255, 60));
+        HLine(bmp, 0, y_mid, m_display_width, Colour(255, 255, 255, 60));
     }
 
     // Display time taken to calc display buffer

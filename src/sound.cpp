@@ -30,31 +30,38 @@ bool Sound::LoadWav(char const *filename)
     if (!fin)
         return false;
 
-    m_num_channels = 1;
+    m_num_channels = 2;
     m_channels = new SoundChannel* [m_num_channels];
-    SoundChannel *chan = new SoundChannel;
-    m_channels[0] = chan;
+    for (int i = 0; i < m_num_channels; i++)
+        m_channels[i] = new SoundChannel;
 
-    while (1)
+    int16_t *buf = new int16_t [SampleBlock::MAX_SAMPLES * m_num_channels];
+    size_t bytes_per_group = sizeof(int16_t) * m_num_channels;
+
+    bool finished = false;
+    while (!finished)
     {
-        SampleBlock *block = new SampleBlock;
+        size_t groups_read = fread(buf, bytes_per_group, SampleBlock::MAX_SAMPLES, fin);
 
-        block->m_len = fread(block->m_samples, sizeof(int16_t), SampleBlock::MAX_SAMPLES, fin);
-
-        block->RecalcLuts();
-
-        if (block->m_len > 0)
+        for (int chan_idx = 0; chan_idx < m_num_channels; chan_idx++)
         {
-            chan->m_blocks.PutDataAtEnd(block);
-        }
-        else
-        {
-            delete block;
-            break;
-        }
+            SoundChannel *chan = m_channels[chan_idx];
+            SampleBlock *block = new SampleBlock;
 
-        if (block->m_len != SampleBlock::MAX_SAMPLES)
-            break;
+            for (size_t i = 0; i < groups_read; i++)
+                block->m_samples[i] = buf[i * m_num_channels + chan_idx];
+
+            block->m_len = groups_read;
+            block->RecalcLuts();
+
+            if (block->m_len > 0)
+                chan->m_blocks.PutDataAtEnd(block);
+            else
+                delete block;
+
+            if (block->m_len != SampleBlock::MAX_SAMPLES)
+                finished = true;
+        }
     }
 
     fclose(fin);
