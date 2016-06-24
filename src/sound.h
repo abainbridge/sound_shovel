@@ -9,6 +9,9 @@ class SoundChannel;
 
 class Sound
 {
+private:
+    int64_t m_cached_length;
+
 public:
     SoundChannel **m_channels;
     int m_num_channels;

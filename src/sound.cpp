@@ -19,6 +19,7 @@
 Sound::Sound()
 {
     m_num_channels = 0;
+    m_cached_length = -1;
 }
 
 
@@ -78,5 +79,8 @@ int64_t Sound::GetLength()
     if (m_num_channels == 0)
         return 0;
 
-    return m_channels[0]->GetLength();
+    if (m_cached_length < 0)
+        m_cached_length = m_channels[0]->GetLength();
+
+    return m_cached_length;
 }
