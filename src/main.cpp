@@ -1,19 +1,28 @@
+// Own header
+#include "main.h"
+
 // Project headers
 #include "sound.h"
 #include "sound_view.h"
 
+// Contrib headers
 #include "df_bitmap.h"
 #include "df_hi_res_time.h"
 #include "df_input.h"
 #include "df_text_renderer.h"
 #include "df_window_manager.h"
 
+// Platform headers
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
 
+// Standard headers
 #include <algorithm>
 #include <stdint.h>
+
+
+bool g_can_sleep = true;
 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
@@ -22,9 +31,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
 
     Sound sound;
-//    sound.LoadWav("c:/Users/Andy/Desktop/2016-03-18-raspbian-jessie-lite.img");
-    sound.LoadWav("c:/Users/Andy/Desktop/EverythingEverything.wav");
-    //    SoundBlock *first = LoadWav("h:/video/later_apr23.mpg");
+    sound.LoadWav("c:/Users/Andy/Desktop/andante.wav");
+//    sound.LoadWav("c:/Users/Andy/Desktop/EverythingEverything.wav");
 
     SoundView sound_view(&sound);
 
@@ -36,8 +44,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         sound_view.Advance();
         sound_view.Render(g_window->bmp);
         
+        DrawTextRight(g_defaultTextRenderer, g_colourWhite, g_window->bmp, 
+            g_window->bmp->width - 5, 2, "FPS: %d", g_window->fps);
+
         UpdateWin();
-        SleepMillisec(10);
+        
+        if (g_can_sleep)
+            SleepMillisec(50);
+
+        g_can_sleep = true;
     }
 
     return 0;

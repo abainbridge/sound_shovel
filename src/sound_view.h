@@ -14,7 +14,7 @@ private:
     void UpdateDisplaySize(int pixelWidth);
 
     double m_target_h_zoom_ratio;
-    int64_t m_target_h_offset;
+    double m_h_offset_velocity;
 
 public:
     Sound *m_sound;
