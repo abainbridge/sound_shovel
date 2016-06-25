@@ -5,6 +5,7 @@
     <ClCompile Include="..\..\src\sound.cpp" />
     <ClCompile Include="..\..\src\sound_view.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
+    <ClCompile Include="..\..\src\sound_channel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -18,5 +19,7 @@
     <ClInclude Include="..\..\src\sound.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound_view.h" />
+    <ClInclude Include="..\..\src\sound_channel.h" />
+    <ClInclude Include="..\..\src\main.h" />
   </ItemGroup>
 </Project>
