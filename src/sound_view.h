@@ -11,10 +11,12 @@ class Sound;
 class SoundView
 {
 private:
-    void UpdateDisplaySize(int pixelWidth);
-
     double m_target_h_zoom_ratio;
     double m_h_offset_velocity;
+
+    void UpdateDisplaySize(int pixel_width);
+    void AdvanceSelection();
+    void RenderSelection(BitmapRGBA *bmp);
 
 public:
     Sound *m_sound;
@@ -26,8 +28,14 @@ public:
     int16_t *m_display_mins;    // An array of length m_display_width.
     int16_t *m_display_maxes;   // An array of length m_display_width.
 
+    int64_t m_selection_start;
+    int64_t m_selection_end;        // Set to -1 if no selection.
+
     SoundView(Sound *sound);
 
     void Advance();
     void Render(BitmapRGBA *bmp);
+
+    int64_t GetSampleIndexFromScreenPos(int screen_x);
+    double GetScreenPosFromSampleIndex(int64_t sample_idx);
 };

@@ -18,19 +18,43 @@
 #include <stdlib.h>
 
 
-void SoundView::UpdateDisplaySize(int pixelWidth)
+// ***************************************************************************
+// Private Methods
+// ***************************************************************************
+
+void SoundView::UpdateDisplaySize(int pixel_width)
 {
-    if (m_display_width == pixelWidth)
+    if (m_display_width == pixel_width)
         return;
 
     delete[] m_display_mins;
     delete[] m_display_maxes;
 
-    m_display_width = pixelWidth;
-    m_display_mins = new int16_t[pixelWidth];
-    m_display_maxes = new int16_t[pixelWidth];
+    m_display_width = pixel_width;
+    m_display_mins = new int16_t[pixel_width];
+    m_display_maxes = new int16_t[pixel_width];
 }
 
+
+void SoundView::AdvanceSelection()
+{
+    if (g_inputManager.lmbClicked)
+    {
+        m_selection_start = GetSampleIndexFromScreenPos(g_inputManager.mouseX);
+    }
+}
+
+
+void SoundView::RenderSelection(BitmapRGBA *bmp)
+{
+    double x = GetScreenPosFromSampleIndex(m_selection_start);
+    VLine(bmp, x, 0, bmp->height, Colour(255, 255, 50, 90));
+}
+
+
+// ***************************************************************************
+// Public Methods
+// ***************************************************************************
 
 SoundView::SoundView(Sound *sound)
 {
@@ -46,7 +70,7 @@ SoundView::SoundView(Sound *sound)
 }
 
 
-static bool nearly_equal(double a, double b)
+static bool NearlyEqual(double a, double b)
 {
     double diff = fabs(a - b);
     return diff < 1e-5;
@@ -57,6 +81,8 @@ void SoundView::Advance()
 {
     if (m_h_zoom_ratio < 0.0)
         return;
+
+    AdvanceSelection();
 
     double h_zoom_ratio_before = m_h_zoom_ratio;
 
@@ -150,8 +176,8 @@ void SoundView::Advance()
         }
     }
 
-    if (!nearly_equal(m_h_zoom_ratio, h_zoom_ratio_before) ||
-        fabs(m_h_offset_velocity) > 1e-3)
+    if (!NearlyEqual(m_h_zoom_ratio, h_zoom_ratio_before) ||
+        fabs(m_h_offset_velocity) > 0.1 * m_h_zoom_ratio)
     {
         g_can_sleep = false;
     }
@@ -195,5 +221,19 @@ void SoundView::Render(BitmapRGBA *bmp)
         HLine(bmp, 0, y_mid + 32767 * v_zoom_ratio, m_display_width, Colour(255, 255, 255, 60));
     }
 
+    RenderSelection(bmp);
+
     DrawTextRight(g_defaultTextRenderer, g_colourWhite, bmp, bmp->width - 5, bmp->height - 20, "Zoom: %.1f", m_h_zoom_ratio);
+}
+
+
+int64_t SoundView::GetSampleIndexFromScreenPos(int screen_x)
+{
+    return m_h_offset + (double)screen_x * m_h_zoom_ratio + 0.5;
+}
+
+
+double SoundView::GetScreenPosFromSampleIndex(int64_t sample_idx)
+{
+    return ((double)sample_idx - m_h_offset) / m_h_zoom_ratio;
 }
