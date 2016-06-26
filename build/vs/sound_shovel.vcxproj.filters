@@ -6,6 +6,12 @@
     <ClCompile Include="..\..\src\sound_view.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound_channel.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -21,5 +27,14 @@
     <ClInclude Include="..\..\src\sound_view.h" />
     <ClInclude Include="..\..\src\sound_channel.h" />
     <ClInclude Include="..\..\src\main.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\darray.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

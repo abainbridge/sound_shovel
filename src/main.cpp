@@ -5,6 +5,9 @@
 #include "sound.h"
 #include "sound_view.h"
 
+//
+#include "gui/file_dialog.h"
+
 // Contrib headers
 #include "df_bitmap.h"
 #include "df_hi_res_time.h"
@@ -30,9 +33,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	CreateWin(1000, 600, WT_WINDOWED, "Sound Shovel");
     g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
 
+//     DArray<String> files = FileDialogOpen();
+//     if (files.Size() == 0)
+//         return -1;
+
     Sound sound;
-    sound.LoadWav("c:/Users/Andy/Desktop/andante.wav");
-//    sound.LoadWav("c:/Users/Andy/Desktop/EverythingEverything.wav");
+//    sound.LoadWav(files[0].c_str());
+    sound.LoadWav("C:/users/andy/desktop/andante.wav");
 
     SoundView sound_view(&sound);
 

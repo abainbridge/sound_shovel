@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
@@ -26,6 +28,9 @@
     <ClCompile Include="..\..\src\sound_view.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\darray.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\llist.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
@@ -103,7 +108,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -124,7 +129,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -143,7 +148,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StringPooling>true</StringPooling>
@@ -173,7 +178,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
