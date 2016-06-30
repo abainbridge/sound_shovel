@@ -7,6 +7,7 @@
 
 //
 #include "gui/file_dialog.h"
+#include "sound/sound_system.h"
 
 // Contrib headers
 #include "df_bitmap.h"
@@ -33,6 +34,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	CreateWin(1000, 600, WT_WINDOWED, "Sound Shovel");
     g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
 
+    g_soundSystem = new SoundSystem;
+
 //     DArray<String> files = FileDialogOpen();
 //     if (files.Size() == 0)
 //         return -1;
@@ -40,6 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     Sound sound;
 //    sound.LoadWav(files[0].c_str());
     sound.LoadWav("C:/users/andy/desktop/andante.wav");
+    g_soundSystem->PlaySound(&sound, 0);
 
     SoundView sound_view(&sound);
 
@@ -54,6 +58,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         DrawTextRight(g_defaultTextRenderer, g_colourWhite, g_window->bmp, 
             g_window->bmp->width - 5, 2, "FPS: %d", g_window->fps);
 
+        g_soundSystem->Advance();
         UpdateWin();
         
         if (g_can_sleep)

@@ -12,10 +12,19 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp">
       <Filter>df_lib_plus_plus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_device.cpp">
+      <Filter>df_lib_plus_plus\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_system.cpp">
+      <Filter>df_lib_plus_plus\sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
       <UniqueIdentifier>{a81c4c99-25a3-4618-9383-56638460a8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="df_lib_plus_plus\sound">
+      <UniqueIdentifier>{20e89f65-60ce-40b7-91bf-806504e9540b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +44,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\darray.h">
       <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_device.h">
+      <Filter>df_lib_plus_plus\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_system.h">
+      <Filter>df_lib_plus_plus\sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
