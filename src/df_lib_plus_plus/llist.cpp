@@ -1,6 +1,3 @@
-#define ReleaseAssert(a, b)
-#define DebugAssert(a)
-
 //*****************************************************************************
 // Class LList
 //*****************************************************************************
@@ -191,13 +188,13 @@ LListItem<T> *LList<T>::GetItem(int index) const
 	
 	while (index > m_cachedIndex) 
 	{
-        ReleaseAssert(m_cached->m_next, "List GetItem failed - m_cached->m_next == NULL");
+        ReleaseAssert((int)m_cached->m_next, "List GetItem failed - m_cached->m_next == NULL");
 		m_cached = m_cached->m_next;
 		m_cachedIndex++;
 	}
 	while (index < m_cachedIndex) 
 	{
-        ReleaseAssert(m_cached->m_prev, "List GetItem failed - m_cached->m_prev == NULL");
+        ReleaseAssert((int)m_cached->m_prev, "List GetItem failed - m_cached->m_prev == NULL");
 		m_cached = m_cached->m_prev;
 		m_cachedIndex--;
 	}

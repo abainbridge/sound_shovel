@@ -1,5 +1,10 @@
-#ifndef INCLUDED_LLIST_H
-#define INCLUDED_LLIST_H
+#pragma once
+
+// Contrib includes
+#include "df_common.h"
+
+// Standard includes
+#include <stdlib.h>     // For NULL.
 
 
 // This is a sort-of vector-list hybrid. 
@@ -32,9 +37,6 @@ protected:
 
 	int         m_numItems;
 
-protected:
-	inline LListItem<T> *GetItem(int index) const;
-
 public:
     LList();
 	~LList();
@@ -43,6 +45,8 @@ public:
 	void		PutDataAtEnd	(const T &data);
 	void		PutDataAtStart	(const T &data);	
 	void		PutDataAtIndex	(const T &data, int index);
+
+    inline LListItem<T> *GetItem(int index) const;
 
     inline T   *GetPointer		(int index) const;	    // \ O(n) unless sequential
     inline T const operator []  (int index) const;      // /
@@ -62,6 +66,3 @@ public:
 
 
 #include "llist.cpp"
-
-
-#endif
