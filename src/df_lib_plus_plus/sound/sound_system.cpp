@@ -81,8 +81,6 @@ void SoundSystem::DeviceCallback(StereoSample *buf, unsigned int num_samples)
             }
         }
     }
-
-    m_sample_idx += num_samples;
 }
 
 
