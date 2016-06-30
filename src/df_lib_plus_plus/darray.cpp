@@ -44,35 +44,31 @@ inline void DArray<T>::SetSize(unsigned int newsize)
 {
 	if (newsize > m_arraySize) 
 	{
-		unsigned int oldarraysize = m_arraySize;
+		unsigned int oldArraySize = m_arraySize;
 
 		m_arraySize = newsize;
-		T *temparray = new T[ m_arraySize ];
+		T *tempArray = new T[m_arraySize];
 		
-		for (unsigned int a = 0; a < oldarraysize; ++a) 
+		for (unsigned int a = 0; a < oldArraySize; ++a) 
 		{
-			temparray[a] = m_array[a];
+			tempArray[a] = m_array[a];
 		}
 		
 		delete [] m_array;
-		m_array = temparray;
+		m_array = tempArray;
 	}
 	else if (newsize < m_arraySize) 
 	{
 		m_arraySize = newsize;
-		T *temparray = new T[m_arraySize];
+		T *tempArray = new T[m_arraySize];
 
 		for (unsigned int a = 0; a < m_arraySize; ++a) 
 		{
-			temparray[a] = m_array[a];
+			tempArray[a] = m_array[a];
 		}
 
 		delete [] m_array;
-		m_array = temparray;
-	}
-	else if (newsize == m_arraySize) 
-	{
-		// Do nothing
+		m_array = tempArray;
 	}
 }
 
