@@ -45,6 +45,23 @@ void SoundView::AdvanceSelection()
 }
 
 
+void SoundView::AdvancePlaybackPos()
+{
+    double target_idx = m_sound->m_playback_idx;
+    if (target_idx < 0)
+        return;
+    
+    if (target_idx > m_playback_pos + 10000.0)
+    {
+        m_playback_pos = target_idx;
+    }
+    else
+    {
+        m_playback_pos = target_idx * 0.1 + m_playback_pos * 0.9;
+    }
+}
+
+
 void SoundView::RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio)
 {
     RGBAColour sound_colour = Colour(52, 152, 219);
@@ -92,6 +109,8 @@ SoundView::SoundView(Sound *sound)
     m_h_offset = 0.0;
     m_h_offset_velocity = 0.0;
     m_h_zoom_ratio = m_target_h_zoom_ratio = -1.0;
+
+    m_playback_pos = -1.0;
 
     m_display_width = -1;
     m_display_mins = NULL;
@@ -210,6 +229,8 @@ void SoundView::Advance()
     {
         g_can_sleep = false;
     }
+
+    AdvancePlaybackPos();
 }
 
 
@@ -230,8 +251,13 @@ void SoundView::Render(BitmapRGBA *bmp)
 
     if (m_sound->m_playback_idx)
     {
-        double x = GetScreenPosFromSampleIndex(m_sound->m_playback_idx);
-        VLine(bmp, x, 0, bmp->height, Colour(255, 255, 255, 90));
+        double x = GetScreenPosFromSampleIndex(m_playback_pos);
+        RGBAColour c = Colour(255, 255, 255, 90);
+        double fractional_x = x - (int64_t)x;
+        c.a = 90 * (1.0 - fractional_x);
+        VLine(bmp, floor(x), 0, bmp->height, c);
+        c.a = 90 * fractional_x;
+        VLine(bmp, ceil(x), 0, bmp->height, c);
     }
     
     DrawTextRight(g_defaultTextRenderer, g_colourWhite, bmp, bmp->width - 5, bmp->height - 20, "Zoom: %.1f", m_h_zoom_ratio);
