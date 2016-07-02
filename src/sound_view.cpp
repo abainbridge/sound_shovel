@@ -228,12 +228,6 @@ void SoundView::Advance()
         m_h_offset += (delta_h_zoom - 1.0) / 2.0 * m_display_width * m_h_zoom_ratio;
     else
         m_h_offset -= (1.0 - delta_h_zoom) / 2.0 * m_display_width * m_h_zoom_ratio;
-    if (m_selection_start >= 0.0 && g_inputManager.mouseVelZ != 0)
-    {
-        double centre_of_screen = m_h_offset + m_display_width * m_h_zoom_ratio * 0.5;
-        double delta = m_selection_start - centre_of_screen;
-        m_h_offset_velocity += delta * 2.7;
-    }
 
 
     //
