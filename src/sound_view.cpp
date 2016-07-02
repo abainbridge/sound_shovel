@@ -62,6 +62,19 @@ void SoundView::AdvancePlaybackPos()
 }
 
 
+void SoundView::RenderMarker(BitmapRGBA *bmp, int64_t sample_idx, RGBAColour col)
+{
+    double x = GetScreenPosFromSampleIndex(sample_idx);
+    double fractional_x = x - (int64_t)x;
+    float const gamma_correction_factor = 0.75;
+    RGBAColour c = col;
+    c.a = col.a * powf(1.0 - fractional_x, gamma_correction_factor);
+    VLine(bmp, floor(x), 0, bmp->height, c);
+    c.a = col.a * powf(fractional_x, gamma_correction_factor);
+    VLine(bmp, ceil(x), 0, bmp->height, c);
+}
+
+
 void SoundView::RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio)
 {
     RGBAColour sound_colour = Colour(52, 152, 219);
@@ -93,8 +106,7 @@ void SoundView::RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio)
 
 void SoundView::RenderSelection(BitmapRGBA *bmp)
 {
-    double x = GetScreenPosFromSampleIndex(m_selection_start);
-    VLine(bmp, x, 0, bmp->height, Colour(255, 255, 50, 90));
+    RenderMarker(bmp, m_selection_start, Colour(255, 255, 50, 90));
 }
 
 
@@ -216,6 +228,12 @@ void SoundView::Advance()
         m_h_offset += (delta_h_zoom - 1.0) / 2.0 * m_display_width * m_h_zoom_ratio;
     else
         m_h_offset -= (1.0 - delta_h_zoom) / 2.0 * m_display_width * m_h_zoom_ratio;
+    if (m_selection_start >= 0.0 && g_inputManager.mouseVelZ != 0)
+    {
+        double centre_of_screen = m_h_offset + m_display_width * m_h_zoom_ratio * 0.5;
+        double delta = m_selection_start - centre_of_screen;
+        m_h_offset_velocity += delta * 2.7;
+    }
 
 
     //
@@ -264,15 +282,7 @@ void SoundView::Render(BitmapRGBA *bmp)
     RenderSelection(bmp);
 
     if (m_sound->m_playback_idx)
-    {
-        double x = GetScreenPosFromSampleIndex(m_playback_pos);
-        RGBAColour c = Colour(255, 255, 255, 90);
-        double fractional_x = x - (int64_t)x;
-        c.a = 90 * (1.0 - fractional_x);
-        VLine(bmp, floor(x), 0, bmp->height, c);
-        c.a = 90 * fractional_x;
-        VLine(bmp, ceil(x), 0, bmp->height, c);
-    }
+        RenderMarker(bmp, m_playback_pos, Colour(255, 255, 255, 90));
     
     DrawTextRight(g_defaultTextRenderer, g_colourWhite, bmp, bmp->width - 5, bmp->height - 20, "Zoom: %.1f", m_h_zoom_ratio);
 }

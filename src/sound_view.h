@@ -1,6 +1,10 @@
 #pragma once
 
 
+// Contrib headers
+#include "df_rgba_colour.h"
+
+// Standard headers
 #include <stdint.h>
 
 
@@ -18,6 +22,8 @@ private:
     void UpdateDisplaySize(int pixel_width);
     void AdvanceSelection();
     void AdvancePlaybackPos();
+
+    void RenderMarker(BitmapRGBA *bmp, int64_t sample_idx, RGBAColour col);
 
     void RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio);
     void RenderSelection(BitmapRGBA *bmp);
