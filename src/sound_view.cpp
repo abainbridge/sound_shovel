@@ -133,6 +133,7 @@ void SoundView::Advance()
     AdvanceSelection();
 
     double h_zoom_ratio_before = m_h_zoom_ratio;
+    double max_h_offset = m_sound->GetLength() - m_display_width * m_h_zoom_ratio;
 
     static double last_time = GetHighResTime();
     double now = GetHighResTime();
@@ -161,12 +162,26 @@ void SoundView::Advance()
         m_target_h_zoom_ratio /= KEY_ZOOM_INCREMENT;
     if (g_inputManager.keys[KEY_DOWN])
         m_target_h_zoom_ratio *= KEY_ZOOM_INCREMENT;
+    if (g_inputManager.keyDowns[KEY_PGUP])
+        m_target_h_zoom_ratio /= KEY_ZOOM_INCREMENT * 8.0;
+    if (g_inputManager.keyDowns[KEY_PGDN])
+        m_target_h_zoom_ratio *= KEY_ZOOM_INCREMENT * 8.0;
 
     double const KEY_H_SCROLL_IMPLUSE = 1600.0 * m_h_zoom_ratio * advance_time;
     if (g_inputManager.keys[KEY_LEFT])
         m_h_offset_velocity -= KEY_H_SCROLL_IMPLUSE;
     if (g_inputManager.keys[KEY_RIGHT])
         m_h_offset_velocity += KEY_H_SCROLL_IMPLUSE;
+
+    if (g_inputManager.keyDowns[KEY_HOME])
+    {
+        m_h_offset_velocity = -m_h_offset * 2.7;
+    }
+    else if (g_inputManager.keyDowns[KEY_END])
+    {
+        double samples_on_screen = m_display_width * m_h_zoom_ratio;
+        m_h_offset_velocity = (m_sound->GetLength() - (samples_on_screen + m_h_offset)) * 2.7;
+    }
 
 
     //
@@ -213,7 +228,6 @@ void SoundView::Advance()
     }
     else 
     {
-        double max_h_offset = m_sound->GetLength() - m_display_width * m_h_zoom_ratio;
         if (max_h_offset < 0.0)
             max_h_offset = 0.0;
 
