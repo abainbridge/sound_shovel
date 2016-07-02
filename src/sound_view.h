@@ -16,7 +16,7 @@ class SoundView
 {
 private:
     double m_target_h_zoom_ratio;
-    double m_h_offset_velocity;
+    double m_target_h_offset;
     double m_playback_pos;
 
     void UpdateDisplaySize(int pixel_width);
