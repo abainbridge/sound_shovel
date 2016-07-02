@@ -14,7 +14,6 @@ class SoundSystem
 {
 public:
     Sound *m_sound;
-    int64_t m_sample_idx;
     LListItem<SampleBlock *> *m_current_blocks[2];
 
 	SoundSystem();

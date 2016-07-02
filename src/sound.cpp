@@ -20,13 +20,12 @@ Sound::Sound()
 {
     m_num_channels = 0;
     m_cached_length = -1;
+    m_playback_idx = -1;
 }
 
 
 bool Sound::LoadWav(char const *filename)
 {
-    double start_time = GetHighResTime();
-
     FILE *fin = fopen(filename, "rb");
     if (!fin)
         return false;
@@ -67,9 +66,6 @@ bool Sound::LoadWav(char const *filename)
 
     fclose(fin);
     delete[] buf;
-
-    double end_time = GetHighResTime();
-    DebugOut("%6.3f\n", end_time - start_time);
 
     return true;
 }

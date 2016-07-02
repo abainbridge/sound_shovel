@@ -61,33 +61,37 @@ void SoundSystem::DeviceCallback(StereoSample *buf, unsigned int num_samples)
     }
 
     ReleaseAssert(m_sound->m_num_channels == 2, "Write more code");
+    int64_t idx = m_sound->m_playback_idx;
 
     for (int i = 0; i < num_samples; i++)
     {
-        buf[i].m_left = m_current_blocks[0]->m_data->m_samples[m_sample_idx];
-        buf[i].m_right = m_current_blocks[1]->m_data->m_samples[m_sample_idx];
+        buf[i].m_left = m_current_blocks[0]->m_data->m_samples[idx];
+        buf[i].m_right = m_current_blocks[1]->m_data->m_samples[idx];
 
-        m_sample_idx++;
-        if (m_sample_idx > m_current_blocks[0]->m_data->m_len)
+        idx++;
+        if (idx > m_current_blocks[0]->m_data->m_len)
         {
-            m_sample_idx = 0;
+            idx = 0;
             m_current_blocks[0] = m_current_blocks[0]->m_next;
             m_current_blocks[1] = m_current_blocks[1]->m_next;
 
             if (!m_current_blocks[0] || !m_current_blocks[1])
             {
                 memset(buf + i + 1, 0, (num_samples - (i + 1)) * sizeof(StereoSample));
+                m_sound->m_playback_idx = -1;
                 return;
             }
         }
     }
+
+    m_sound->m_playback_idx = idx;
 }
 
 
 void SoundSystem::PlaySound(Sound *sound, int64_t start_sample_idx)
 {
     m_sound = sound;
-    m_sample_idx = start_sample_idx;
+    m_sound->m_playback_idx = start_sample_idx;
 
     m_current_blocks[0] = m_sound->m_channels[0]->m_blocks.GetItem(0);
     m_current_blocks[1] = m_sound->m_channels[1]->m_blocks.GetItem(0);

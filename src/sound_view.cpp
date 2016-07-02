@@ -45,6 +45,35 @@ void SoundView::AdvanceSelection()
 }
 
 
+void SoundView::RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio)
+{
+    RGBAColour sound_colour = Colour(52, 152, 219);
+    int channel_height = bmp->height / m_sound->m_num_channels;
+
+    for (int chan_idx = 0; chan_idx < m_sound->m_num_channels; chan_idx++)
+    {
+        SoundChannel *chan = m_sound->m_channels[chan_idx];
+
+        chan->CalcDisplayData(m_h_offset, m_display_mins, m_display_maxes, m_display_width, m_h_zoom_ratio);
+
+        int y_mid = channel_height * chan_idx + channel_height / 2;
+
+        int prev_y = y_mid;
+        for (unsigned x = 0; x < m_display_width; x++)
+        {
+            int vline_len = RoundToInt(m_display_maxes[x] - m_display_mins[x]) * v_zoom_ratio;
+            //            vline_len = 200 * v_zoom_ratio;
+            VLine(bmp, x, ceil(y_mid - m_display_maxes[x] * v_zoom_ratio), vline_len, sound_colour);
+            //            VLine(bmp, x, y_mid - 100 * v_zoom_ratio, vline_len, sound_colour);
+        }
+
+        HLine(bmp, 0, y_mid - 32767 * v_zoom_ratio, m_display_width, Colour(255, 255, 255, 60));
+        HLine(bmp, 0, y_mid, m_display_width, Colour(255, 255, 255, 60));
+        HLine(bmp, 0, y_mid + 32767 * v_zoom_ratio, m_display_width, Colour(255, 255, 255, 60));
+    }
+}
+
+
 void SoundView::RenderSelection(BitmapRGBA *bmp)
 {
     double x = GetScreenPosFromSampleIndex(m_selection_start);
@@ -196,33 +225,15 @@ void SoundView::Render(BitmapRGBA *bmp)
 
     double v_zoom_ratio = (double)bmp->height / (65536 * m_sound->m_num_channels);
 
-    RGBAColour sound_colour = Colour(60, 120, 220);
-    int channel_height = bmp->height / m_sound->m_num_channels;
-
-    for (int chan_idx = 0; chan_idx < m_sound->m_num_channels; chan_idx++)
-    {
-        SoundChannel *chan = m_sound->m_channels[chan_idx];
-
-        chan->CalcDisplayData(m_h_offset, m_display_mins, m_display_maxes, m_display_width, m_h_zoom_ratio);
-
-        int y_mid = channel_height * chan_idx + channel_height / 2;
-
-        int prev_y = y_mid;
-        for (unsigned x = 0; x < m_display_width; x++)
-        {
-            int vline_len = RoundToInt(m_display_maxes[x] - m_display_mins[x]) * v_zoom_ratio;
-//            vline_len = 200 * v_zoom_ratio;
-            VLine(bmp, x, ceil(y_mid - m_display_maxes[x] * v_zoom_ratio), vline_len, sound_colour);
-//            VLine(bmp, x, y_mid - 100 * v_zoom_ratio, vline_len, sound_colour);
-        }
-
-        HLine(bmp, 0, y_mid - 32767 * v_zoom_ratio, m_display_width, Colour(255, 255, 255, 60));
-        HLine(bmp, 0, y_mid, m_display_width, Colour(255, 255, 255, 60));
-        HLine(bmp, 0, y_mid + 32767 * v_zoom_ratio, m_display_width, Colour(255, 255, 255, 60));
-    }
-
+    RenderWaveform(bmp, v_zoom_ratio);
     RenderSelection(bmp);
 
+    if (m_sound->m_playback_idx)
+    {
+        double x = GetScreenPosFromSampleIndex(m_sound->m_playback_idx);
+        VLine(bmp, x, 0, bmp->height, Colour(255, 255, 255, 90));
+    }
+    
     DrawTextRight(g_defaultTextRenderer, g_colourWhite, bmp, bmp->width - 5, bmp->height - 20, "Zoom: %.1f", m_h_zoom_ratio);
 }
 

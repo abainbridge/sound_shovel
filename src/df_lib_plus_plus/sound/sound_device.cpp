@@ -79,7 +79,6 @@ void CALLBACK WaveOutProc(HWAVEOUT dev, UINT msg, DWORD user_data, DWORD param1,
 	if (!g_soundDevice || !g_soundDevice->m_callback) 
 		return;
 
-    DebugOut("%7.4f WaveOutProc\n", GetHighResTime());
     g_soundDevice->m_fills_requested++;
 }
 
@@ -137,8 +136,6 @@ void SoundDevice::SetCallback(void (*_callback)(StereoSample *, unsigned int))
 
 void SoundDevice::TopupBuffer()
 {
-    DebugOut("%7.4f Topup: %d\n", GetHighResTime(), m_fills_requested);
-
 	while (m_fills_requested)
 	{
 		StereoSampleBuf *buf = &m_buffers[m_next_buffer];

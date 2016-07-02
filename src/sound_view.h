@@ -16,6 +16,8 @@ private:
 
     void UpdateDisplaySize(int pixel_width);
     void AdvanceSelection();
+
+    void RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio);
     void RenderSelection(BitmapRGBA *bmp);
 
 public:

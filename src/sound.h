@@ -14,6 +14,7 @@ private:
 
 public:
     SoundChannel **m_channels;
+    int64_t m_playback_idx;
     int m_num_channels;
 
     Sound();
