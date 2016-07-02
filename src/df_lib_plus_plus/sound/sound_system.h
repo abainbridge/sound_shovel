@@ -1,12 +1,10 @@
 #pragma once
 
 
-#include "llist.h"
 #include <stdint.h>
 
 
 class Sound;
-struct SampleBlock;
 class StereoSample;
 
 
@@ -14,7 +12,6 @@ class SoundSystem
 {
 public:
     Sound *m_sound;
-    LListItem<SampleBlock *> *m_current_blocks[2];
 
 	SoundSystem();
 

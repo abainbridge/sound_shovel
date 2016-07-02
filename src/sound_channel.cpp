@@ -18,7 +18,7 @@ unsigned SoundChannel::GetLength()
 }
 
 
-SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int sample_idx)
+SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int64_t sample_idx)
 {
     int block_idx = 0;
     

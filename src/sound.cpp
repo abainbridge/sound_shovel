@@ -55,7 +55,7 @@ bool Sound::LoadWav(char const *filename)
             block->RecalcLuts();
 
             if (block->m_len > 0)
-                chan->m_blocks.PutDataAtEnd(block);
+                chan->m_blocks.Push(block);
             else
                 delete block;
 

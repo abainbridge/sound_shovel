@@ -4,7 +4,7 @@
 #include "sample_block.h"
 
 // Contrib headers
-#include "df_lib_plus_plus/llist.h"
+#include "df_lib_plus_plus/darray.h"
 
 // Standard headers
 #include <stdint.h>
@@ -12,25 +12,33 @@
 
 class SoundChannel
 {
-private:
+public:
     struct SoundPos
     {
         int m_block_idx;
         int m_sample_idx;
 
-        SoundPos(int block_idx, int sample_idx)
+        SoundPos()
+        {
+	        m_block_idx = 0;
+    	    m_sample_idx = 0;
+        }
+
+        SoundPos(int block_idx, int sample_idx) 
         {
             m_block_idx = block_idx;
             m_sample_idx = sample_idx;
         }
     };
 
-    SoundPos GetSoundPosFromSampleIdx(int sample_idx);
-    SampleBlock *IncrementSoundPos(SoundPos *pos, int64_t num_samples);
+private:
     void CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max);
 
 public:
-    LList <SampleBlock *> m_blocks;
+    SoundPos GetSoundPosFromSampleIdx(int64_t sample_idx);
+    SampleBlock *IncrementSoundPos(SoundPos *pos, int64_t num_samples);
+
+    DArray <SampleBlock *> m_blocks;
 
     unsigned GetLength();
 
