@@ -127,6 +127,9 @@ SoundView::SoundView(Sound *sound)
     m_display_width = -1;
     m_display_mins = NULL;
     m_display_maxes = NULL;
+
+    m_selection_start = -1.0;
+    m_selection_end = -1.0;
 }
 
 
