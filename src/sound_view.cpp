@@ -172,6 +172,7 @@ void SoundView::Advance()
         m_target_h_offset -= g_inputManager.mouseVelX * m_h_zoom_ratio * 50.0;
     }
 
+
     //
     // Take keyboard input
 
@@ -231,20 +232,34 @@ void SoundView::Advance()
 
 
     //
-    // Correct h_offset to compensate for zoom change this frame
+    // Correct h_offset to compensate for zoom change this frame. 
 
-    double delta_h_zoom = h_zoom_ratio_before / m_h_zoom_ratio;
-    if (delta_h_zoom < 1.0)
     {
-        double tmp = (delta_h_zoom - 1.0) / 2.0 * m_display_width * m_h_zoom_ratio;
-        m_target_h_offset += tmp;
-        m_h_offset += tmp;
-    }
-    else
-    {
-        double tmp = -((1.0 - delta_h_zoom) / 2.0 * m_display_width * m_h_zoom_ratio);
-        m_target_h_offset += tmp;
-        m_h_offset += tmp;
+        // The aim is to keep some part of the visible waveform in the same
+        // place on the display. If there is a selection start, we use that,
+        // otherwise we just use the sample that is currently in the middle
+        // of the display.
+        double num_samples_visible = m_display_width * h_zoom_ratio_before;
+        double keep_thing = (m_selection_start - m_h_offset) / num_samples_visible;
+        if (keep_thing < 0.0 || keep_thing > 1.0)
+            keep_thing = 0.5;
+
+        double delta_h_zoom = h_zoom_ratio_before / m_h_zoom_ratio;
+
+        if (delta_h_zoom < 1.0)
+        {
+            double tmp = (delta_h_zoom - 1.0) * num_samples_visible;
+            tmp *= keep_thing / delta_h_zoom;
+            m_target_h_offset += tmp;
+            m_h_offset += tmp;
+        }
+        else
+        {
+            double tmp = -((1.0 - delta_h_zoom) * num_samples_visible);
+            tmp *= keep_thing / delta_h_zoom;
+            m_target_h_offset += tmp;
+            m_h_offset += tmp;
+        }
     }
 
 
