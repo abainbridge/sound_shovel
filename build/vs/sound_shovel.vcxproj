@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\binary_file_reader.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_device.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\binary_file_reader.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\darray.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_device.h" />
