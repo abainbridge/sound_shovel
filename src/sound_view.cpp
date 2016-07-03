@@ -92,9 +92,11 @@ void SoundView::RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio)
         for (unsigned x = 0; x < m_display_width; x++)
         {
             int vline_len = RoundToInt(m_display_maxes[x] - m_display_mins[x]) * v_zoom_ratio;
-            //            vline_len = 200 * v_zoom_ratio;
-            VLine(bmp, x, ceil(y_mid - m_display_maxes[x] * v_zoom_ratio), vline_len, sound_colour);
-            //            VLine(bmp, x, y_mid - 100 * v_zoom_ratio, vline_len, sound_colour);
+            int y = ceil(y_mid - m_display_maxes[x] * v_zoom_ratio);
+            if (vline_len == 0)
+                PutPix(bmp, x, y, sound_colour);
+            else
+                VLine(bmp, x, y, vline_len, sound_colour);
         }
 
         HLine(bmp, 0, y_mid - 32767 * v_zoom_ratio, m_display_width, Colour(255, 255, 255, 60));
@@ -149,6 +151,7 @@ void SoundView::Advance()
 
     double h_zoom_ratio_before = m_h_zoom_ratio;
     double max_h_offset = m_sound->GetLength() - m_display_width * m_h_zoom_ratio;
+    max_h_offset = IntMax(0.0, max_h_offset);
 
     static double last_time = GetHighResTime();
     double now = GetHighResTime();
