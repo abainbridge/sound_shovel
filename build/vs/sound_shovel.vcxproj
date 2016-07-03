@@ -22,24 +22,23 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_device.cpp" />
-    <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_system.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
     <ClCompile Include="..\..\src\sound_channel.cpp" />
+    <ClCompile Include="..\..\src\sound_system.cpp" />
     <ClCompile Include="..\..\src\sound_view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\darray.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h" />
-    <ClInclude Include="..\..\src\df_lib_plus_plus\llist.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_device.h" />
-    <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_system.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound.h" />
     <ClInclude Include="..\..\src\sound_channel.h" />
+    <ClInclude Include="..\..\src\sound_system.h" />
     <ClInclude Include="..\..\src\sound_view.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

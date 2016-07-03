@@ -15,9 +15,7 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_device.cpp">
       <Filter>df_lib_plus_plus\sound</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_system.cpp">
-      <Filter>df_lib_plus_plus\sound</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\src\sound_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -28,9 +26,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\df_lib_plus_plus\llist.h">
-      <Filter>df_lib_plus_plus</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\sound.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound_view.h" />
@@ -48,8 +43,6 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_device.h">
       <Filter>df_lib_plus_plus\sound</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_system.h">
-      <Filter>df_lib_plus_plus\sound</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\src\sound_system.h" />
   </ItemGroup>
 </Project>

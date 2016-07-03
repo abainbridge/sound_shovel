@@ -4,7 +4,7 @@
 #include "sound.h"
 #include "sample_block.h"
 #include "sound_channel.h"
-#include "sound_device.h"
+#include "sound/sound_device.h"
 
 // Contrib includes
 #include "df_hi_res_time.h"
