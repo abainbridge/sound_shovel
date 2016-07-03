@@ -274,6 +274,8 @@ void SoundView::Advance()
 
     m_h_offset = ClampDouble(m_h_offset, 0.0, max_h_offset);
     m_target_h_offset = ClampDouble(m_target_h_offset, 0.0, max_h_offset);
+    if (m_h_zoom_ratio < 1.0)
+        m_h_zoom_ratio = 1.0;
 
     if (!NearlyEqual(m_h_zoom_ratio, m_target_h_zoom_ratio) ||
         !NearlyEqual(m_h_offset, m_target_h_offset))
