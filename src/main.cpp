@@ -3,11 +3,11 @@
 
 // Project headers
 #include "sound.h"
+#include "sound_system.h"
 #include "sound_view.h"
 
 //
 #include "gui/file_dialog.h"
-#include "sound/sound_system.h"
 
 // Contrib headers
 #include "df_bitmap.h"
@@ -49,7 +49,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     while (!g_window->windowClosed && !g_inputManager.keyDowns[KEY_ESC])
     {
-        ClearBitmap(g_window->bmp, Colour(50, 50, 50));
+        ClearBitmap(g_window->bmp, Colour(44, 51, 59));
         InputManagerAdvance();
 
         sound_view.Advance();
@@ -61,8 +61,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         g_soundSystem->Advance();
         UpdateWin();
         
-        if (g_can_sleep)
-            SleepMillisec(50);
+//         if (g_can_sleep)
+//             SleepMillisec(50);
 
         g_can_sleep = true;
     }

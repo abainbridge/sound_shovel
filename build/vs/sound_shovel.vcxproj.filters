@@ -6,9 +6,6 @@
     <ClCompile Include="..\..\src\sound_view.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound_channel.cpp" />
-    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp">
-      <Filter>df_lib_plus_plus</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp">
       <Filter>df_lib_plus_plus</Filter>
     </ClCompile>
@@ -19,6 +16,27 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\binary_file_reader.cpp">
       <Filter>df_lib_plus_plus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\preferences.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\command.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\string_utils.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\filesys_utils.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\threading.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\mutex.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp">
+      <Filter>df_lib_plus_plus\gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -27,6 +45,12 @@
     <Filter Include="df_lib_plus_plus\sound">
       <UniqueIdentifier>{20e89f65-60ce-40b7-91bf-806504e9540b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="df_lib_plus_plus\gui">
+      <UniqueIdentifier>{2731e065-db60-4429-baa9-08da65e29b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="df_lib_plus_plus\containers">
+      <UniqueIdentifier>{ab674c5f-6e90-4461-a91a-eac985ede0c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sound.h" />
@@ -34,9 +58,6 @@
     <ClInclude Include="..\..\src\sound_view.h" />
     <ClInclude Include="..\..\src\sound_channel.h" />
     <ClInclude Include="..\..\src\main.h" />
-    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h">
-      <Filter>df_lib_plus_plus</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h">
       <Filter>df_lib_plus_plus</Filter>
     </ClInclude>
@@ -49,6 +70,33 @@
     <ClInclude Include="..\..\src\sound_system.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\binary_file_reader.h">
       <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\preferences.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\command.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\containers\hash_table.h">
+      <Filter>df_lib_plus_plus\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\containers\llist.h">
+      <Filter>df_lib_plus_plus\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\string_utils.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\filesys_utils.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\threading.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\mutex.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h">
+      <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

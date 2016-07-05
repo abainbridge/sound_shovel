@@ -20,6 +20,7 @@
 
 Sound::Sound()
 {
+    m_channels = NULL;
     m_num_channels = 0;
     m_cached_length = -1;
     m_playback_idx = -1;

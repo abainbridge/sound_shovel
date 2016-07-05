@@ -21,8 +21,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\binary_file_reader.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\command.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\filesys_utils.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\file_dialog.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\mutex.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\preferences.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\sound\sound_device.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\string_utils.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\threading.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
@@ -33,9 +39,17 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\binary_file_reader.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\command.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\containers\hash_table.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\containers\llist.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\darray.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\filesys_utils.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\file_dialog.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\mutex.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\preferences.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\sound\sound_device.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\string_utils.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\threading.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound.h" />
@@ -114,7 +128,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4244;4577;4800;4996</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ShowIncludes>false</ShowIncludes>
     </ClCompile>
@@ -136,7 +150,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4244;4577;4800;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,7 +169,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4244;4577;4800;4996</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
@@ -186,7 +200,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018;4244;4577;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4244;4577;4800;4996</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
