@@ -26,11 +26,11 @@ class SoundDevice
 {
 protected:
 	StereoSampleBuf	*m_buffers;
-	unsigned int	m_num_buffers;
-	unsigned int	m_next_buffer;		// Index of next buffer to send to sound card
+	unsigned int	m_numBuffers;
+	unsigned int	m_nextBuffer;		// Index of next buffer to send to sound card
 
 public:
-	unsigned int	m_fills_requested;	// Number of outstanding requests for more sound data that Windows has issued
+	unsigned int	m_fillsRequested;	// Number of outstanding requests for more sound data that Windows has issued
 	unsigned int	m_freq;
 	unsigned int	m_samplesPerBuffer;
     void			(*m_callback) (StereoSample *buf, unsigned int numSamples);

@@ -1,8 +1,7 @@
-#ifndef INCLUDED_LLIST_H
-#define INCLUDED_LLIST_H
+#pragma once
 
 
-// This is a sort-of vector-list hybrid. 
+// This is a sort-of vector-list hybrid.
 // List like features:
 //  * You can add and remove data to/from anywhere
 //
@@ -39,9 +38,9 @@ public:
     LList();
 	~LList();
 
-	inline void PutData			(const T &data);        // Adds data at the end	
+	inline void PutData			(const T &data);        // Adds data at the end
 	void		PutDataAtEnd	(const T &data);
-	void		PutDataAtStart	(const T &data);	
+	void		PutDataAtStart	(const T &data);
 	void		PutDataAtIndex	(const T &data, int index);
 
     inline T   *GetPointer		(int index) const;	    // \ O(n) unless sequential
@@ -51,17 +50,14 @@ public:
 	inline void	RemoveDataAtEnd	();
 
     int			FindData		(const T &data);		// -1 means 'not found'
-  
+
     inline int	Size			() const;				// Returns the total size of the array
     inline bool ValidIndex		(int index) const;
 
-    void		Empty			();						// Resets the array to empty    
+    void		Empty			();						// Resets the array to empty
     void		EmptyAndDelete	();						// As above, deletes all data as well
 
 };
 
 
 #include "llist.cpp"
-
-
-#endif

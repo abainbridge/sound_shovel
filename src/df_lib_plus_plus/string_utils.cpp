@@ -149,13 +149,13 @@ bool IsWordBreak(char a, char const *l, int x)
 
 	char b = l[x];
 
-	if (safe_isspace(b))
+	if (IsSpace(b))
 	{
-		return !safe_isspace(a);
+		return !IsSpace(a);
 	}
 	else
 	{
-		return iswordchar(a) != iswordchar(b);
+		return IsWordChar(a) != IsWordChar(b);
 	}
 	
 //	return false;

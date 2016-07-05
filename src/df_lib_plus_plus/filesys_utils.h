@@ -1,5 +1,4 @@
-#ifndef INCLUDED_FILESYS_UTILS
-#define INCLUDED_FILESYS_UTILS
+#pragma once
 
 
 // Project headers
@@ -34,7 +33,7 @@ public:
 	char const *GetDirectoryPart	() const { return m_directoryPart.c_str(); };
 	char const *GetFilenamePart		() const { return m_filenamePart.c_str(); };
 	char const *GetExtensionPart	() const { return m_extensionPart.c_str(); };
-	
+
 	bool		Exists				();	// Returns true if the file exists
 	bool		IsReadOnly			();	// Returns true if the file is read only
 	bool		IsInvalid			() { return m_directoryPart.length() == 0; }
@@ -97,6 +96,4 @@ bool IsRelativePath		(char const *path);
  #define FilenameCmp		stricmp
 #else
  #define FilenameCmp		strcmp
-#endif
-
 #endif

@@ -167,13 +167,13 @@ bool PrefsManager::IsLineEmpty(char const *line)
 	}
 
 	return true;
-}	
+}
 
 
 void PrefsManager::AddLine(char *line)
 {
 	m_fileText.PutData(StringDuplicate(line));
-	
+
     char localCopy[256];
     strncpy(localCopy, line, 255);
 	if (!IsLineEmpty(localCopy))				// Skip comment lines and blank lines
@@ -182,19 +182,19 @@ void PrefsManager::AddLine(char *line)
 		char *key = localCopy;
 		while (!isalnum(*key) && *key != '\0')
 			key++;
-		
+
 		// Find end of key
 		char *c = key;
-		while (!safe_isspace(*c))			// Find the end of the key word
+		while (!IsSpace(*c))			// Find the end of the key word
 			c++;
 		if (*c == '\0')
 			goto handle_error;
-		
+
 		*c = '\0';
 
 		// Find value
 		c++;
-		while (safe_isspace(*c))
+		while (IsSpace(*c))
 		{
 			c++;
 			if (*c == '\0')
@@ -203,13 +203,13 @@ void PrefsManager::AddLine(char *line)
 		if (*c != '=')
 			goto handle_error;
 		c++;
-		while (safe_isspace(*c))
+		while (IsSpace(*c))
 		{
 			c++;
 			if (*c == '\0')
 				goto handle_error;
 		}
-		
+
 		// Strip trailing newline
 		c[strlen(c) - 1] = '\0';
 
@@ -221,18 +221,18 @@ void PrefsManager::AddLine(char *line)
 				item = CreateOverrideItem(key);
 				m_items.PutData(key, item);
 			}
-			
+
  			if (!item->SetValueFromLine(c))
- 				ReleaseWarn(false, "Local settings file contained out of range value:%s\n", line); 
+ 				ReleaseWarn(false, "Local settings file contained out of range value:%s\n", line);
 		}
 		else
 		{
 			ReleaseWarn((int)item, "Local settings file contains an unrecognized setting:%s\n", line);
-			
+
 			if (item)
 				item->SetValueFromLine(c);
 		}
-	}  
+	}
 
 	return;
 
@@ -292,15 +292,15 @@ void PrefsManager::Save()
 	// First clear the "has been written" flags on all the items
 	for (unsigned int i = 0; i < m_items.Size(); ++i)
 	{
-		if (m_items.ValidIndex(i)) 
+		if (m_items.ValidIndex(i))
 			m_items[i]->m_hasBeenWritten = false;
 	}
 
 	// Now use m_fileText as a template to write most of the items
     String newFilename = m_filename + String(".tmp");
     FILE *out = fopen(newFilename.c_str(), "w");
-	
-	// If we couldn't open the prefs file for writing then just silently fail - 
+
+	// If we couldn't open the prefs file for writing then just silently fail -
 	// it's better than crashing.
 	if (!out)
 		return;
@@ -319,11 +319,11 @@ void PrefsManager::Save()
 			char const *c = line;
 			char const *keyStart = NULL;
 			char const *keyEnd = NULL;
-			while (*c != '\0') 
+			while (*c != '\0')
 			{
 				if (isalnum(*c) || *c == '.')
 				{
-					keyStart = c; 
+					keyStart = c;
 					break;
 				}
 				++c;
@@ -367,7 +367,7 @@ void PrefsManager::Save()
 	// Finally output any items that haven't already been written
 	for (unsigned int i = 0; i < m_items.Size(); ++i)
 	{
-		if (m_items.ValidIndex(i)) 
+		if (m_items.ValidIndex(i))
 		{
 			PrefsItem *item = m_items.GetData(i);
 			char const *key = m_items.GetName(i);
@@ -472,7 +472,7 @@ char *PrefsManager::ExecuteCommand(char const *object, char const *command, char
 		int val = GetInt(arguments);
 		return CreateIntToSend(val);
 	}
-	
+
     return COMMAND_RETURN_NOTHING;
 }
 
@@ -495,14 +495,14 @@ PrefsItem *PrefsManager::GetItem(char const *key) const
 	item = NULL;
 #endif
 
-	// If still not found, look for Trowel wide setting (this will 
+	// If still not found, look for Trowel wide setting (this will
 	// retrieve the user preference, if there is one, or the trowel
 	// default that was registered at startup.
 	if (!item)
 		item = m_items.GetData(key);
 
 	// If still not found, that's an error
-	ReleaseAssert((int)item, "PrefsManager::GetString: '%s' not found", key);		
+	ReleaseAssert((int)item, "PrefsManager::GetString: '%s' not found", key);
 
 	return item;
 }
@@ -559,7 +559,7 @@ void PrefsManager::RegisterString(char const *name, char const *_default, bool v
 {
 	DebugAssert(!m_items.GetData(name));
 	PrefsItemString *item = new PrefsItemString(_default);
-	m_items.PutData(name, item);	
+	m_items.PutData(name, item);
 	item->m_registered = true;
 	item->m_variesWithSyntaxGroup = variesWithSyntaxGroup;
 }
@@ -587,7 +587,7 @@ PrefsItem *PrefsManager::CreateOverrideItem(char const *fullName)
 
 	PrefsItem *baseItem = m_items.GetData(baseName);
 	PrefsItem *item = NULL;
-	
+
 	switch (baseItem->m_type)
 	{
 		case PrefsItem::TypeFloat:

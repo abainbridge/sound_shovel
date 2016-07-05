@@ -1,6 +1,7 @@
 #pragma  once
 
-// Like std::string, except with no allocator template parameter, and no inheritance 
+
+// Like std::string, except with no allocator template parameter, and no inheritance
 // from basic_string.
 //
 // Advantages:
@@ -15,7 +16,7 @@
 #include <string>
 typedef std::string String;
 
-#else 
+#else
 
 #define noinl __declspec(noinline)
 
@@ -72,7 +73,7 @@ public:
     noinl size_t find(char c, size_t pos = 0) const;
 
     noinl size_t rfind(char c, size_t pos = npos) const;
-    
+
     noinl size_t find_first_of(const char *s, size_t pos = 0) const;
 
     String substr(size_t pos = 0, size_t len = npos) const;

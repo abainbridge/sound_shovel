@@ -1,5 +1,4 @@
-#ifndef INCLUDED_THREADING_H
-#define INCLUDED_THREADING_H
+#pragma once
 
 
 #include <windows.h>    // TODO make this not needed in the header by making m_criticalSectionWin32 be a pointer
@@ -27,6 +26,3 @@ typedef unsigned long (__stdcall *ThreadProc)(void *data);
 unsigned StartThread(ThreadProc threadFunc, void *threadData);
 bool MySuspendThread(unsigned threadHandle);	// Returns true on success
 bool MyResumeThread(unsigned threadHandle);		// Returns true on success
-
-
-#endif

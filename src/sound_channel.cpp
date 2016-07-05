@@ -18,55 +18,55 @@ unsigned SoundChannel::GetLength()
 }
 
 
-SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int64_t sample_idx)
+SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int64_t sampleIdx)
 {
-    int block_idx = 0;
-    
-    while (sample_idx >= m_blocks[block_idx]->m_len)
+    int blockIdx = 0;
+
+    while (sampleIdx >= m_blocks[blockIdx]->m_len)
     {
-        sample_idx -= m_blocks[block_idx]->m_len;
-        block_idx++;
-        if (block_idx > m_blocks.Size())
+        sampleIdx -= m_blocks[blockIdx]->m_len;
+        blockIdx++;
+        if (blockIdx > m_blocks.Size())
             return SoundPos(-1, -1);
     }
 
-    return SoundPos(block_idx, sample_idx);
+    return SoundPos(blockIdx, sampleIdx);
 }
 
 
-// Move SoundPos along by the specified num_samples, moving over (potentially part
+// Move SoundPos along by the specified numSamples, moving over (potentially part
 // full) blocks as needed.
 //
 // Returns a pointer to the block we end on, or NULL if we go off the end of the
 // Sound.
-SampleBlock *SoundChannel::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
+SampleBlock *SoundChannel::IncrementSoundPos(SoundPos *pos, int64_t numSamples)
 {
-    if (pos->m_block_idx >= m_blocks.Size())
+    if (pos->m_blockIdx >= m_blocks.Size())
         return NULL;
 
-    SampleBlock *block = m_blocks[pos->m_block_idx];
-    ReleaseAssert(pos->m_sample_idx < block->m_len, "Invalid SoundPos - m_sample_idx beyond end of block");
+    SampleBlock *block = m_blocks[pos->m_blockIdx];
+    ReleaseAssert(pos->m_sampleIdx < block->m_len, "Invalid SoundPos - m_sampleIdx beyond end of block");
 
     // Iterate across blocks until we've crossed enough samples.
-    while (num_samples)
+    while (numSamples)
     {
-        // Has this block got at least 'num_samples' left?
-        if (pos->m_sample_idx + num_samples < block->m_len)
+        // Has this block got at least 'numSamples' left?
+        if (pos->m_sampleIdx + numSamples < block->m_len)
         {
             // Yes
-            pos->m_sample_idx += num_samples;
-            num_samples = 0;
+            pos->m_sampleIdx += numSamples;
+            numSamples = 0;
         }
         else
         {
             // No
-            num_samples -= block->m_len - pos->m_sample_idx;
-            pos->m_block_idx++;
-            if (pos->m_block_idx >= m_blocks.Size())
+            numSamples -= block->m_len - pos->m_sampleIdx;
+            pos->m_blockIdx++;
+            if (pos->m_blockIdx >= m_blocks.Size())
                 return NULL;
 
-            block = m_blocks[pos->m_block_idx];
-            pos->m_sample_idx = 0;
+            block = m_blocks[pos->m_blockIdx];
+            pos->m_sampleIdx = 0;
         }
     }
 
@@ -74,34 +74,34 @@ SampleBlock *SoundChannel::IncrementSoundPos(SoundPos *pos, int64_t num_samples)
 }
 
 
-void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max)
+void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned numSamples, int16_t *resultMin, int16_t *resultMax)
 {
-    // If pos is entirely outside the bounds of the sample, then we set result_min and result_max to zero.
-    if (pos->m_block_idx >= m_blocks.Size())
+    // If pos is entirely outside the bounds of the sample, then we set resultMin and resultMax to zero.
+    if (pos->m_blockIdx >= m_blocks.Size())
     {
-        *result_max = 0;
-        *result_min = 0;
+        *resultMax = 0;
+        *resultMin = 0;
         return;
     }
 
-    SampleBlock *block = m_blocks[pos->m_block_idx];
+    SampleBlock *block = m_blocks[pos->m_blockIdx];
 
     int16_t _min = INT16_MAX;
     int16_t _max = INT16_MIN;
 
     // Do the slow bit at the start of the range.
     {
-        const unsigned lut_item_boundary_mask = SampleBlock::SAMPLES_PER_LUT_ITEM - 1;
-        unsigned num_samples_to_next_lut_item_boundary = (SampleBlock::SAMPLES_PER_LUT_ITEM - pos->m_sample_idx) & lut_item_boundary_mask;
-        unsigned num_slow_samples = num_samples_to_next_lut_item_boundary;
-        if (num_slow_samples > num_samples)
-            num_slow_samples = num_samples;
+        const unsigned lutItemBoundaryMask = SampleBlock::SAMPLES_PER_LUT_ITEM - 1;
+        unsigned numSamplesToNextLutItemBoundary = (SampleBlock::SAMPLES_PER_LUT_ITEM - pos->m_sampleIdx) & lutItemBoundaryMask;
+        unsigned numSlowSamples = numSamplesToNextLutItemBoundary;
+        if (numSlowSamples > numSamples)
+            numSlowSamples = numSamples;
 
-        unsigned idx = pos->m_sample_idx;
-        unsigned end_idx = idx + num_slow_samples;
+        unsigned idx = pos->m_sampleIdx;
+        unsigned end_idx = idx + numSlowSamples;
         if (end_idx > block->m_len)
             end_idx = block->m_len;
-        
+
         while (idx < end_idx)
         {
             _min = SAMPLE_MIN(block->m_samples[idx], _min);
@@ -109,56 +109,56 @@ void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16
             idx++;
         }
 
-        num_samples -= num_slow_samples;
-        block = IncrementSoundPos(pos, num_slow_samples);
+        numSamples -= numSlowSamples;
+        block = IncrementSoundPos(pos, numSlowSamples);
     }
 
     // Do the fast bit - one block per iteration.
-    while (block && num_samples > SampleBlock::SAMPLES_PER_LUT_ITEM)
+    while (block && numSamples > SampleBlock::SAMPLES_PER_LUT_ITEM)
     {
         // Cases here:
         // 1. There is one or more LUT items in this block that we can use.
         // 2. There is one or more LUT items left, but the pixel doesn't span entirely over it/them.
 
-        unsigned num_lut_items_we_need = num_samples / SampleBlock::SAMPLES_PER_LUT_ITEM;
-        unsigned current_lut_item_idx = pos->m_sample_idx / SampleBlock::SAMPLES_PER_LUT_ITEM;
-        unsigned num_lut_items_in_this_block = ((block->m_len - 1) / SampleBlock::SAMPLES_PER_LUT_ITEM) + 1;
-        unsigned num_lut_items_left_in_this_block = num_lut_items_in_this_block - current_lut_item_idx;
+        unsigned numLutItemsWeNeed = numSamples / SampleBlock::SAMPLES_PER_LUT_ITEM;
+        unsigned currentLutItemIdx = pos->m_sampleIdx / SampleBlock::SAMPLES_PER_LUT_ITEM;
+        unsigned numLutItemsInThisBlock = ((block->m_len - 1) / SampleBlock::SAMPLES_PER_LUT_ITEM) + 1;
+        unsigned numLutItemsLeftInThisBlock = numLutItemsInThisBlock - currentLutItemIdx;
 
-        unsigned num_lut_items_to_use = num_lut_items_we_need;
-        if (num_lut_items_left_in_this_block < num_lut_items_to_use)
-            num_lut_items_to_use = num_lut_items_left_in_this_block;
+        unsigned numLutItemsToUse = numLutItemsWeNeed;
+        if (numLutItemsLeftInThisBlock < numLutItemsToUse)
+            numLutItemsToUse = numLutItemsLeftInThisBlock;
 
-        unsigned end_lut_item_idx = current_lut_item_idx + num_lut_items_to_use;
-        while (current_lut_item_idx < end_lut_item_idx)
+        unsigned endLutItemIdx = currentLutItemIdx + numLutItemsToUse;
+        while (currentLutItemIdx < endLutItemIdx)
         {
-            _min = SAMPLE_MIN(block->m_min_lut[current_lut_item_idx], _min);
-            _max = SAMPLE_MAX(block->m_max_lut[current_lut_item_idx], _max);
-            current_lut_item_idx++;
+            _min = SAMPLE_MIN(block->m_minLut[currentLutItemIdx], _min);
+            _max = SAMPLE_MAX(block->m_maxLut[currentLutItemIdx], _max);
+            currentLutItemIdx++;
         }
 
         // Calculate how many samples we processed. It's a little complex because the
         // LUT items we used might not have been "full", if the block has been part of
         // and insert or delete operation previously.
-        unsigned num_samples_left_in_this_block_before_we_did_the_fast_bit = block->m_len - pos->m_sample_idx;
-        unsigned num_samples_processed_this_iteration = num_lut_items_to_use * SampleBlock::SAMPLES_PER_LUT_ITEM;
-        if (num_samples > num_samples_left_in_this_block_before_we_did_the_fast_bit)
-            num_samples_processed_this_iteration = num_samples_left_in_this_block_before_we_did_the_fast_bit;
+        unsigned numSamplesLeftInThisBlockBeforeWeDidTheFastBit = block->m_len - pos->m_sampleIdx;
+        unsigned numSamplesProcessedThisIteration = numLutItemsToUse * SampleBlock::SAMPLES_PER_LUT_ITEM;
+        if (numSamples > numSamplesLeftInThisBlockBeforeWeDidTheFastBit)
+            numSamplesProcessedThisIteration = numSamplesLeftInThisBlockBeforeWeDidTheFastBit;
 
-        num_samples -= num_samples_processed_this_iteration;
-        block = IncrementSoundPos(pos, num_samples_processed_this_iteration);
+        numSamples -= numSamplesProcessedThisIteration;
+        block = IncrementSoundPos(pos, numSamplesProcessedThisIteration);
     }
 
     // Do the slow bit at the end of the range.
     if (block)
     {
-        // We are not at end of block and num_samples is less than next LUT item boundary.
+        // We are not at end of block and numSamples is less than next LUT item boundary.
         // Cases:
         // 1 - There are enough samples in the current block to cover the current pixel.
         // 2 - There aren't.
 
-        unsigned idx = pos->m_sample_idx;
-        unsigned end_idx = pos->m_sample_idx + num_samples;
+        unsigned idx = pos->m_sampleIdx;
+        unsigned end_idx = pos->m_sampleIdx + numSamples;
         if (end_idx > block->m_len)
             end_idx = block->m_len;
 
@@ -169,33 +169,33 @@ void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16
             idx++;
         }
 
-        block = IncrementSoundPos(pos, num_samples);
+        block = IncrementSoundPos(pos, numSamples);
     }
 
-    *result_min = _min;
-    *result_max = _max;
+    *resultMin = _min;
+    *resultMax = _max;
 }
 
 
-void SoundChannel::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, double samples_per_pixel)
+void SoundChannel::CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned widthInPixels, double samplesPerPixel)
 {
     SoundPos pos = GetSoundPosFromSampleIdx(start_sample_idx);
 
-    double width_error_per_pixel = samples_per_pixel - floorf(samples_per_pixel);
+    double widthErrorPerPixel = samplesPerPixel - floorf(samplesPerPixel);
     double error = 0;
-    for (unsigned x = 0; x < width_in_pixels; x++)
+    for (unsigned x = 0; x < widthInPixels; x++)
     {
-        if (pos.m_block_idx < m_blocks.Size())
+        if (pos.m_blockIdx < m_blocks.Size())
         {
-            int samples_this_pixel = samples_per_pixel;
+            int samplesThisPixel = samplesPerPixel;
             if (error > 1.0)
             {
-                samples_this_pixel++;
+                samplesThisPixel++;
                 error -= 1.0;
             }
-            error += width_error_per_pixel;
+            error += widthErrorPerPixel;
 
-            CalcMinMaxForRange(&pos, samples_this_pixel, mins + x, maxes + x);
+            CalcMinMaxForRange(&pos, samplesThisPixel, mins + x, maxes + x);
 
             // On all but the first iteration of the loop, make vline join onto
             // the previous, so no gaps are visible.

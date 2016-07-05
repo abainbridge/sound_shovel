@@ -21,9 +21,9 @@
 Sound::Sound()
 {
     m_channels = NULL;
-    m_num_channels = 0;
-    m_cached_length = -1;
-    m_playback_idx = -1;
+    m_numChannels = 0;
+    m_cachedLength = -1;
+    m_playbackIdx = -1;
 }
 
 
@@ -52,15 +52,15 @@ bool Sound::LoadWav(char const *filename)
         return false;
     unsigned fmtChunkSize = f.ReadU32();
     unsigned audioFormat = f.ReadU16();
-    m_num_channels = f.ReadU16();
+    m_numChannels = f.ReadU16();
     unsigned sampleRate = f.ReadU32();
     unsigned byteRate = f.ReadU32();
-    unsigned bytes_per_group = f.ReadU16();
+    unsigned bytesPerGroup = f.ReadU16();
     unsigned bitsPerSample = f.ReadU16();
 
     ReleaseAssert(audioFormat == 1, "File '%s' unsupported format", filename);
-    ReleaseAssert(m_num_channels == 2, "File '%s' is not stereo", filename);
-    ReleaseAssert(bytes_per_group == 4, "File '%s' unsupported block alignment", filename);
+    ReleaseAssert(m_numChannels == 2, "File '%s' is not stereo", filename);
+    ReleaseAssert(bytesPerGroup == 4, "File '%s' unsupported block alignment", filename);
     ReleaseAssert(bitsPerSample == 16, "File '%s' is not 16 bits sample depth", filename);
 
 
@@ -70,42 +70,42 @@ bool Sound::LoadWav(char const *filename)
     if (f.ReadBytes(4, buf1) != 4 || memcmp(buf1, "data", 4) != 0)
         return false;
     unsigned dataChunkSize = f.ReadU32();
-    ReleaseAssert(dataChunkSize % bytes_per_group == 0, "File '%s' ends with half a sample", filename);
-    unsigned num_groups = dataChunkSize / bytes_per_group;
-    unsigned num_blocks = num_groups / SampleBlock::MAX_SAMPLES;
-    if (num_groups % SampleBlock::MAX_SAMPLES != 0)
-        num_blocks++;
+    ReleaseAssert(dataChunkSize % bytesPerGroup == 0, "File '%s' ends with half a sample", filename);
+    unsigned numGroups = dataChunkSize / bytesPerGroup;
+    unsigned numBlocks = numGroups / SampleBlock::MAX_SAMPLES;
+    if (numGroups % SampleBlock::MAX_SAMPLES != 0)
+        numBlocks++;
 
-    m_channels = new SoundChannel* [m_num_channels];
-    for (int i = 0; i < m_num_channels; i++)
+    m_channels = new SoundChannel* [m_numChannels];
+    for (int i = 0; i < m_numChannels; i++)
         m_channels[i] = new SoundChannel;
 
-    int16_t *buf = new int16_t [SampleBlock::MAX_SAMPLES * m_num_channels];
+    int16_t *buf = new int16_t [SampleBlock::MAX_SAMPLES * m_numChannels];
 
-    for (int block_count = 0; block_count < num_blocks; block_count++)
+    for (int blockCount = 0; blockCount < numBlocks; blockCount++)
     {
-        unsigned bytes_to_read = bytes_per_group * SampleBlock::MAX_SAMPLES;
-        if (block_count + 1 == num_blocks)
-            bytes_to_read = (num_groups % SampleBlock::MAX_SAMPLES) * bytes_per_group;
-        size_t bytes_read = f.ReadBytes(bytes_to_read, (unsigned char *)buf);
-        size_t groups_read = bytes_read / bytes_per_group;
+        unsigned bytesToRead = bytesPerGroup * SampleBlock::MAX_SAMPLES;
+        if (blockCount + 1 == numBlocks)
+            bytesToRead = (numGroups % SampleBlock::MAX_SAMPLES) * bytesPerGroup;
+        size_t bytesRead = f.ReadBytes(bytesToRead, (unsigned char *)buf);
+        size_t groupsRead = bytesRead / bytesPerGroup;
 
-        for (int chan_idx = 0; chan_idx < m_num_channels; chan_idx++)
+        for (int chan_idx = 0; chan_idx < m_numChannels; chan_idx++)
         {
             SoundChannel *chan = m_channels[chan_idx];
             SampleBlock *block = new SampleBlock;
 
-            for (size_t i = 0; i < groups_read; i++)
-                block->m_samples[i] = buf[i * m_num_channels + chan_idx];
+            for (size_t i = 0; i < groupsRead; i++)
+                block->m_samples[i] = buf[i * m_numChannels + chan_idx];
 
-            block->m_len = groups_read;
+            block->m_len = groupsRead;
             block->RecalcLuts();
 
             DebugAssert(block->m_len > 0);
             chan->m_blocks.Push(block);
 
             if (block->m_len != SampleBlock::MAX_SAMPLES)
-                DebugAssert(block_count + 1 == num_blocks);
+                DebugAssert(blockCount + 1 == numBlocks);
         }
     }
 
@@ -117,11 +117,11 @@ bool Sound::LoadWav(char const *filename)
 
 int64_t Sound::GetLength()
 {
-    if (m_num_channels == 0)
+    if (m_numChannels == 0)
         return 0;
 
-    if (m_cached_length < 0)
-        m_cached_length = m_channels[0]->GetLength();
+    if (m_cachedLength < 0)
+        m_cachedLength = m_channels[0]->GetLength();
 
-    return m_cached_length;
+    return m_cachedLength;
 }

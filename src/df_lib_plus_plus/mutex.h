@@ -1,5 +1,4 @@
-#ifndef INCLUDED_MUTEX_H
-#define INCLUDED_MUTEX_H
+#pragma once
 
 
 class Mutex
@@ -15,7 +14,7 @@ public:
 };
 
 
-// This wrapper class makes
+
 class MutexLocker
 {
 private:
@@ -33,6 +32,3 @@ public:
         m_mutex->Leave();
     }
 };
-
-
-#endif

@@ -14,15 +14,15 @@ const unsigned String::npos = -1;
 // Private Functions
 // ***************************************************************************
 
-// For some bizarre reason, this strlen generates better code in VS 2008 (x86) 
-// than the one in the standard library. This code compiles down to 3 
-// instructions in the loop, compared to the standard implementation with 4. 
-// Also, when inlined it tends to save another instruction or two compared to 
+// For some bizarre reason, this strlen generates better code in VS 2008 (x86)
+// than the one in the standard library. This code compiles down to 3
+// instructions in the loop, compared to the standard implementation with 4.
+// Also, when inlined it tends to save another instruction or two compared to
 // the standard one.
 inline static unsigned mystrlen(char const *s)
 {
     unsigned lenS = 0;
-    while (s[lenS]) 
+    while (s[lenS])
         lenS++;
     return lenS;
 }
@@ -93,7 +93,7 @@ void String::resize(size_t n, char c)
         return;
 
     char *newArray = new char [n + 1];
-    
+
     if (n < m_len)
     {
         memcpy(newArray, m_array, n);
@@ -126,7 +126,7 @@ void String::operator = (String const &s)
 
 
 void String::operator = (char const *s)
-{ 
+{
     delete [] m_array;
     assign(s);
 }
@@ -211,7 +211,7 @@ void String::erase(size_t pos, size_t len)
 {
     if (pos >= m_len)
         return;
- 
+
     if (len == npos || (pos + len) > m_len)
         len = m_len - pos;
 

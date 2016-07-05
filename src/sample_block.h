@@ -16,8 +16,8 @@ struct SampleBlock
 
     int16_t     m_samples[MAX_SAMPLES];
     unsigned    m_len;   // Number of valid items in m_samples
-    int16_t     m_max_lut[LUT_SIZE];
-    int16_t     m_min_lut[LUT_SIZE];
+    int16_t     m_maxLut[LUT_SIZE];
+    int16_t     m_minLut[LUT_SIZE];
 
     SampleBlock();
 

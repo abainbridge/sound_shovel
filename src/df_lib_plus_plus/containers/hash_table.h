@@ -1,5 +1,4 @@
-#ifndef INCLUDED_HASH_TABLE_H
-#define INCLUDED_HASH_TABLE_H
+#pragma once
 
 
 #include <stdlib.h>
@@ -64,6 +63,3 @@ public:
 
 
 #include "hash_table.cpp"
-
-
-#endif

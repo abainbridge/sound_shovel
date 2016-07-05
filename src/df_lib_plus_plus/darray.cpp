@@ -1,14 +1,16 @@
+// Own header
 #include "df_common.h"
 
+// Standard headers
 #include <stdlib.h>
 
 
 template <class T>
 DArray<T>::DArray()
-:	m_arraySize(0),
-m_nextIndex(0),
-m_array(NULL)
 {
+    m_arraySize = 0;
+    m_nextIndex = 0;
+    m_array = NULL;
 }
 
 
@@ -42,27 +44,27 @@ DArray<T>::~DArray()
 template <class T>
 inline void DArray<T>::SetSize(unsigned int newsize)
 {
-	if (newsize > m_arraySize) 
+	if (newsize > m_arraySize)
 	{
 		unsigned int oldArraySize = m_arraySize;
 
 		m_arraySize = newsize;
 		T *tempArray = new T[m_arraySize];
-		
-		for (unsigned int a = 0; a < oldArraySize; ++a) 
+
+		for (unsigned int a = 0; a < oldArraySize; ++a)
 		{
 			tempArray[a] = m_array[a];
 		}
-		
+
 		delete [] m_array;
 		m_array = tempArray;
 	}
-	else if (newsize < m_arraySize) 
+	else if (newsize < m_arraySize)
 	{
 		m_arraySize = newsize;
 		T *tempArray = new T[m_arraySize];
 
-		for (unsigned int a = 0; a < m_arraySize; ++a) 
+		for (unsigned int a = 0; a < m_arraySize; ++a)
 		{
 			tempArray[a] = m_array[a];
 		}
@@ -92,10 +94,10 @@ template <class T>
 inline unsigned int DArray<T>::Push(const T &newdata)
 {
     if (m_nextIndex == m_arraySize)			// Must resize the array
-	{			 
+	{
 		Grow();
     }
-	    
+
     m_array[m_nextIndex] = newdata;
     m_nextIndex++;
 
@@ -170,7 +172,7 @@ template <class T>
 inline T DArray<T>::operator [] (unsigned int index)
 {
     DebugAssert(index < m_nextIndex);
-    return m_array[index];    
+    return m_array[index];
 }
 
 
@@ -178,7 +180,7 @@ template <class T>
 inline const T DArray<T>::operator [] (unsigned int index) const
 {
     DebugAssert(index < m_nextIndex);
-    return m_array[index];    
+    return m_array[index];
 }
 
 

@@ -15,32 +15,32 @@ class SoundChannel
 public:
     struct SoundPos
     {
-        int m_block_idx;
-        int m_sample_idx;
+        int m_blockIdx;
+        int m_sampleIdx;
 
         SoundPos()
         {
-	        m_block_idx = 0;
-    	    m_sample_idx = 0;
+	        m_blockIdx = 0;
+    	    m_sampleIdx = 0;
         }
 
-        SoundPos(int block_idx, int sample_idx) 
+        SoundPos(int blockIdx, int sampleIdx)
         {
-            m_block_idx = block_idx;
-            m_sample_idx = sample_idx;
+            m_blockIdx = blockIdx;
+            m_sampleIdx = sampleIdx;
         }
     };
 
 private:
-    void CalcMinMaxForRange(SoundPos *pos, unsigned num_samples, int16_t *result_min, int16_t *result_max);
+    void CalcMinMaxForRange(SoundPos *pos, unsigned numSamples, int16_t *resultMin, int16_t *resultMax);
 
 public:
-    SoundPos GetSoundPosFromSampleIdx(int64_t sample_idx);
-    SampleBlock *IncrementSoundPos(SoundPos *pos, int64_t num_samples);
+    SoundPos GetSoundPosFromSampleIdx(int64_t sampleIdx);
+    SampleBlock *IncrementSoundPos(SoundPos *pos, int64_t numSamples);
 
     DArray <SampleBlock *> m_blocks;
 
     unsigned GetLength();
 
-    void CalcDisplayData(int start_sample_idx, int16_t *mins, int16_t *maxes, unsigned width_in_pixels, double samples_per_pixel);
+    void CalcDisplayData(int startSampleIdx, int16_t *mins, int16_t *maxes, unsigned widthInPixels, double samplesPerPixel);
 };

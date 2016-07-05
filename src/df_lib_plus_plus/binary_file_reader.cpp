@@ -1,10 +1,12 @@
 // Own header
 #include "binary_file_reader.h"
 
+// Platform headers
 #ifdef WIN32
 #include <io.h>
 #endif
 
+// Standard headers
 #include <stdio.h>
 #include <string.h>
 

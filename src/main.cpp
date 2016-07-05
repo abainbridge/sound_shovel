@@ -26,7 +26,7 @@
 #include <stdint.h>
 
 
-bool g_can_sleep = true;
+bool g_canSleep = true;
 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
@@ -45,26 +45,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     sound.LoadWav("C:/users/andy/desktop/andante.wav");
     g_soundSystem->PlaySound(&sound, 0);
 
-    SoundView sound_view(&sound);
+    SoundView soundView(&sound);
 
     while (!g_window->windowClosed && !g_inputManager.keyDowns[KEY_ESC])
     {
         ClearBitmap(g_window->bmp, Colour(44, 51, 59));
         InputManagerAdvance();
 
-        sound_view.Advance();
-        sound_view.Render(g_window->bmp);
-        
-        DrawTextRight(g_defaultTextRenderer, g_colourWhite, g_window->bmp, 
+        soundView.Advance();
+        soundView.Render(g_window->bmp);
+
+        DrawTextRight(g_defaultTextRenderer, g_colourWhite, g_window->bmp,
             g_window->bmp->width - 5, 2, "FPS: %d", g_window->fps);
 
         g_soundSystem->Advance();
         UpdateWin();
-        
-//         if (g_can_sleep)
+
+//         if (g_canSleep)
 //             SleepMillisec(50);
 
-        g_can_sleep = true;
+        g_canSleep = true;
     }
 
     return 0;

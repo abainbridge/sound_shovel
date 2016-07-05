@@ -1,5 +1,4 @@
-#ifndef INCLUDED_COMMAND_H
-#define INCLUDED_COMMAND_H
+#pragma once
 
 
 // Project headers
@@ -112,6 +111,3 @@ public:
 
 
 extern CommandSender g_commandSender;
-
-
-#endif

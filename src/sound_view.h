@@ -15,9 +15,9 @@ class Sound;
 class SoundView
 {
 private:
-    double m_target_h_zoom_ratio;
-    double m_target_h_offset;
-    double m_playback_pos;
+    double m_targetHZoomRatio;
+    double m_targetHOffset;
+    double m_playbackPos;
 
     void UpdateDisplaySize(int pixel_width);
     void AdvanceSelection();
@@ -31,21 +31,21 @@ private:
 public:
     Sound *m_sound;
 
-    double m_h_offset;
-    double m_h_zoom_ratio;
+    double m_hOffset;
+    double m_hZoomRatio;
 
-    int m_display_width;
-    int16_t *m_display_mins;    // An array of length m_display_width.
-    int16_t *m_display_maxes;   // An array of length m_display_width.
+    int m_displayWidth;
+    int16_t *m_displayMins;    // An array of length m_displayWidth.
+    int16_t *m_displayMaxes;   // An array of length m_displayWidth.
 
-    int64_t m_selection_start;
-    int64_t m_selection_end;        // Set to -1 if no selection.
+    int64_t m_selectionStart;
+    int64_t m_selectionEnd;        // Set to -1 if no selection.
 
     SoundView(Sound *sound);
 
     void Advance();
     void Render(BitmapRGBA *bmp);
 
-    int64_t GetSampleIndexFromScreenPos(int screen_x);
-    double GetScreenPosFromSampleIndex(int64_t sample_idx);
+    int64_t GetSampleIndexFromScreenPos(int screenX);
+    double GetScreenPosFromSampleIndex(int64_t sampleIdx);
 };

@@ -16,9 +16,9 @@ public:
 	SoundSystem();
 
 	void Advance();
-	void DeviceCallback(StereoSample *buf, unsigned int num_samples);
+	void DeviceCallback(StereoSample *buf, unsigned int numSamples);
 
-    void PlaySound(Sound *sound, int64_t start_sample_idx);
+    void PlaySound(Sound *sound, int64_t startSampleIdx);
 };
 
 

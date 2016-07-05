@@ -1,4 +1,4 @@
 #pragma once
 
 
-extern bool g_can_sleep;
+extern bool g_canSleep;

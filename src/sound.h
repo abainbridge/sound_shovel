@@ -10,12 +10,12 @@ class SoundChannel;
 class Sound
 {
 private:
-    int64_t m_cached_length;
+    int64_t m_cachedLength;
 
 public:
     SoundChannel **m_channels;
-    int64_t m_playback_idx;
-    int m_num_channels;
+    int64_t m_playbackIdx;
+    int m_numChannels;
 
     Sound();
 

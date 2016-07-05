@@ -79,16 +79,16 @@ void CALLBACK WaveOutProc(HWAVEOUT dev, UINT msg, DWORD user_data, DWORD param1,
 	if (!g_soundDevice || !g_soundDevice->m_callback) 
 		return;
 
-    g_soundDevice->m_fills_requested++;
+    g_soundDevice->m_fillsRequested++;
 }
 
 
 SoundDevice::SoundDevice()
 {   
     m_callback = NULL;
-    m_num_buffers = 4;
-    m_next_buffer = 0;
-    m_fills_requested = 0;
+    m_numBuffers = 4;
+    m_nextBuffer = 0;
+    m_fillsRequested = 0;
 
     DebugAssert(!g_soundDevice);
 
@@ -124,7 +124,7 @@ SoundDevice::SoundDevice()
 	// 
 	// Create the sound buffers
 
-	m_buffers = new StereoSampleBuf[m_num_buffers];
+	m_buffers = new StereoSampleBuf[m_numBuffers];
 }
 
 
@@ -136,9 +136,9 @@ void SoundDevice::SetCallback(void (*_callback)(StereoSample *, unsigned int))
 
 void SoundDevice::TopupBuffer()
 {
-	while (m_fills_requested)
+	while (m_fillsRequested)
 	{
-		StereoSampleBuf *buf = &m_buffers[m_next_buffer];
+		StereoSampleBuf *buf = &m_buffers[m_nextBuffer];
 
 		g_soundDevice->m_callback(buf->m_buffer, g_soundDevice->m_samplesPerBuffer);
 
@@ -149,9 +149,9 @@ void SoundDevice::TopupBuffer()
 		}
 		else
 		{
-			m_next_buffer++;
-			m_next_buffer %= m_num_buffers;
-			m_fills_requested--;
+			m_nextBuffer++;
+			m_nextBuffer %= m_numBuffers;
+			m_fillsRequested--;
 		}
 	}
 }

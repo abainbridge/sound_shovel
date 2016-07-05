@@ -1,5 +1,7 @@
+// Own header
 #include "mutex.h"
 
+// Platform headers
 #include <windows.h>
 
 
