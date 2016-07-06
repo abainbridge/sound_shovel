@@ -12,6 +12,7 @@
 #include "df_input.h"
 #include "df_hi_res_time.h"
 #include "df_text_renderer.h"
+#include "df_window_manager.h"
 
 // Standard headers
 #include <math.h>
@@ -152,10 +153,7 @@ void SoundView::Advance()
     double maxHOffset = m_sound->GetLength() - m_displayWidth * m_hZoomRatio;
     maxHOffset = IntMax(0.0, maxHOffset);
 
-    static double lastTime = GetHighResTime();
-    double now = GetHighResTime();
-    double advanceTime = now - lastTime;
-    lastTime = now;
+    double advanceTime = g_window->advanceTime;
 
 
     //
