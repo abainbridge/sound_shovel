@@ -491,3 +491,12 @@ bool IsRelativePath(char const *path)
 	if (path[0] == '\\' && path[1] == '\\') return false;
 	return true;
 }
+
+
+char const *GetExePath()
+{
+    HMODULE mod = GetModuleHandle(NULL);
+    static char buf[MAX_PATH + 1];
+    GetModuleFileName(mod, buf, MAX_PATH + 1);
+    return buf;
+}

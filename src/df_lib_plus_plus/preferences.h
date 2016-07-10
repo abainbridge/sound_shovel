@@ -2,7 +2,6 @@
 
 
 // Project headers
-#include "command.h"
 #include "containers/hash_table.h"
 #include "containers/llist.h"
 
@@ -74,7 +73,7 @@ public:
 // Class PrefsManager
 // ******************
 
-class PrefsManager: public CommandReceiver
+class PrefsManager
 {
 protected:
     char            *m_filename;
@@ -113,8 +112,6 @@ public:
     void SetString  (char const *_key, char const *_string);
     void SetFloat   (char const *_key, float _val);
     void SetInt     (char const *_key, int _val);
-
-    virtual char *ExecuteCommand(char const *object, char const *command, char const *arguments);
 };
 
 

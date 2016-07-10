@@ -149,10 +149,7 @@ bool PrefsItemInt::SetValueFromLine(char const *line)
 // ****************************************************************************
 
 PrefsManager::PrefsManager()
-:   CommandReceiver("LocalSettings")
 {
-    g_commandSender.RegisterReceiver(this);
-
     m_filename = NULL;
 }
 
@@ -462,18 +459,6 @@ void PrefsManager::SetInt(char const *_key, int _int)
 		PrefsItemInt *intItem = (PrefsItemInt*)item;
 		intItem->m_int = _int;
 	}
-}
-
-
-char *PrefsManager::ExecuteCommand(char const *object, char const *command, char const *arguments)
-{
-	if (COMMAND_IS("GetInt"))
-	{
-		int val = GetInt(arguments);
-		return CreateIntToSend(val);
-	}
-
-    return COMMAND_RETURN_NOTHING;
 }
 
 

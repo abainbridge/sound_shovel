@@ -4,7 +4,7 @@
 #include "sample_block.h"
 
 // Contrib headers
-#include "df_lib_plus_plus/darray.h"
+#include "containers/darray.h"
 
 // Standard headers
 #include <stdint.h>

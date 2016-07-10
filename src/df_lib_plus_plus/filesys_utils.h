@@ -92,8 +92,4 @@ void SetCwd				(char const *dir);
 void CanonicalisePath	(String &path);
 void WindowsFilePath	(char *path);
 bool IsRelativePath		(char const *path);
-#ifdef WIN32
- #define FilenameCmp		stricmp
-#else
- #define FilenameCmp		strcmp
-#endif
+char const *GetExePath  ();
