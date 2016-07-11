@@ -3,13 +3,17 @@
 
 // Project headers
 #include "andy_string.h"
-#include "cursor_manager.h"
-#include "gui_manager.h"
-#include "widget_history.h"
+#include "gui/cursor_manager.h"
+#include "gui/gui_manager.h"
+#include "gui/menu.h"
+#include "gui/widget_history.h"
 
 // Contrib headers
 #include "df_input.h"
 #include "df_window_manager.h"
+
+// Standard headers
+#include <stdlib.h>
 
 
 ContainerVert::ContainerVert(char const *name, Widget *parent, int x, int y)
@@ -140,7 +144,7 @@ void ContainerVert::Render()
 	{
 		Widget *w = m_widgets[i];
 		if (w->m_hideState == HideStateHidden) continue;
-		if (stricmp(w->m_name, "MenuBar") != 0)
+		if (stricmp(w->m_name, MENU_BAR_NAME) != 0)
 		{
 			g_guiManager->DrawFrame(w->m_left, w->m_top, w->m_width, w->m_height);
 //			ClipRect cr(w->m_left, w->m_top, w->m_width, w->m_height); // TODO implement cliprect

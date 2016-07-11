@@ -41,7 +41,7 @@ void TooltipManager::Render()
 		{
 			int h = g_defaultTextRenderer->charHeight;
 			int w = GetTextWidth(g_defaultTextRenderer, m_buf);
-			RectFill(g_window->bmp, m_x, m_y, w, h, g_guiManager->m_backgroundHighlightColour);
+			RectFill(g_window->bmp, m_x, m_y, w, h, g_guiManager->m_backgroundColour);
 			DrawOutlineBox(m_x-1, m_y-1, w+2, h+2, g_guiManager->m_frameColour4);
             DrawTextSimple(g_defaultTextRenderer, m_col, g_window->bmp, m_x, m_y, m_buf);
 		}

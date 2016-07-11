@@ -14,22 +14,19 @@
 
 
 class ContainerVert;
-class MenuBar;
-class StatusBar;
 typedef struct _TextRenderer TextRenderer;
 
 
 class GuiManager: public Widget
 {
 private:
-	bool			m_exitRequested;
+	bool m_exitRequested;
 
-	Widget			*m_modalWidget;
-	Widget			*m_previouslyFocussedWidget;	// Only used when a modal widget is present
+	Widget *m_modalWidget;
+	Widget *m_previouslyFocussedWidget;	// Only used when a modal widget is present
 
 public:
-	RGBAColour	m_backgroundHighlightColour;
-	RGBAColour	m_backgroundShadowColour;
+	RGBAColour	m_backgroundColour;
 	RGBAColour	m_frameColour1;                 // Darkest
 	RGBAColour	m_frameColour2;
 	RGBAColour	m_frameColour3;
@@ -40,29 +37,23 @@ public:
 	RGBAColour  m_highlightColour;
 	RGBAColour  m_strongHighlightColour;
 	RGBAColour	m_textColourNormal;
-	RGBAColour	m_textColourComment;
-	RGBAColour	m_textColourKeyword;
-	RGBAColour	m_textColourString;
-	RGBAColour	m_textColourNumber;
 	RGBAColour	m_textColourFrame;
 	RGBAColour  m_focusBoxColour;
 
     TextRenderer *m_propFont;    // Proportional width font used by Menus, status bar etc.
 
-	CursorManager	m_cursorManager;
-	Widget			*m_focussedWidget;
-	ContainerVert	*m_mainContainer;
-	bool			m_exitAtEndOfFrame;	// True if something has requested that the application quit
+	CursorManager m_cursorManager;
+	Widget *m_focussedWidget;
+	ContainerVert *m_mainContainer;
+	bool m_exitAtEndOfFrame;	// True if something has requested that the application quit
 
 private:
 	RGBAColour	GetColour(char const *name, RGBAColour const &defaultColour);
 	bool		StringToColour(char const *str, RGBAColour *col);	// Returns true on success
 	void		SetColours();
-	void		RenderBoxedWidget(Widget *widget);
 
 public:
 	GuiManager();
-	void		Initialise();
 
 	void		About();
 
@@ -74,10 +65,10 @@ public:
 	// Override Widget base methods
 	virtual void SetRect(int x=-1, int y=-1, int w=-1, int h=-1);
 	virtual Widget*	GetWidgetAtPos(int x, int y);
-    virtual Widget*		GetWidgetByName(char const *name);
-	virtual void		Show(char const *widgetToShow);
-	virtual void		Advance();
-	virtual void		Render();
+    virtual Widget*	GetWidgetByName(char const *name);
+	virtual void Show(char const *widgetToShow);
+	virtual void Advance();
+	virtual void Render();
 
 	void		SetModalWidget(Widget *w);
 

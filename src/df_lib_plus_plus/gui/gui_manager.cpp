@@ -48,6 +48,41 @@ GuiManager::GuiManager()
     m_exitAtEndOfFrame(false),
     Widget(GUI_MANAGER_NAME, NULL)
 {
+    g_widgetHistory = new WidgetHistory("widget_history.txt");
+    g_keyboardShortcutManager = new KeyboardShortcutManager("data/config_keys.txt");
+
+    SetColours();
+    m_propFont = CreateTextRenderer("Tahoma", 8, 5);
+    ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
+
+    g_commandSender.RegisterReceiver(this);
+
+    // Register the mouse update handler function with the input manager
+    //    g_inputManager.RegisterMouseUpdateCallback(&MouseUpdateHandler);  // TODO - Implement RegisterMouseUpdateCallback
+
+    // Create main container
+    m_mainContainer = new ContainerVert("MainContainer", this);
+    int SCREEN_X = 0;
+    int SCREEN_Y = 0;
+    int SCREEN_W = g_window->bmp->width;
+    int SCREEN_H = g_window->bmp->height;
+    SetRect(SCREEN_X, SCREEN_W, SCREEN_W, SCREEN_H);
+
+    // Create MenuBar
+    MenuBar *menuBar = new MenuBar(m_mainContainer);
+    m_mainContainer->AddWidget(menuBar);
+    menuBar->Initialise();
+
+    ResultsView *resultsView = new ResultsView("ResultsView", m_mainContainer);
+    m_mainContainer->AddWidget(resultsView);
+
+    // Create StatusBar
+    StatusBar *statusBar = new StatusBar(m_mainContainer);
+    m_mainContainer->AddWidget(statusBar);
+
+    SetRect(SCREEN_X, SCREEN_Y, SCREEN_W, SCREEN_H);
+
+    SetFocussedWidget(resultsView);
 }
 
 
@@ -55,7 +90,7 @@ RGBAColour GuiManager::GetColour(char const *name, RGBAColour const &defaultC)
 {
     RGBAColour rv = defaultC;
 
-    char const *str = NULL;// g_prefs->GetString(name);
+    char const *str = NULL;// g_prefs->GetString(name); // TODO - re-enable the prefs system
 
     if (str)
         StringToColour(str, &rv);
@@ -66,23 +101,17 @@ RGBAColour GuiManager::GetColour(char const *name, RGBAColour const &defaultC)
 
 void GuiManager::SetColours()
 {
-    // Set window background colours
-    m_backgroundShadowColour = GetColour("GuiWindowBackgroundColour", Colour(50,50,50)); //g_systemInfo.m_windowBackgroundColour);
+    m_backgroundColour = GetColour("GuiWindowBackgroundColour", Colour(50,50,50));
 
-    m_backgroundHighlightColour = m_backgroundShadowColour;// + Colour(10,30,50);
     m_frameColour2 = GetColour("GuiFrameColour", Colour(180, 180, 180));
     m_textColourNormal = GetColour("GuiTextColourNormal", Colour(200,200,200));
-    m_textColourComment = GetColour("GuiTextColourComment", Colour(120,235,120));
-    m_textColourKeyword = GetColour("GuiTextColourKeyword", Colour(148,205,255));
-    m_textColourString = GetColour("GuiTextColourString", Colour(255,128,128));
-    m_textColourNumber = GetColour("GuiTextColourNumber", Colour(255,180,128));
     m_selectionBlockColour = GetColour("GuiSelectionBlockColour", Colour(60, 60, 155, 64));
-    m_highlightColour = GetColour("GuiHighlightColour", m_backgroundHighlightColour + Colour(15,15,15));
-    m_strongHighlightColour = GetColour("GuiStrongHighlightColour", m_backgroundHighlightColour + Colour(35,35,35));
+    m_highlightColour = GetColour("GuiHighlightColour", m_backgroundColour + Colour(15,15,15));
+    m_strongHighlightColour = GetColour("GuiStrongHighlightColour", m_backgroundColour + Colour(35,35,35));
     m_focusBoxColour = GetColour("GuiFocusBoxColour", Colour(255,120,120));
 
     m_selectionBlockUnfocussedColour = m_selectionBlockColour;
-    m_selectionBlockUnfocussedColour = m_selectionBlockUnfocussedColour * 0.5f + m_backgroundHighlightColour * 0.5f;
+    m_selectionBlockUnfocussedColour = m_selectionBlockUnfocussedColour * 0.5f + m_backgroundColour * 0.5f;
 
     m_frameColour1 = m_frameColour2 * 0.4f;
     m_frameColour3 = m_frameColour2 * 1.2f;
@@ -93,49 +122,7 @@ void GuiManager::SetColours()
 }
 
 
-void GuiManager::Initialise()
-{
-#if PROFILER_ENABLED
-    m_profileWindow = new ProfileWindow(PROFILE_WINDOW_NAME, this);
-    m_profileWindow->SetRect(300, 100, 330, 100);
-#endif
-
-    SetColours();
-    m_propFont = CreateTextRenderer("Tahoma", 8, 5);
-    ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
-
-    g_commandSender.RegisterReceiver(this);
-
-    // Register the mouse update handler function with the input manager
-//    g_inputManager.RegisterMouseUpdateCallback(&MouseUpdateHandler);  // TODO - Implement RegisterMouseUpdateCallback
-
-    // Create main container
-    m_mainContainer = new ContainerVert("MainContainer", this);
-    int SCREEN_X = 0;
-    int SCREEN_Y = 0;
-    int SCREEN_W = g_window->bmp->width;
-    int SCREEN_H = g_window->bmp->height;
-    SetRect(SCREEN_X, SCREEN_W, SCREEN_W, SCREEN_H);
-
-        // Create MenuBar
-        MenuBar *menuBar = new MenuBar(m_mainContainer);
-        m_mainContainer->AddWidget(menuBar);
-        menuBar->Initialise();
-
-        ResultsView *resultsView = new ResultsView("ResultsView", m_mainContainer);
-        m_mainContainer->AddWidget(resultsView);
-
-        // Create StatusBar
-        StatusBar *statusBar = new StatusBar(m_mainContainer);
-        m_mainContainer->AddWidget(statusBar);
-
-        SetRect(SCREEN_X, SCREEN_Y, SCREEN_W, SCREEN_H);
-
-    SetFocussedWidget(resultsView);
-}
-
-
-#define APPLICATION_NAME "Sound Shovel"
+#define APPLICATION_NAME "Sound Shovel" // TODO - make this a string passed in at run time to both the prefs system and this module, from the app (ie non-library) code.
 
 unsigned long __stdcall AboutProc(void *data)
 {
@@ -174,14 +161,10 @@ bool GuiManager::StringToColour(char const *str, RGBAColour *col)
 
 void GuiManager::FillBackground(int x, int y, int w, int h, bool highlighted) const
 {
-    RGBAColour colour = m_backgroundShadowColour;
-    if (highlighted) 
-        colour = m_backgroundHighlightColour;
-
     DrawOutlineBox(x, y, w, h, m_frameColour5);
     x++; y++;
     w -= 2; h -= 2;
-//    RectFill(g_window->bmp, x, y, w, h, colour);
+//    RectFill(g_window->bmp, x, y, w, h, m_backgroundColour);
 }
 
 
@@ -267,6 +250,14 @@ void GuiManager::SetFocussedWidget(Widget *w)
 
 void GuiManager::Advance()
 {
+    if (g_window->windowClosed)
+    {
+        g_window->windowClosed = false;
+        g_guiManager->RequestExit();
+    }
+
+    // g_commandSender.ProcessDeferredCommands();
+
     // Update the size of all the widgets, unless we are minimised.
 //     if (SCREEN_H > 100)
 //         SetRect(SCREEN_X, SCREEN_Y, SCREEN_W, SCREEN_H);
@@ -313,13 +304,6 @@ void GuiManager::Advance()
     }
 
     g_tooltipManager.Advance();
-}
-
-
-void GuiManager::RenderBoxedWidget(Widget *widget)
-{
-    widget->Render();
-//  DrawOutlineBox(x, y, w, h, m_frameColour5);
 }
 
 
