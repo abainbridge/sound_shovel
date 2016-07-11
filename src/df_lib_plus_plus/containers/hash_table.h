@@ -30,33 +30,33 @@ protected:
 	unsigned int			m_mask;
 	mutable unsigned int	m_numCollisions;						// In the current data set
 
-	unsigned int	HashFunc	(char const *_key) const;
+	unsigned int	HashFunc	(char const *key) const;
 	void			Grow		();
-	unsigned int	GetInsertPos(char const *_key) const;			// Returns the index of the position where _key should be placed
+	unsigned int	GetInsertPos(char const *key) const;			// Returns the index of the position where _key should be placed
 
 public:
 	HashTable		();
 	~HashTable		();
 
-	int				GetIndex	(char const *_key) const;			// Returns -1 if key isn't present
+	int				GetIndex	(char const *key) const;			// Returns -1 if key isn't present
 
-	int				PutData		(char const *_key, T const &_data); // Returns slot used
-	T				GetData		(char const *_key, T const &_default = NULL) const;
-	T				GetData		(unsigned int _index) const;
-	T *				GetPointer	(char const *_key) const;
-	T *				GetPointer  (unsigned int _index) const;
-	void			RemoveData	(char const *_key);					// Client still MUST delete if data is a pointer
-	void			RemoveData	(unsigned int _index);				// Client still MUST delete if data is a pointer
+	int				PutData		(char const *key, T const &data); // Returns slot used
+	T				GetData		(char const *key, T const &default = NULL) const;
+	T				GetData		(unsigned int index) const;
+	T *				GetPointer	(char const *key) const;
+	T *				GetPointer  (unsigned int index) const;
+	void			RemoveData	(char const *key);					// Client still MUST delete if data is a pointer
+	void			RemoveData	(unsigned int index);				// Client still MUST delete if data is a pointer
 
 	void			Empty		();
 	void			EmptyAndDelete();
 
-	bool			ValidIndex	(unsigned int _x) const;
+	bool			ValidIndex	(unsigned int x) const;
 	unsigned int	Size		() const;							// Returns total table size, NOT number of slots used
 	unsigned int	NumUsed		() const;
 
-	T				operator [] (unsigned int _index) const;
-	char const *	GetName		(unsigned int _index) const;
+	T				operator [] (unsigned int index) const;
+	char const *	GetName		(unsigned int index) const;
 
 	void			DumpKeys	() const;
 };
