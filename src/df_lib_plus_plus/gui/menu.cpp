@@ -38,10 +38,10 @@ weird:
 #define MENU_SPACING_X			18
 #define MENU_SPACING_Y			4
 #define	HIGHLIGHT_BOX_BORDER	8
-#define CONFIG_FILE_NAME		"data/config_menus.txt"
+#define CONFIG_FILE_NAME		"data/config_menus.txt" // TODO - make this name an argument to the MenuBar constructor. Make the constructor of GuiManager take is and pass it through.
 
 
-TextRenderer *g_propFont = g_defaultTextRenderer;
+#define g_propFont g_guiManager->m_propFont
 
 
 // ****************************************************************************
@@ -416,9 +416,6 @@ MenuBar::MenuBar(Widget *parent)
 	m_highlightable = false;
     m_contextMenu = NULL;
     m_altState = 0;
-
-    String userConfigFilename = "user_menus_config.txt";
-    m_userConfigFilename = StringDuplicate(userConfigFilename.c_str());
 }
 
 
@@ -427,25 +424,6 @@ void MenuBar::Initialise()
 	m_height = g_propFont->charHeight + 1;
 
     LoadConfigFile(CONFIG_FILE_NAME);
-
-    // Load or create user menu settings file
-    if (FileExists(m_userConfigFilename))
-        LoadConfigFile(m_userConfigFilename);
-    else
-    {
-        FILE *out = fopen(m_userConfigFilename, "w");
-        fprintf(out,
-            "# This file can be used to define menu items, or to remove standard ones.\n"
-            "# For examples of how to define menu items, see the main config_menus.txt\n"
-            "# file in the Trowel's data directory.\n"
-            );
-        fclose(out);
-    }
-
-	Menu *fileMenu = FindMenuByName("File");
-	MenuItem *item = new MenuItem;
-	item->m_label = "";
-	fileMenu->AddItem(item);
 
 	CalculateScreenPositions();
 }
@@ -946,7 +924,7 @@ void MenuBar::Render()
         m_contextMenu->Render();
 
 	// Render the FPS meter
-	DrawTextLeft(g_propFont, g_guiManager->m_textColourFrame, g_window->bmp, g_window->bmp->width - 41, y, "FPS: %d", g_window->fps);
+    DrawTextRight(g_propFont, g_guiManager->m_textColourFrame, g_window->bmp, g_window->bmp->width - 5, y, "FPS: %d", g_window->fps);
 }
 
 

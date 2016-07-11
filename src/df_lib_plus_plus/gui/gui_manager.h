@@ -10,15 +10,13 @@
 
 
 #define WIDGET_SPACER 4
-#define OUTPUT_WINDOW_NAME "OutputWindow"
-#define PYTHON_OUTPUT_TAB "Python Output"
-#define FIND_RESULTS_TAB "Find Results"
 #define GUI_MANAGER_NAME "GuiManager"
 
 
+class ContainerVert;
 class MenuBar;
 class StatusBar;
-class ContainerVert;
+typedef struct _TextRenderer TextRenderer;
 
 
 class GuiManager: public Widget
@@ -48,6 +46,8 @@ public:
 	RGBAColour	m_textColourNumber;
 	RGBAColour	m_textColourFrame;
 	RGBAColour  m_focusBoxColour;
+
+    TextRenderer *m_propFont;    // Proportional width font used by Menus, status bar etc.
 
 	CursorManager	m_cursorManager;
 	Widget			*m_focussedWidget;

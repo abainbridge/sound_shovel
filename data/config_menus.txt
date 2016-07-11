@@ -1,0 +1,37 @@
+# This file is read case insensitively. Each line binds a menu item to an event
+# generator. Multiple menu items can be bound to the same event if you want.
+# The editor needs to be exitted and reloaded for changes to take effect.
+# If a keypress is bound to the same event as a menu item, the keypress combo
+# will be displayed in the menu item automatically.
+#
+# Each line has four mandatory arguments:
+#   menu - The name of the menu (new menus are created automatically)
+#   label - The menu item text
+#   object - The object to send the event to
+#   command - The event type
+#
+# key is an optional argument that states which index in "label" should be
+# used for the keyboard accelerator (ie the character that appears underlined
+# and will cause the item to be executed if that letter is pressed when the
+# menu is displayed). If key is not specified, a default of 0 will be used.
+# If two items attempt to use the same key, the first item in the list will
+# succeed, and the second item will have not key assigned. Setting key to
+# -1 will disable the key accelerator for any item. This is useful if you
+# want an item lower in the menu to use the key that would otherwise be
+# taken by default.
+#
+# The rest of the line is a free format string that different objects treat
+# differently. If you have a specific question about this aspect, you should
+# ask a question on the forums on the deadfrog.co.uk website.
+
+menu=File label=New                     object=DocViewManager   command=New
+menu=File label=Open...                 object=DocViewManager   command=OpenDialog
+menu=File label=Close                   object=DocViewManager   command=Close
+menu=File label="Close All"             object=DocViewManager   key=-1 command=CloseAll
+menu=File label=separator
+menu=File label=Save                    object=DocViewManager   command=Save
+menu=File label="Save As..."            object=DocViewManager   key=5 command=SaveAsWithDialog
+menu=File label=separator
+menu=File label=Exit                    object=GuiManager       key=1 command=exit
+
+menu=Help label=About                   object=GuiManager       command=About

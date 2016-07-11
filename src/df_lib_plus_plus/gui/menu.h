@@ -80,7 +80,6 @@ private:
 	Widget				*m_oldHighlightedWidget;// Used to restore g_guiManager->m_highlightedWidget when we unhighlight ourselves
     Menu                *m_contextMenu;         // Null if there is no current context menu
     int                 m_altState;             // Used to make alt up only focus menubar if no input events have occurred since alt down
-    char                *m_userConfigFilename;
 
 private:
 	void LoadConfigFile(char const *filename);
@@ -96,7 +95,6 @@ private:
 public:
     MenuBar(Widget *parent);
 
-    char const *GetUserConfigFilename() { return m_userConfigFilename; }
 	void Initialise();
 
 	void AddMenu(Menu *menu);

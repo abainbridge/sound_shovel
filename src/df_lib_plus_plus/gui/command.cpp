@@ -123,30 +123,30 @@ void CommandSender::RegisterReceiver(CommandReceiver *receiver)
 
 char *CommandSender::SendCommand(char const *from, char const *target, char const *command, char const *arguments)
 {
-    // TODO uncomment this: g_guiManager->GetWidgetByName(target);
-//     CommandReceiver *receiver = NULL;
-// 
-// 	if (!receiver)
-// 	{
-// 		for (int i = 0; i < m_receivers.Size(); ++i)
-// 		{
-// 			CommandReceiver *thisReceiver = m_receivers[i];
-// 			if (stricmp(thisReceiver->m_receiverName, target) == 0)
-// 			{
-// 				receiver = thisReceiver;
-// 				break;
-// 			}
-// 		}
-// 	}
-// 
-// 	if (receiver)
-// 	{
+    CommandReceiver *receiver = NULL;
+
+	if (!receiver)
+	{
+		for (int i = 0; i < m_receivers.Size(); ++i)
+		{
+			CommandReceiver *thisReceiver = m_receivers[i];
+			if (stricmp(thisReceiver->m_receiverName, target) == 0)
+			{
+				receiver = thisReceiver;
+				break;
+			}
+		}
+	}
+
+	if (receiver)
+	{
+// TODO - re-add CommandHistory
 //         CommandHistory *cv = (CommandHistory*)g_guiManager->GetWidgetByName(COMMAND_VIEW_WINDOW_NAME);
 //         ReleaseAssert(cv, "CommandSender::SendCommand: command view window not found");
 //         cv->AddCommand(from, target, command, arguments);
-// 
-// 		return receiver->ExecuteCommand(from, command, arguments);
-// 	}
+
+		return receiver->ExecuteCommand(from, command, arguments);
+	}
 
 	return NULL;
 }

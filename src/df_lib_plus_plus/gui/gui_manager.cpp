@@ -19,6 +19,7 @@
 #include "df_rgba_colour.h"
 #include "df_input.h"
 #include "df_message_dialog.h"
+#include "df_text_renderer.h"
 #include "df_window_manager.h"
 
 
@@ -69,7 +70,7 @@ void GuiManager::SetColours()
     m_backgroundShadowColour = GetColour("GuiWindowBackgroundColour", Colour(50,50,50)); //g_systemInfo.m_windowBackgroundColour);
 
     m_backgroundHighlightColour = m_backgroundShadowColour;// + Colour(10,30,50);
-    m_frameColour2 = GetColour("GuiFrameColour", Colour(80, 80, 80));
+    m_frameColour2 = GetColour("GuiFrameColour", Colour(180, 180, 180));
     m_textColourNormal = GetColour("GuiTextColourNormal", Colour(200,200,200));
     m_textColourComment = GetColour("GuiTextColourComment", Colour(120,235,120));
     m_textColourKeyword = GetColour("GuiTextColourKeyword", Colour(148,205,255));
@@ -88,7 +89,7 @@ void GuiManager::SetColours()
     m_frameColour4 = m_frameColour2 * 1.6f;
     m_frameColour5 = m_frameColour2 * 2.0f;
 
-    m_textColourFrame = GetColour("GuiTextColourFrame", Colour(200,200,200));
+    m_textColourFrame = GetColour("GuiTextColourFrame", Colour(0,0,0));
 }
 
 
@@ -100,6 +101,8 @@ void GuiManager::Initialise()
 #endif
 
     SetColours();
+    m_propFont = CreateTextRenderer("Tahoma", 8, 5);
+    ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
 
     g_commandSender.RegisterReceiver(this);
 
@@ -178,7 +181,7 @@ void GuiManager::FillBackground(int x, int y, int w, int h, bool highlighted) co
     DrawOutlineBox(x, y, w, h, m_frameColour5);
     x++; y++;
     w -= 2; h -= 2;
-    RectFill(g_window->bmp, x, y, w, h, colour);
+//    RectFill(g_window->bmp, x, y, w, h, colour);
 }
 
 
