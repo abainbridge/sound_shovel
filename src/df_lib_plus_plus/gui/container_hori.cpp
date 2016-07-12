@@ -4,7 +4,7 @@
 // Project headers
 #include "andy_string.h"
 #include "cursor_manager.h"
-#include "gui_manager.h"
+#include "gui_manager_base.h"
 #include "widget_history.h"
 
 // Contrib headers

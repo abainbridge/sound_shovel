@@ -40,9 +40,6 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\text_stream_readers.cpp">
       <Filter>df_lib_plus_plus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_manager.cpp">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\keyboard_shortcuts.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\gui\app_gui_manager.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.cpp">
+      <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +146,6 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\text_stream_readers.h">
       <Filter>df_lib_plus_plus</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_manager.h">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\keyboard_shortcuts.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
@@ -184,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\gui\app_gui_manager.h">
       <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.h">
+      <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

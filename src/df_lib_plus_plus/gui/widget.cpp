@@ -3,7 +3,7 @@
 
 // Project headers
 #include "drawing_primitives.h"
-#include "gui_manager.h"
+#include "gui_manager_base.h"
 #include "widget_history.h"
 #include "andy_string.h"
 #include "string_utils.h"

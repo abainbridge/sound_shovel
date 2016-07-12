@@ -1,7 +1,7 @@
 #include "tooltip_manager.h"
 
 #include "drawing_primitives.h"
-#include "gui_manager.h"
+#include "gui_manager_base.h"
 #include "menu.h"
 
 #include "df_hi_res_time.h"

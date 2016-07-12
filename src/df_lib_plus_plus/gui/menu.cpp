@@ -21,7 +21,7 @@ weird:
 #include "df_lib_plus_plus/filesys_utils.h"
 #include "df_lib_plus_plus/text_stream_readers.h"
 #include "gui/drawing_primitives.h"
-#include "gui/gui_manager.h"
+#include "gui/gui_manager_base.h"
 #include "gui/keyboard_shortcuts.h"
 
 // Contrib headers

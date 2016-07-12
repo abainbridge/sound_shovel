@@ -7,7 +7,7 @@
 //#include "system_info.h"
 #include "text_stream_readers.h"
 #include "gui/command.h"
-#include "gui/gui_manager.h"
+#include "gui/gui_manager_base.h"
 
 // Contrib headers
 #include "df_input.h"

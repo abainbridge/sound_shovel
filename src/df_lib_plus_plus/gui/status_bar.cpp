@@ -2,7 +2,7 @@
 #include "status_bar.h"
 
 // Project headers
-#include "gui_manager.h"
+#include "gui_manager_base.h"
 
 #include "../preferences.h"
 
