@@ -9,7 +9,6 @@
 #include "gui/drawing_primitives.h"
 #include "gui/keyboard_shortcuts.h"
 #include "gui/menu.h"
-#include "gui/results_view.h"
 #include "gui/status_bar.h"
 #include "gui/tooltip_manager.h"
 #include "gui/widget_history.h"
@@ -48,7 +47,6 @@ GuiManager::GuiManager()
     m_exitAtEndOfFrame(false),
     Widget(GUI_MANAGER_NAME, NULL)
 {
-    g_widgetHistory = new WidgetHistory("widget_history.txt");
     g_keyboardShortcutManager = new KeyboardShortcutManager("data/config_keys.txt");
 
     SetColours();
@@ -59,30 +57,6 @@ GuiManager::GuiManager()
 
     // Register the mouse update handler function with the input manager
     //    g_inputManager.RegisterMouseUpdateCallback(&MouseUpdateHandler);  // TODO - Implement RegisterMouseUpdateCallback
-
-    // Create main container
-    m_mainContainer = new ContainerVert("MainContainer", this);
-    int SCREEN_X = 0;
-    int SCREEN_Y = 0;
-    int SCREEN_W = g_window->bmp->width;
-    int SCREEN_H = g_window->bmp->height;
-    SetRect(SCREEN_X, SCREEN_W, SCREEN_W, SCREEN_H);
-
-    // Create MenuBar
-    MenuBar *menuBar = new MenuBar(m_mainContainer);
-    m_mainContainer->AddWidget(menuBar);
-    menuBar->Initialise();
-
-    ResultsView *resultsView = new ResultsView("ResultsView", m_mainContainer);
-    m_mainContainer->AddWidget(resultsView);
-
-    // Create StatusBar
-    StatusBar *statusBar = new StatusBar(m_mainContainer);
-    m_mainContainer->AddWidget(statusBar);
-
-    SetRect(SCREEN_X, SCREEN_Y, SCREEN_W, SCREEN_H);
-
-    SetFocussedWidget(resultsView);
 }
 
 
@@ -258,9 +232,9 @@ void GuiManager::Advance()
 
     // g_commandSender.ProcessDeferredCommands();
 
-    // Update the size of all the widgets, unless we are minimised.
-//     if (SCREEN_H > 100)
-//         SetRect(SCREEN_X, SCREEN_Y, SCREEN_W, SCREEN_H);
+    // Update the size of all the widgets, unless we are minimized.
+    if (g_window->bmp->width > 100)
+        SetRect(0, 0, g_window->bmp->width, g_window->bmp->height);
 
     if (!m_modalWidget)
         g_keyboardShortcutManager->Advance();

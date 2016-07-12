@@ -2,13 +2,12 @@
 #include "main.h"
 
 // Project headers
-#include "sound.h"
+#include "gui/app_gui_manager.h"
 #include "sound_system.h"
-#include "sound_view.h"
 
 // Contrib headers
 #include "gui/file_dialog.h"
-#include "gui/gui_manager.h"
+#include "gui/widget_history.h"
 #include "df_bitmap.h"
 #include "df_hi_res_time.h"
 #include "df_input.h"
@@ -33,20 +32,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	CreateWin(1000, 600, WT_WINDOWED, "Sound Shovel");
     g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
 
-    g_guiManager = new GuiManager;
-
     g_soundSystem = new SoundSystem;
 
-//     DArray<String> files = FileDialogOpen();
-//     if (files.Size() == 0)
-//         return -1;
-
-    Sound sound;
-//    sound.LoadWav(files[0].c_str());
-    sound.LoadWav("C:/users/andy/desktop/andante.wav");
-    g_soundSystem->PlaySound(&sound, 0);
-
-    SoundView soundView(&sound);
+    g_widgetHistory = new WidgetHistory("widget_history.txt");  // TODO - re-introduce the system_info module and make this filename be in the user's home folder.
+    g_guiManager = new AppGuiManager;
+    g_guiManager->Initialise();
 
     while (!g_guiManager->m_exitAtEndOfFrame)
     {

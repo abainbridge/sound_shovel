@@ -49,9 +49,6 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\cursor_manager.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\results_view.cpp">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\drawing_primitives.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
@@ -79,6 +76,9 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\menu.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\gui\app_gui_manager.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -92,6 +92,9 @@
     </Filter>
     <Filter Include="df_lib_plus_plus\containers">
       <UniqueIdentifier>{ab674c5f-6e90-4461-a91a-eac985ede0c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{f7ed3bce-eebf-4ec1-93c6-c73de4942996}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +155,6 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\cursor_manager.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\results_view.h">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\drawing_primitives.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
@@ -181,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\menu.h">
       <Filter>df_lib_plus_plus\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gui\app_gui_manager.h">
+      <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

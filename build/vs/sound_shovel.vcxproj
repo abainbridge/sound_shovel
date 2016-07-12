@@ -32,7 +32,6 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_manager.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\keyboard_shortcuts.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\menu.cpp" />
-    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\results_view.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\status_bar.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\tooltip_manager.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\widget.cpp" />
@@ -43,6 +42,7 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\string_utils.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\text_stream_readers.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\threading.cpp" />
+    <ClCompile Include="..\..\src\gui\app_gui_manager.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
@@ -67,7 +67,6 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_manager.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\keyboard_shortcuts.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\menu.h" />
-    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\results_view.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\status_bar.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\tooltip_manager.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\widget.h" />
@@ -78,6 +77,7 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\string_utils.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\text_stream_readers.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\threading.h" />
+    <ClInclude Include="..\..\src\gui\app_gui_manager.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound.h" />

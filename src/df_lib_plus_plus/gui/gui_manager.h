@@ -54,6 +54,7 @@ private:
 
 public:
 	GuiManager();
+    virtual void Initialise() = 0;  // Implement this in a derived class and create and populate m_mainContainer from there.
 
 	void		About();
 
