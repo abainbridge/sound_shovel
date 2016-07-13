@@ -421,8 +421,6 @@ MenuBar::MenuBar(Widget *parent)
 
 void MenuBar::Initialise()
 {
-	m_height = g_propFont->charHeight + 1;
-
     LoadConfigFile(CONFIG_FILE_NAME);
 
 	CalculateScreenPositions();

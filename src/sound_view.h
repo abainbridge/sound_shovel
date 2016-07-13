@@ -9,6 +9,9 @@
 #include <stdint.h>
 
 
+#define SOUND_VIEW_NAME "SoundView"
+
+
 struct BitmapRGBA;
 class Sound;
 

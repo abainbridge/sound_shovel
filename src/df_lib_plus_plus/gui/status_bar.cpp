@@ -22,9 +22,6 @@
 #include <stdarg.h>
 
 
-#define MAX_MESSAGE_LEN 256
-
-
 StatusBar *g_statusBar = NULL;
 
 
@@ -37,8 +34,9 @@ StatusBar::StatusBar(Widget *parent)
 	m_highlightable = false;
 	m_height = 13;
 
-	m_messageBuffer = new char [MAX_MESSAGE_LEN + 1];
 	m_messageBuffer[0] = '\0';
+    m_leftBuffer[0] = '\0';
+    m_rightBuffer[0] = '\0';
 
     m_messageStartTime = 0.0;
 
@@ -63,6 +61,22 @@ void StatusBar::ShowError(char const *fmt, ...)
     _vsnprintf(m_messageBuffer, MAX_MESSAGE_LEN, fmt, ap);
 	m_messageStartTime = GetHighResTime();
 	m_messageIsError = true;
+}
+
+
+void StatusBar::SetLeftString(char const *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    _vsnprintf(m_leftBuffer, MAX_MESSAGE_LEN, fmt, ap);
+}
+
+
+void StatusBar::SetRightString(char const *fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    _vsnprintf(m_rightBuffer, MAX_MESSAGE_LEN, fmt, ap);
 }
 
 
@@ -94,19 +108,17 @@ void StatusBar::Render()
 	if (m_messageBuffer[0] != '\0')
 	{
 		if (m_messageIsError)
-		{
 			RectFill(g_window->bmp, x, y, w, h, Colour(200,0,0));
-		}
 		else
-		{
 			RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour5);
-		}
 		DrawTextSimple(g_defaultTextRenderer, g_colourWhite, g_window->bmp, x + 10, y, m_messageBuffer);
 		return;
 	}
 
 	// Now the usual status bar stuff
 	RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour2);
+    DrawTextSimple(g_guiManager->m_propFont, g_guiManager->m_textColourFrame, g_window->bmp, x + 5, y, m_leftBuffer);
+    DrawTextRight(g_guiManager->m_propFont, g_guiManager->m_textColourFrame, g_window->bmp, x + w - 5, y, m_rightBuffer);
 }
 
 

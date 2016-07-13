@@ -1,0 +1,71 @@
+// Own header
+#include "app_gui_manager.h"
+
+// Project headers
+#include "sound.h"
+#include "sound_view.h"
+#include "sound_system.h"
+
+// Project headers
+#include "sound_view.h"
+
+// Contrib headers
+#include "gui/container_vert.h"
+#include "gui/menu.h"
+#include "gui/status_bar.h"
+#include "df_window_manager.h"
+
+
+AppGuiManager::AppGuiManager()
+    : GuiManagerBase()
+{
+}
+
+
+void AppGuiManager::Initialise()
+{
+    //     DArray<String> files = FileDialogOpen();
+    //     if (files.Size() == 0)
+    //         return -1;
+
+    Sound *sound = new Sound;
+    //    sound.LoadWav(files[0].c_str());
+    sound->LoadWav("C:/users/andy/desktop/andante.wav");
+    g_soundSystem->PlaySound(sound, 0);
+
+    // Create main container
+    m_mainContainer = new ContainerVert("MainContainer", this);
+    int SCREEN_X = 0;
+    int SCREEN_Y = 0;
+    int SCREEN_W = g_window->bmp->width;
+    int SCREEN_H = g_window->bmp->height;
+    SetRect(SCREEN_X, SCREEN_W, SCREEN_W, SCREEN_H);
+
+    // Create MenuBar
+    MenuBar *menuBar = new MenuBar(m_mainContainer);
+    m_mainContainer->AddWidget(menuBar);
+    menuBar->Initialise();
+
+    SoundView *soundView = new SoundView(sound, m_mainContainer);
+    m_mainContainer->AddWidget(soundView);
+
+    // Create StatusBar
+    StatusBar *statusBar = new StatusBar(m_mainContainer);
+    m_mainContainer->AddWidget(statusBar);
+
+    SetRect(SCREEN_X, SCREEN_Y, SCREEN_W, SCREEN_H);
+
+    SetFocussedWidget(soundView);
+}
+
+
+void AppGuiManager::Advance()
+{
+    SoundView *sv = (SoundView*)GetWidgetByName(SOUND_VIEW_NAME);
+    if (sv)
+    {
+        g_statusBar->SetRightString("Zoom: %.1f", sv->m_hZoomRatio);
+    }
+
+    GuiManagerBase::Advance();
+}

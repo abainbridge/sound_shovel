@@ -103,7 +103,7 @@ void SoundView::RenderSelection(BitmapRGBA *bmp)
 // ***************************************************************************
 
 SoundView::SoundView(Sound *sound, Widget *parent)
-    : Widget("SoundView", parent)
+    : Widget(SOUND_VIEW_NAME, parent)
 {
     m_sound = sound;
 
@@ -299,8 +299,6 @@ void SoundView::Render()
 
     if (m_sound->m_playbackIdx)
         RenderMarker(g_window->bmp, m_playbackPos, Colour(255, 255, 255, 90));
-
-    DrawTextRight(g_defaultTextRenderer, g_colourWhite, g_window->bmp, m_width - 5, m_height - 20, "Zoom: %.1f", m_hZoomRatio);
 }
 
 
