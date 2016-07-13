@@ -743,22 +743,22 @@ void MenuBar::AdvanceWithHighlight()
 	// Do we want to want to lose key captured or displayed state?
 	bool mouseOverDisplayedMenu = false;
 	if (m_displayed) mouseOverDisplayedMenu = m_highlightedMenu->IsMouseOver();
-// TODO - implement key ups
-// 	if ((g_guiManager->m_focussedWidget == this && g_keyUps[KEY_ALT] && m_altState == 1) ||
-// 		(g_inputManager.lmbClicked && menu == NULL && !mouseOverDisplayedMenu) ||
-// 		(g_inputManager.lmbClicked && m_displayed && menu == m_highlightedMenu))
-// 	{
-// 		ClearAllState();
-// 		return;
-// 	}
-// 
-// 	if (g_keyUps[KEY_ALT] &&
-//         m_altState == 1 &&
-//         g_guiManager->m_focussedWidget != this)
-// 	{
-// 		GrabFocus();
-// 		m_highlightedMenu = m_menus[0];
-// 	}
+
+	if ((g_guiManager->m_focussedWidget == this && g_inputManager.keyUps[KEY_ALT] && m_altState == 1) ||
+		(g_inputManager.lmbClicked && menu == NULL && !mouseOverDisplayedMenu) ||
+		(g_inputManager.lmbClicked && m_displayed && menu == m_highlightedMenu))
+	{
+		ClearAllState();
+		return;
+	}
+
+    if (g_inputManager.keyUps[KEY_ALT] &&
+        m_altState == 1 &&
+        g_guiManager->m_focussedWidget != this)
+	{
+		GrabFocus();
+		m_highlightedMenu = m_menus[0];
+	}
 }
 
 

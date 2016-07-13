@@ -9,7 +9,7 @@
 #include "widget.h"
 
 
-#define WIDGET_SPACER 2
+#define WIDGET_SPACER 4
 #define GUI_MANAGER_NAME "GuiManager"
 
 
