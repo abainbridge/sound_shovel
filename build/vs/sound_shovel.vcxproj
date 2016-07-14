@@ -43,12 +43,12 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\text_stream_readers.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\threading.cpp" />
     <ClCompile Include="..\..\src\gui\app_gui_manager.cpp" />
+    <ClCompile Include="..\..\src\gui\sound_view.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
     <ClCompile Include="..\..\src\sound_channel.cpp" />
     <ClCompile Include="..\..\src\sound_system.cpp" />
-    <ClCompile Include="..\..\src\sound_view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
@@ -78,12 +78,16 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\text_stream_readers.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\threading.h" />
     <ClInclude Include="..\..\src\gui\app_gui_manager.h" />
+    <ClInclude Include="..\..\src\gui\sound_view.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound.h" />
     <ClInclude Include="..\..\src\sound_channel.h" />
     <ClInclude Include="..\..\src\sound_system.h" />
-    <ClInclude Include="..\..\src\sound_view.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\data\config_keys.txt" />
+    <Text Include="..\..\data\config_menus.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3800C23A-715F-455D-B468-10FABC616620}</ProjectGuid>

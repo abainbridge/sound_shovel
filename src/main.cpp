@@ -46,9 +46,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         g_guiManager->Advance();
         g_guiManager->Render();
 
-//         soundView.Advance();
-//         soundView.Render(g_window->bmp);
-
         g_soundSystem->Advance();
         UpdateWin();
 

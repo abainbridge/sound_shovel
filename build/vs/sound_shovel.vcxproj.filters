@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
-    <ClCompile Include="..\..\src\sound_view.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound_channel.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp">
@@ -79,6 +78,9 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\gui\sound_view.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -96,11 +98,13 @@
     <Filter Include="gui">
       <UniqueIdentifier>{f7ed3bce-eebf-4ec1-93c6-c73de4942996}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{0cb641d5-bd24-49f7-a6fd-6e526df470ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sound.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
-    <ClInclude Include="..\..\src\sound_view.h" />
     <ClInclude Include="..\..\src\sound_channel.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h">
@@ -185,5 +189,16 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\gui\sound_view.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\data\config_keys.txt">
+      <Filter>data</Filter>
+    </Text>
+    <Text Include="..\..\data\config_menus.txt">
+      <Filter>data</Filter>
+    </Text>
   </ItemGroup>
 </Project>
