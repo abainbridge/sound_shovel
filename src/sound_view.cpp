@@ -85,9 +85,8 @@ void SoundView::RenderWaveform(BitmapRGBA *bmp, double vZoomRatio)
                 VLine(bmp, m_left + x, y, vline_len, soundColour);
         }
 
-        HLine(bmp, 0, yMid - 32767 * vZoomRatio, m_width, Colour(255, 255, 255, 60));
-        HLine(bmp, 0, yMid, m_width, Colour(255, 255, 255, 60));
-        HLine(bmp, 0, yMid + 32767 * vZoomRatio, m_width, Colour(255, 255, 255, 60));
+        HLine(bmp, m_left, yMid, m_width, Colour(255, 255, 255, 60));
+        HLine(bmp, m_left, yMid + 32767 * vZoomRatio, m_width, Colour(255, 255, 255, 60));
     }
 }
 
