@@ -20,10 +20,10 @@ WidgetHistory *g_widgetHistory = NULL;
 // Class HistItem
 // **************
 
-HistItem::HistItem(char const *_str)
+HistItem::HistItem(char const *str)
 :	m_type(TypeString)
 {
-	m_str = StringDuplicate(_str);
+	m_str = StringDuplicate(str);
 }
 
 
@@ -47,10 +47,10 @@ HistItem::~HistItem()
 }
 
 
-void HistItem::SetValueFromLine(char const *_line)
+void HistItem::SetValueFromLine(char const *line)
 {
 	// Get value
-	char const *value = _line;
+	char const *value = line;
 	while (IsSpace(*value) || *value == '=')
 	{
 		if (*value == '\0') break;
@@ -132,12 +132,12 @@ void HistItem::SetValueFromLine(char const *_line)
 // Class WidgetHistory
 // ******************
 
-WidgetHistory::WidgetHistory(char const *_filename)
+WidgetHistory::WidgetHistory(char const *filename)
 :   CommandReceiver("WidgetHistory")
 {
     g_commandSender.RegisterReceiver(this);
 
-    m_filename = StringDuplicate(_filename);
+    m_filename = StringDuplicate(filename);
 
 	Load();
 }
@@ -148,13 +148,13 @@ WidgetHistory::~WidgetHistory()
 }
 
 
-bool WidgetHistory::IsLineEmpty(char const *_line)
+bool WidgetHistory::IsLineEmpty(char const *line)
 {
-	while (_line[0] != '\0')
+	while (line[0] != '\0')
 	{
-		if (_line[0] == '#') return true;
-		if (isalnum(_line[0])) return false;
-		++_line;
+		if (line[0] == '#') return true;
+		if (isalnum(line[0])) return false;
+		++line;
 	}
 
 	return true;
@@ -184,10 +184,10 @@ char *WidgetHistory::GetKeyFromLine(char *line)
 }
 
 
-void WidgetHistory::AddLine(char *_line)
+void WidgetHistory::AddLine(char *line)
 {
     char localCopy[256];
-    strncpy(localCopy, _line, 255);
+    strncpy(localCopy, line, 255);
 	if (!IsLineEmpty(localCopy))				// Skip comment lines and blank lines
 	{
 		// Remove trailing new line
@@ -211,19 +211,19 @@ void WidgetHistory::AddLine(char *_line)
 }
 
 
-void WidgetHistory::Load(char const *_filename)
+void WidgetHistory::Load(char const *filename)
 {
-	if (!_filename) _filename = m_filename;
+	if (!filename) filename = m_filename;
 
 	m_items.EmptyAndDelete();
     
     // Try to read preferences if they exist
-    FILE *in = fopen(_filename, "r");
+    FILE *in = fopen(filename, "r");
 
     if (in)
     {
         struct _stat statBuf;
-        _stat(_filename, &statBuf);
+        _stat(filename, &statBuf);
         m_diskFileModTimeWhenRead = statBuf.st_mtime;
 
         char line[256];
@@ -240,22 +240,22 @@ void WidgetHistory::Load(char const *_filename)
 }
 
 
-void WidgetHistory::SaveItem(FILE *out, char const *key, HistItem *_item)
+void WidgetHistory::SaveItem(FILE *out, char const *key, HistItem *item)
 {
-	switch (_item->m_type)
+	switch (item->m_type)
 	{
 		case HistItem::TypeFloat:
-			fprintf(out, "%s = %.2f\n", key, _item->m_float);
+			fprintf(out, "%s = %.2f\n", key, item->m_float);
 			break;
 		case HistItem::TypeInt:
-			fprintf(out, "%s = %d\n", key, _item->m_int);
+			fprintf(out, "%s = %d\n", key, item->m_int);
 			break;
 		case HistItem::TypeString:
         {
 			fprintf(out, "%s = ", key);
             
             // Output the value, remembering to escape any backslash and newline characters
-            char *c = _item->m_str;
+            char *c = item->m_str;
             while (*c)
             {
                 if (*c == '\n')
@@ -299,9 +299,9 @@ void WidgetHistory::Save()
 }
 
 
-float WidgetHistory::GetFloat(char const *_key, float _default) const
+float WidgetHistory::GetFloat(char const *key, float _default) const
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 	if (index == -1) return _default;
 	HistItem *item = m_items.GetData(index);
 	if (item->m_type != HistItem::TypeFloat) return _default;
@@ -310,9 +310,9 @@ float WidgetHistory::GetFloat(char const *_key, float _default) const
 
 
 // TODO get rid of underscores in parameter names
-int WidgetHistory::GetInt(char const *_key, int _default) const
+int WidgetHistory::GetInt(char const *key, int _default) const
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 	if (index == -1) return _default;
 	HistItem *item = m_items.GetData(index);
 	if (item->m_type != HistItem::TypeInt) return _default;
@@ -320,9 +320,9 @@ int WidgetHistory::GetInt(char const *_key, int _default) const
 }
 
 
-char *WidgetHistory::GetString(char const *_key, char *_default) const
+char *WidgetHistory::GetString(char const *key, char *_default) const
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 	if (index == -1) return _default;
 	HistItem *item = m_items.GetData(index);
 	if (item->m_type != HistItem::TypeString) return _default;
@@ -330,14 +330,14 @@ char *WidgetHistory::GetString(char const *_key, char *_default) const
 }
 
 
-void WidgetHistory::SetString(char const *_key, char const *_string)
+void WidgetHistory::SetString(char const *key, char const *_string)
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 
 	if (index == -1)
 	{
 		HistItem *item = new HistItem(_string);
-		m_items.PutData(_key, item);
+		m_items.PutData(key, item);
 	}
 	else
 	{
@@ -350,14 +350,14 @@ void WidgetHistory::SetString(char const *_key, char const *_string)
 }
 
 
-void WidgetHistory::SetFloat(char const *_key, float _float)
+void WidgetHistory::SetFloat(char const *key, float _float)
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 
 	if (index == -1)
 	{
 		HistItem *item = new HistItem(_float);
-		m_items.PutData(_key, item);
+		m_items.PutData(key, item);
 	}
 	else
 	{
@@ -368,14 +368,14 @@ void WidgetHistory::SetFloat(char const *_key, float _float)
 }
 
 
-void WidgetHistory::SetInt(char const *_key, int _int)
+void WidgetHistory::SetInt(char const *key, int _int)
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 
 	if (index == -1)
 	{
 		HistItem *item = new HistItem(_int);
-		m_items.PutData(_key, item);
+		m_items.PutData(key, item);
 	}
 	else
 	{
@@ -386,9 +386,9 @@ void WidgetHistory::SetInt(char const *_key, int _int)
 }
 
 
-bool WidgetHistory::DoesKeyExist(char const *_key)
+bool WidgetHistory::DoesKeyExist(char const *key)
 {
-	int index = m_items.GetIndex(_key);
+	int index = m_items.GetIndex(key);
 
 	return index != -1;
 }

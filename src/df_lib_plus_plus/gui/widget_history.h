@@ -59,24 +59,24 @@ private:
 	char *GetKeyFromLine(char *line);
 
 public:
-	WidgetHistory(char const *_filename);
+	WidgetHistory(char const *filename);
 	~WidgetHistory();
 
-	void Load		(char const *_filename=NULL); // If filename is NULL, then m_filename is used
+	void Load		(char const *filename=NULL); // If filename is NULL, then m_filename is used
 	void Save		();
 
-	char *GetString (char const *_key, char *_default=NULL) const;
-	float GetFloat  (char const *_key, float _default=-1.0f) const;
-	int	  GetInt    (char const *_key, int _default=-1) const;
+	char *GetString (char const *key, char *_default=NULL) const;
+	float GetFloat  (char const *key, float _default=-1.0f) const;
+	int	  GetInt    (char const *key, int _default=-1) const;
 
 	// Set functions update existing HistItems or create new ones if key doesn't yet exist
-	void SetString  (char const *_key, char const *_string);
-	void SetFloat	(char const *_key, float _val);
-	void SetInt		(char const *_key, int _val);
+	void SetString  (char const *key, char const *_string);
+	void SetFloat	(char const *key, float _val);
+	void SetInt		(char const *key, int _val);
     
-    void AddLine    (char *_line);
+    void AddLine    (char *line);
 
-    bool DoesKeyExist(char const *_key);
+    bool DoesKeyExist(char const *key);
 
     virtual char *ExecuteCommand(char const *object, char const *command, char const *arguments);
 };
