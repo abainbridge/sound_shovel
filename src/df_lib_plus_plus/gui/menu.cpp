@@ -598,7 +598,7 @@ void MenuBar::Advance()
             m_altState = 1;
         else
 		{
-            int numKeyDowns = 0; // g_inputManager.numKeyDowns; // TODO implement g_inputManager.numKeyDowns
+            int numKeyDowns = g_inputManager.numKeyDowns;
 			if (g_inputManager.keyDowns[KEY_ALT])
 				numKeyDowns--;
 			if (numKeyDowns || g_inputManager.lmbClicked ||
@@ -657,8 +657,8 @@ void MenuBar::Advance()
         }
     }
 
-//	if (g_inputManager.keyUps[KEY_ALT]) // Todo - implement keyUps
-//		m_altState = 0;
+	if (g_inputManager.keyUps[KEY_ALT])
+		m_altState = 0;
 }
 
 
@@ -667,16 +667,15 @@ void MenuBar::Advance()
 //	If mouse over, highlight relevant menu
 void MenuBar::AdvanceNoHighlight()
 {
-// TODO implement key ups
-// 	if (g_keyUps[KEY_ALT])
-// 	{
-// 		if (m_altState == 1)
-// 		{
-// 			GrabFocus();
-// 			m_highlightedMenu = m_menus[0];
-// 			return;
-// 		}
-// 	}
+	if (g_inputManager.keyUps[KEY_ALT])
+	{
+		if (m_altState == 1)
+		{
+			GrabFocus();
+			m_highlightedMenu = m_menus[0];
+			return;
+		}
+	}
 
 	// Is mouse cursor over any of the menu titles?
 	Menu *newHighlightedMenu = GetMenuTitleUnderMouseCursor();

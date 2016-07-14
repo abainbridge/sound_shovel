@@ -1,0 +1,111 @@
+RecalcLuts:
+
+01111260  push        ebp  
+01111261  mov         ebp,esp  
+01111263  sub         esp,8  
+01111266  push        esi  
+01111267  push        edi  
+01111268  mov         esi,ecx 
+0111126A  call        GetHighResTime (01112A20h)  
+
+# Put 8 copies of INT16_MAX into xmm5
+0111126F  movaps      xmm5,xmmword ptr [__xmm@7fff7fff7fff7fff7fff7fff7fff7fff (01128830h)]  
+
+# edx = m_samples
+01111276  lea         edx,[esi+4]  
+
+# Put 8 copies of INT16_MIN into xmm6
+01111279  movaps      xmm6,xmmword ptr [__xmm@80008000800080008000800080008000 (01128840h)]  
+
+# esi = num bytes in m_samples + small offset
+01111280  add         esi,40108h  # 13107 * 2 + 264
+
+# Stash xmm0?
+01111286  movsd       mmword ptr [ebp-8],xmm0  
+
+# edi = 128
+0111128B  mov         edi,80h  
+
++30h:
+# Initialise xmm1, 2, 3, 4 with 16 copies of INT16_MAX and INT16_MIN
+01111290  movaps      xmm2,xmm5  
+01111293  movaps      xmm1,xmm6  
+01111296  movaps      xmm3,xmm5
+01111299  movaps      xmm4,xmm6  
+
+# j = 64
+0111129C  mov         eax,40h  
+
++41h:
+
+# xmm0 = *current_sample
+011112A1  movups      xmm0,xmmword ptr [edx]  
+
+# Find the min and max of 8 values from m_samples
+011112A4  pminsw      xmm2,xmm0
+011112A8  pmaxsw      xmm1,xmm0  
+
+# xmm0 = *(current_sample + 16)
+011112AC  movups      xmm0,xmmword ptr [edx+10h]  
+
+# current_sample += 32
+011112B0  add         edx,20h  
+
+# Find the min and max of the next 8 values from m_samples
+011112B3  pminsw      xmm3,xmm0  
+011112B7  pmaxsw      xmm4,xmm0  
+
+# j--
+011112BB  sub         eax,1  
+011112BE  jne         RecalcLuts+41h (011112A1h)  
+
+# Now xmm1, 2, 3, 4 contain the min and max values, but we need to condense them down.
+
+# Get max into eax, then ecx, then the stack
+011112C0  pmaxsw      xmm1,xmm4 # xmm1 is max of 8 shorts 
+011112C8  movaps      xmm0,xmm1  
+011112CB  psrldq      xmm0,8    # Double quad shift right by 8 bytes. xmm0 is max of 4 shorts
+011112D0  pmaxsw      xmm1,xmm0
+011112D4  movaps      xmm0,xmm1  
+011112D7  psrldq      xmm0,4  
+011112DC  pmaxsw      xmm1,xmm0  
+011112E0  movaps      xmm0,xmm1  
+011112E3  psrldq      xmm0,2  
+011112E8  pmaxsw      xmm1,xmm0  
+011112F8  movd        eax,xmm1  
+
+01111308  movzx       ecx,ax  # 
+0111130E  mov         word ptr [esi-100h],cx  
+
+# Get min into 
+011112C4  pminsw      xmm2,xmm3  
+011112EC  movaps      xmm0,xmm2  
+011112EF  psrldq      xmm0,8  
+011112F4  pminsw      xmm2,xmm0  
+011112FC  movaps      xmm0,xmm2  
+011112FF  psrldq      xmm0,4  
+01111304  pminsw      xmm2,xmm0  
+0111130B  movaps      xmm0,xmm2  
+01111315  psrldq      xmm0,2  
+0111131A  pminsw      xmm2,xmm0  
+0111131E  movd        eax,xmm2  
+01111322  movzx       eax,ax  
+01111325  mov         word ptr [esi],ax
+
+01111328  add         esi,2  
+0111132B  sub         edi,1  
+0111132E  jne         SoundBlock::RecalcLuts+30h (01111290h)
+
+01111334  call        GetHighResTime (01112A20h)  
+01111339  subsd       xmm0,mmword ptr [start_time]  
+0111133E  sub         esp,8  
+01111341  mulsd       xmm0,mmword ptr [__real@408f400000000000 (011287F0h)]  
+01111349  movsd       mmword ptr [esp],xmm0  
+0111134E  push        offset string "%6.3f\n" (011285C8h)  
+01111353  call        DebugOut (01112AA0h)  
+01111358  add         esp,0Ch  
+
+0111135B  pop         edi  
+0111135C  pop         esi  
+0111135D  mov         esp,ebp  
+0111135F  pop         ebp  

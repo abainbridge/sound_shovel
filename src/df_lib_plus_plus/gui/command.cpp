@@ -4,7 +4,7 @@
 // Project headers
 #include "mutex.h"
 #include "string_utils.h"
-// #include "widgets/gui_manager.h"
+#include "gui/gui_manager_base.h"
 // #include "widgets/command_view.h"
 
 // Standard headers
@@ -123,7 +123,7 @@ void CommandSender::RegisterReceiver(CommandReceiver *receiver)
 
 char *CommandSender::SendCommand(char const *from, char const *target, char const *command, char const *arguments)
 {
-    CommandReceiver *receiver = NULL;
+    CommandReceiver *receiver = g_guiManager->GetWidgetByName(target);
 
 	if (!receiver)
 	{
