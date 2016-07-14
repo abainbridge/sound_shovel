@@ -29,7 +29,7 @@ bool g_canSleep = true;
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	CreateWin(1000, 600, WT_WINDOWED, "Sound Shovel");
+	CreateWin(1000, 600, WT_WINDOWED, APPLICATION_NAME);
     g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
 
     g_soundSystem = new SoundSystem;

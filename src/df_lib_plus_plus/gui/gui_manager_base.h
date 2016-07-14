@@ -47,6 +47,8 @@ public:
 	ContainerVert *m_mainContainer;
 	bool m_exitAtEndOfFrame;	// True if something has requested that the application quit
 
+    char *m_aboutString;
+
 private:
 	RGBAColour	GetColour(char const *name, RGBAColour const &defaultColour);
 	bool		StringToColour(char const *str, RGBAColour *col);	// Returns true on success

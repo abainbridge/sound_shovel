@@ -53,6 +53,8 @@ GuiManagerBase::GuiManagerBase()
     m_propFont = CreateTextRenderer("Tahoma", 8, 5);
     ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
 
+    m_aboutString = "";
+
     g_commandSender.RegisterReceiver(this);
 
     // Register the mouse update handler function with the input manager
@@ -96,16 +98,9 @@ void GuiManagerBase::SetColours()
 }
 
 
-#define APPLICATION_NAME "Sound Shovel" // TODO - make this a string passed in at run time to both the prefs system and this module, from the app (ie non-library) code.
-
 unsigned long __stdcall AboutProc(void *data)
 {
-    MessageDialog("About " APPLICATION_NAME,
-        "               " APPLICATION_NAME "\n\n"
-        "              (Beta Version)\n"
-        "               " __DATE__ "\n\n"
-        " Created by Deadfrog Software  \n",
-        MsgDlgTypeOk);
+    MessageDialog("About", g_guiManager->m_aboutString, MsgDlgTypeOk);
 
     return 0;
 }

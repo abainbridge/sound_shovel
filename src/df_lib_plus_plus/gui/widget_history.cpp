@@ -309,7 +309,6 @@ float WidgetHistory::GetFloat(char const *key, float _default) const
 }
 
 
-// TODO get rid of underscores in parameter names
 int WidgetHistory::GetInt(char const *key, int _default) const
 {
 	int index = m_items.GetIndex(key);

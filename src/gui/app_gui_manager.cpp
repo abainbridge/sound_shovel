@@ -2,6 +2,7 @@
 #include "app_gui_manager.h"
 
 // Project headers
+#include "main.h"
 #include "sound.h"
 #include "sound_view.h"
 #include "sound_system.h"
@@ -19,6 +20,11 @@
 AppGuiManager::AppGuiManager()
     : GuiManagerBase()
 {
+    m_aboutString =
+        "               " APPLICATION_NAME "\n\n"
+        "              (Beta Version)\n"
+        "               " __DATE__ "\n\n"
+        " Created by Deadfrog Software  \n";
 }
 
 
