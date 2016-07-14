@@ -9,7 +9,7 @@
 #include "df_lib_plus_plus/binary_file_reader.h"
 
 // Contrib headers
-#include "df_hi_res_time.h"
+#include "df_time.h"
 
 // Standard headers
 #include <math.h>

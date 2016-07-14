@@ -3,7 +3,7 @@
 
 // Contrib headers
 #include "df_input.h"
-#include "df_window_manager.h"
+#include "df_window.h"
 
 // Platform headers
 #include <windows.h>
@@ -21,7 +21,7 @@ CursorManager::CursorManager()
 
 void CursorManager::Advance()
 {
-	if (g_inputManager.lmbUnClicked) 
+	if (g_input.lmbUnClicked) 
 		m_captured = NULL;
 	if (m_captured == NULL)
 		m_type = CursorMain;
@@ -37,22 +37,19 @@ void CursorManager::RequestCursorType(int type)
 
 void CursorManager::Render(int x, int y)
 {
-//	if (g_window->IsMouseInWindow())    // TODO - Implement IsMouseInWindow
+    switch(m_type)
     {
-        switch(m_type)
-        {
-            case CursorMain:
-                SetCursor(LoadCursor(NULL, IDC_ARROW));
-                break;
-            case CursorText:
-                SetCursor(LoadCursor(NULL, IDC_IBEAM));
-                break;
-            case CursorHoriDrag:
-                SetCursor(LoadCursor(NULL, IDC_SIZEWE));
-                break;
-            case CursorVertDrag:
-                SetCursor(LoadCursor(NULL, IDC_SIZENS));
-                break;
-        }
+        case CursorMain:
+            SetCursor(LoadCursor(NULL, IDC_ARROW));
+            break;
+        case CursorText:
+            SetCursor(LoadCursor(NULL, IDC_IBEAM));
+            break;
+        case CursorHoriDrag:
+            SetCursor(LoadCursor(NULL, IDC_SIZEWE));
+            break;
+        case CursorVertDrag:
+            SetCursor(LoadCursor(NULL, IDC_SIZENS));
+            break;
     }
 }

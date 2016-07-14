@@ -10,9 +10,9 @@
 #include "df_bitmap.h"
 #include "df_common.h"
 #include "df_input.h"
-#include "df_hi_res_time.h"
-#include "df_text_renderer.h"
-#include "df_window_manager.h"
+#include "df_time.h"
+#include "df_font.h"
+#include "df_window.h"
 
 // Standard headers
 #include <math.h>
@@ -25,9 +25,9 @@
 
 void SoundView::AdvanceSelection()
 {
-    if (g_inputManager.lmbClicked)
+    if (g_input.lmbClicked)
     {
-        m_selectionStart = GetSampleIndexFromScreenPos(g_inputManager.mouseX);
+        m_selectionStart = GetSampleIndexFromScreenPos(g_input.mouseX);
     }
 }
 
@@ -49,12 +49,12 @@ void SoundView::AdvancePlaybackPos()
 }
 
 
-void SoundView::RenderMarker(BitmapRGBA *bmp, int64_t sampleIdx, RGBAColour col)
+void SoundView::RenderMarker(DfBitmap *bmp, int64_t sampleIdx, DfColour col)
 {
     double x = GetScreenPosFromSampleIndex(sampleIdx);
     double fractionalX = x - (int64_t)x;
     float const gammaCorrectionFactor = 0.75;
-    RGBAColour c = col;
+    DfColour c = col;
     c.a = col.a * powf(1.0 - fractionalX, gammaCorrectionFactor);
     VLine(bmp, floor(x), m_top, m_height, c);
     c.a = col.a * powf(fractionalX, gammaCorrectionFactor);
@@ -62,9 +62,9 @@ void SoundView::RenderMarker(BitmapRGBA *bmp, int64_t sampleIdx, RGBAColour col)
 }
 
 
-void SoundView::RenderWaveform(BitmapRGBA *bmp, double vZoomRatio)
+void SoundView::RenderWaveform(DfBitmap *bmp, double vZoomRatio)
 {
-    RGBAColour soundColour = Colour(52, 152, 219);
+    DfColour soundColour = Colour(52, 152, 219);
     int channelHeight = m_height / m_sound->m_numChannels;
 
     for (int chanIdx = 0; chanIdx < m_sound->m_numChannels; chanIdx++)
@@ -91,7 +91,7 @@ void SoundView::RenderWaveform(BitmapRGBA *bmp, double vZoomRatio)
 }
 
 
-void SoundView::RenderSelection(BitmapRGBA *bmp)
+void SoundView::RenderSelection(DfBitmap *bmp)
 {
     RenderMarker(bmp, m_selectionStart, Colour(255, 255, 50, 90));
 }
@@ -160,19 +160,19 @@ void SoundView::Advance()
     // Take mouse input
 
     double const ZOOM_INCREMENT = 1.2;
-    if (g_inputManager.mouseVelZ < 0)
+    if (g_input.mouseVelZ < 0)
         m_targetHZoomRatio *= ZOOM_INCREMENT;
-    else if (g_inputManager.mouseVelZ > 0)
+    else if (g_input.mouseVelZ > 0)
         m_targetHZoomRatio /= ZOOM_INCREMENT;
 
-    if (g_inputManager.mmb)
+    if (g_input.mmb)
     {
-        m_hOffset -= g_inputManager.mouseVelX * m_hZoomRatio;
-        m_targetHOffset = m_hOffset - g_inputManager.mouseVelX * m_hZoomRatio;
+        m_hOffset -= g_input.mouseVelX * m_hZoomRatio;
+        m_targetHOffset = m_hOffset - g_input.mouseVelX * m_hZoomRatio;
     }
-    else if (g_inputManager.mmbUnClicked)
+    else if (g_input.mmbUnClicked)
     {
-        m_targetHOffset -= g_inputManager.mouseVelX * m_hZoomRatio * 50.0;
+        m_targetHOffset -= g_input.mouseVelX * m_hZoomRatio * 50.0;
     }
 
 
@@ -180,26 +180,26 @@ void SoundView::Advance()
     // Take keyboard input
 
     const double KEY_ZOOM_INCREMENT = 1.0 + 1.3 * advanceTime;
-    if (g_inputManager.keys[KEY_UP])
+    if (g_input.keys[KEY_UP])
         m_targetHZoomRatio /= KEY_ZOOM_INCREMENT;
-    if (g_inputManager.keys[KEY_DOWN])
+    if (g_input.keys[KEY_DOWN])
         m_targetHZoomRatio *= KEY_ZOOM_INCREMENT;
-    if (g_inputManager.keyDowns[KEY_PGUP])
+    if (g_input.keyDowns[KEY_PGUP])
         m_targetHZoomRatio /= KEY_ZOOM_INCREMENT * 8.0;
-    if (g_inputManager.keyDowns[KEY_PGDN])
+    if (g_input.keyDowns[KEY_PGDN])
         m_targetHZoomRatio *= KEY_ZOOM_INCREMENT * 8.0;
 
     double const KEY_H_SCROLL_IMPLUSE = 1000.0 * m_hZoomRatio * advanceTime;
-    if (g_inputManager.keys[KEY_LEFT])
+    if (g_input.keys[KEY_LEFT])
         m_targetHOffset -= KEY_H_SCROLL_IMPLUSE;
-    if (g_inputManager.keys[KEY_RIGHT])
+    if (g_input.keys[KEY_RIGHT])
         m_targetHOffset += KEY_H_SCROLL_IMPLUSE;
 
-    if (g_inputManager.keyDowns[KEY_HOME])
+    if (g_input.keyDowns[KEY_HOME])
     {
         m_targetHOffset = 0;
     }
-    else if (g_inputManager.keyDowns[KEY_END])
+    else if (g_input.keyDowns[KEY_END])
     {
         double samples_on_screen = m_width * m_hZoomRatio;
         m_targetHOffset = m_sound->GetLength() - samples_on_screen;

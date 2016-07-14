@@ -69,7 +69,7 @@ StereoSampleBuf::~StereoSampleBuf()
 // Class SoundDevice
 //*****************************************************************************
 
-#include "df_hi_res_time.h"
+#include "df_time.h"
 void CALLBACK WaveOutProc(HWAVEOUT dev, UINT msg, DWORD user_data, DWORD param1, DWORD param2)
 {
 	if (msg != WOM_DONE) 

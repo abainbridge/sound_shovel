@@ -10,7 +10,7 @@
 
 // Contrib headers
 #include "df_input.h"
-#include "df_window_manager.h"
+#include "df_window.h"
 
 // Standard headers
 #include <stdlib.h>
@@ -60,24 +60,24 @@ void ContainerVert::AdvanceResizing()
         y += m_widgets[i]->m_height;
 	    
 	    if (!m_resizingWidget &&
-            (g_inputManager.mouseY >= (y - 0)) && 
-			(g_inputManager.mouseY <= (y + WIDGET_SPACER + 1)) &&
+            (g_input.mouseY >= (y - 0)) && 
+			(g_input.mouseY <= (y + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
 		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorVertDrag);
-            if (g_inputManager.lmbClicked)
+            if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
 		    }
         }
          
-        if (g_inputManager.lmb && m_resizingWidget == w && g_inputManager.mouseVelY != 0)
+        if (g_input.lmb && m_resizingWidget == w && g_input.mouseVelY != 0)
 		{
 			Widget *w1 = m_widgets[i];
 			Widget *w2 = m_widgets[i + 1];
 
-            int newH1 = g_inputManager.mouseY - w1->m_top;
-			int newH2 = (w2->m_top + w2->m_height) - g_inputManager.mouseY;
+            int newH1 = g_input.mouseY - w1->m_top;
+			int newH2 = (w2->m_top + w2->m_height) - g_input.mouseY;
 
 			if (newH1 < 50)
 			{
@@ -101,7 +101,7 @@ void ContainerVert::AdvanceResizing()
 			g_widgetHistory->SetInt(key2.c_str(), w2->m_height);
 		}
 
-        if (g_inputManager.lmbUnClicked)
+        if (g_input.lmbUnClicked)
 	    {
 			m_resizingWidget = NULL;
 	    }
@@ -121,7 +121,7 @@ void ContainerVert::AdvanceResizing()
 
 void ContainerVert::Advance()
 {
-    if (IsPointInBounds(g_inputManager.mouseX, g_inputManager.mouseY))
+    if (IsPointInBounds(g_input.mouseX, g_input.mouseY))
     {
         AdvanceResizing();
     }

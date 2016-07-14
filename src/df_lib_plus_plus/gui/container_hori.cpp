@@ -9,7 +9,7 @@
 
 // Contrib headers
 #include "df_input.h"
-#include "df_window_manager.h"
+#include "df_window.h"
 
 
 ContainerHori::ContainerHori(char const *name, Widget *parent)
@@ -40,24 +40,24 @@ void ContainerHori::AdvanceResizing()
         x += m_widgets[i]->m_width;
 	    
 	    if (!m_resizingWidget &&
-            (g_inputManager.mouseX >= (x - 0)) && 
-			(g_inputManager.mouseX <= (x + WIDGET_SPACER + 1)) &&
+            (g_input.mouseX >= (x - 0)) && 
+			(g_input.mouseX <= (x + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
 		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorHoriDrag);
-            if (g_inputManager.lmbClicked)
+            if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
 		    }
         }
          
-        if (g_inputManager.lmb && m_resizingWidget == w && g_inputManager.mouseVelX != 0)
+        if (g_input.lmb && m_resizingWidget == w && g_input.mouseVelX != 0)
 		{
 			Widget *w1 = m_widgets[i];
 			Widget *w2 = m_widgets[i + 1];
 
-            int newW1 = g_inputManager.mouseX - w1->m_left;
-			int newW2 = (w2->m_left + w2->m_width) - g_inputManager.mouseX;
+            int newW1 = g_input.mouseX - w1->m_left;
+			int newW2 = (w2->m_left + w2->m_width) - g_input.mouseX;
 
 			if (newW1 < 30)
 			{
@@ -81,7 +81,7 @@ void ContainerHori::AdvanceResizing()
 			g_widgetHistory->SetInt(key2.c_str(), w2->m_width);
 		}
 
-        if (g_inputManager.lmbUnClicked)
+        if (g_input.lmbUnClicked)
 	    {
 			m_resizingWidget = NULL;
 	    }
@@ -101,7 +101,7 @@ void ContainerHori::AdvanceResizing()
 
 void ContainerHori::Advance()
 {
-    if (IsPointInBounds(g_inputManager.mouseX, g_inputManager.mouseY))
+    if (IsPointInBounds(g_input.mouseX, g_input.mouseY))
     {
         AdvanceResizing();
     }

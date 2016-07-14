@@ -27,8 +27,8 @@ weird:
 // Contrib headers
 #include "df_input.h"
 #include "df_bitmap.h"
-#include "df_text_renderer.h"
-#include "df_window_manager.h"
+#include "df_font.h"
+#include "df_window.h"
 
 // Standard headers
 #include <stdlib.h>
@@ -38,7 +38,7 @@ weird:
 #define MENU_SPACING_X			18
 #define MENU_SPACING_Y			4
 #define	HIGHLIGHT_BOX_BORDER	8
-#define CONFIG_FILE_NAME		"data/config_menus.txt" // TODO - make this name an argument to the MenuBar constructor. Make the constructor of GuiManager take is and pass it through.
+#define CONFIG_FILE_NAME		"data/config_menus.txt"
 
 
 #define g_propFont g_guiManager->m_propFont
@@ -157,11 +157,11 @@ void Menu::Advance()
 	}
 
 	// If key up/down, set new highlighted item
-	if (g_inputManager.keyDowns[KEY_DOWN] || g_inputManager.keyDowns[KEY_UP])
+	if (g_input.keyDowns[KEY_DOWN] || g_input.keyDowns[KEY_UP])
 	{
 		int direction = 0;
-		if (g_inputManager.keyDowns[KEY_DOWN]) direction = 1;
-		if (g_inputManager.keyDowns[KEY_UP]) direction = -1;
+		if (g_input.keyDowns[KEY_DOWN]) direction = 1;
+		if (g_input.keyDowns[KEY_UP]) direction = -1;
 		if (direction)
 		{
 			do
@@ -173,8 +173,8 @@ void Menu::Advance()
 		}
 	}
 
-	bool const mouseMoved = (abs(g_inputManager.mouseVelX) > 0 ||
-							 abs(g_inputManager.mouseVelY) > 0);
+	bool const mouseMoved = (abs(g_input.mouseVelX) > 0 ||
+							 abs(g_input.mouseVelY) > 0);
 
 	// Update highlighted menu item based on mouse position
 	if (mouseMoved)
@@ -195,9 +195,9 @@ void Menu::Advance()
 	}
 
 	// If a hot key has been pressed, execute corresponding menu item
-	for (int i = 0; i < g_inputManager.numKeysTyped; i++)
+	for (int i = 0; i < g_input.numKeysTyped; i++)
 	{
-		MenuItem *item = FindMenuItemByHotkey(g_inputManager.keysTyped[i]);
+		MenuItem *item = FindMenuItemByHotkey(g_input.keysTyped[i]);
 		if (item)
 		{
 			item->Execute();
@@ -207,7 +207,7 @@ void Menu::Advance()
 
 	// If item clicked on or return pressed, execute highlighted menu item
 	if (m_highlightedItem != -1 &&
-		(g_inputManager.keyDowns[KEY_ENTER] || g_inputManager.lmbUnClicked))
+		(g_input.keyDowns[KEY_ENTER] || g_input.lmbUnClicked))
 	{
         g_guiManager->m_cursorManager.m_captured = NULL;
 		MenuItem *item = m_items[m_highlightedItem];
@@ -230,9 +230,9 @@ void Menu::Render()
 	DrawFilledBox(x+1, y+1, width, height, g_guiManager->m_frameColour2);
 
 	// Set mouse cursor if mouse is over menu area
-	if (g_inputManager.mouseX > x && g_inputManager.mouseX < (x + width + 1))
+	if (g_input.mouseX > x && g_input.mouseX < (x + width + 1))
 	{
-		if (g_inputManager.mouseY > y && g_inputManager.mouseY < (y + height + 1))
+		if (g_input.mouseY > y && g_input.mouseY < (y + height + 1))
 		{
 			g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
 		}
@@ -288,9 +288,9 @@ void Menu::Render()
 bool Menu::IsMouseOverTitle()
 {
 	const int border = MENU_SPACING_X / 2;
-	if (g_inputManager.mouseX >= (m_left - border) &&
-		g_inputManager.mouseX < (m_right + border) &&
-		g_inputManager.mouseY < 18)
+	if (g_input.mouseX >= (m_left - border) &&
+		g_input.mouseX < (m_right + border) &&
+		g_input.mouseY < 18)
 	{
 		return true;
 	}
@@ -304,11 +304,11 @@ bool Menu::IsMouseOver()
 	int menuTop = m_top; //m_parent->m_height;
 	int width = GetWidthInPixels();
 	int height = GetHeightInPixels();
-	int mouseX = g_inputManager.mouseX;
+	int mouseX = g_input.mouseX;
 	if (mouseX >= m_left &&
 		mouseX < m_left + width &&
-		g_inputManager.mouseY >= menuTop &&
-		g_inputManager.mouseY < (menuTop + height))
+		g_input.mouseY >= menuTop &&
+		g_input.mouseY < (menuTop + height))
 	{
 		return true;
 	}
@@ -329,7 +329,7 @@ int Menu::IsMouseOverItem()
 		{
 			int y1 = item->m_yPos + m_top + 7;
 			int y2 = y1 + ySize;
-			if (g_inputManager.mouseY >= y1 && g_inputManager.mouseY < y2)
+			if (g_input.mouseY >= y1 && g_input.mouseY < y2)
 			{
 				return i;
 			}
@@ -592,27 +592,27 @@ void MenuBar::ShowContextMenu(Menu *contextMenu)
 
 void MenuBar::Advance()
 {
-    if (g_inputManager.keys[KEY_ALT])
+    if (g_input.keys[KEY_ALT])
     {
         if (m_altState == 0)
             m_altState = 1;
         else
 		{
-            int numKeyDowns = g_inputManager.numKeyDowns;
-			if (g_inputManager.keyDowns[KEY_ALT])
+            int numKeyDowns = g_input.numKeyDowns;
+			if (g_input.keyDowns[KEY_ALT])
 				numKeyDowns--;
-			if (numKeyDowns || g_inputManager.lmbClicked ||
-				 g_inputManager.mmbClicked || g_inputManager.rmbClicked)
+			if (numKeyDowns || g_input.lmbClicked ||
+				 g_input.mmbClicked || g_input.rmbClicked)
                 m_altState = 2;
 		}
     }
     else
 	{
-		if (g_inputManager.keys[KEY_SHIFT] || g_inputManager.keys[KEY_CONTROL])
+		if (g_input.keys[KEY_SHIFT] || g_input.keys[KEY_CONTROL])
 			ClearMenuBarState();
 	}
 
-	if (!g_inputManager.windowHasFocus)
+	if (!g_input.windowHasFocus)
     {
         // Clear the sticky alt key state if shift or control is pressed
         ClearAllState();
@@ -644,7 +644,7 @@ void MenuBar::Advance()
 
     if (m_contextMenu)
     {
-        if (g_inputManager.lmbClicked || g_inputManager.rmbClicked)
+        if (g_input.lmbClicked || g_input.rmbClicked)
         {
             if (!m_contextMenu->IsMouseOver())
             {
@@ -657,7 +657,7 @@ void MenuBar::Advance()
         }
     }
 
-	if (g_inputManager.keyUps[KEY_ALT])
+	if (g_input.keyUps[KEY_ALT])
 		m_altState = 0;
 }
 
@@ -667,7 +667,7 @@ void MenuBar::Advance()
 //	If mouse over, highlight relevant menu
 void MenuBar::AdvanceNoHighlight()
 {
-	if (g_inputManager.keyUps[KEY_ALT])
+	if (g_input.keyUps[KEY_ALT])
 	{
 		if (m_altState == 1)
 		{
@@ -699,8 +699,8 @@ void MenuBar::AdvanceNoHighlight()
 //    If key alt, key capture = true
 void MenuBar::AdvanceWithHighlight()
 {
-	bool const mouseMoved = (abs(g_inputManager.mouseVelX) > 0 ||
-							 abs(g_inputManager.mouseVelY) > 0);
+	bool const mouseMoved = (abs(g_input.mouseVelX) > 0 ||
+							 abs(g_input.mouseVelY) > 0);
 
 	Menu *const menu = GetMenuTitleUnderMouseCursor();
 	if (menu && menu != m_highlightedMenu)
@@ -713,8 +713,8 @@ void MenuBar::AdvanceWithHighlight()
 	{
 		// Have cursor left/right been pressed?
 		int menuIndex = m_menus.FindData(m_highlightedMenu);
-		if (g_inputManager.keyDowns[KEY_LEFT]) menuIndex--;
-		if (g_inputManager.keyDowns[KEY_RIGHT]) menuIndex++;
+		if (g_input.keyDowns[KEY_LEFT]) menuIndex--;
+		if (g_input.keyDowns[KEY_RIGHT]) menuIndex++;
 		menuIndex += m_menus.Size();
 		menuIndex %= m_menus.Size();
 		if (m_menus[menuIndex] != m_highlightedMenu)
@@ -743,15 +743,15 @@ void MenuBar::AdvanceWithHighlight()
 	bool mouseOverDisplayedMenu = false;
 	if (m_displayed) mouseOverDisplayedMenu = m_highlightedMenu->IsMouseOver();
 
-	if ((g_guiManager->m_focussedWidget == this && g_inputManager.keyUps[KEY_ALT] && m_altState == 1) ||
-		(g_inputManager.lmbClicked && menu == NULL && !mouseOverDisplayedMenu) ||
-		(g_inputManager.lmbClicked && m_displayed && menu == m_highlightedMenu))
+	if ((g_guiManager->m_focussedWidget == this && g_input.keyUps[KEY_ALT] && m_altState == 1) ||
+		(g_input.lmbClicked && menu == NULL && !mouseOverDisplayedMenu) ||
+		(g_input.lmbClicked && m_displayed && menu == m_highlightedMenu))
 	{
 		ClearAllState();
 		return;
 	}
 
-    if (g_inputManager.keyUps[KEY_ALT] &&
+    if (g_input.keyUps[KEY_ALT] &&
         m_altState == 1 &&
         g_guiManager->m_focussedWidget != this)
 	{
@@ -768,7 +768,7 @@ void MenuBar::AdvanceWithHighlight()
 //  If key typed, choose menu and display
 void MenuBar::AdvanceHighlightNoDisplay()
 {
-	if (g_inputManager.lmbClicked)
+	if (g_input.lmbClicked)
 	{
 		Menu *menu = GetMenuTitleUnderMouseCursor();
 		if (menu)
@@ -782,9 +782,9 @@ void MenuBar::AdvanceHighlightNoDisplay()
 	// Select a menu to display if a key has been pressed
     if (g_guiManager->m_focussedWidget == this)
     {
-        for (int i = 0; i < g_inputManager.numKeysTyped; i++)
+        for (int i = 0; i < g_input.numKeysTyped; i++)
 	    {
-		    Menu *menu = FindMenuByHotKey(g_inputManager.keysTyped[i]);
+		    Menu *menu = FindMenuByHotKey(g_input.keysTyped[i]);
 		    if (menu)
 		    {
 			    m_highlightedMenu = menu;
@@ -796,7 +796,7 @@ void MenuBar::AdvanceHighlightNoDisplay()
     }
 
 	// Have cursor up/down or return been pressed?
-	if (g_inputManager.keyDowns[KEY_UP] || g_inputManager.keyDowns[KEY_DOWN] || g_inputManager.keyDowns[KEY_ENTER])
+	if (g_input.keyDowns[KEY_UP] || g_input.keyDowns[KEY_DOWN] || g_input.keyDowns[KEY_ENTER])
 	{
 		m_displayed = true;
 		GrabFocus();
@@ -871,7 +871,7 @@ void MenuBar::Render()
 //	bool highlighted = g_guiManager->m_focussedWidget == this;
 
 	// Set mouse pointer to CursorMain if it is over the menu bar
-	if (g_inputManager.mouseY < m_height)
+	if (g_input.mouseY < m_height)
 	{
 		g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
 	}
@@ -891,7 +891,7 @@ void MenuBar::Render()
 	for (int i = 0; i < m_menus.Size(); ++i)
 	{
 		Menu *menu = m_menus[i];
-		RGBAColour underlineColour = g_guiManager->m_textColourFrame;
+		DfColour underlineColour = g_guiManager->m_textColourFrame;
 
 		// Title text
         if (menu == m_highlightedMenu)

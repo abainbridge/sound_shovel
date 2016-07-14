@@ -10,7 +10,7 @@
 
 // Contrib headers
 #include "df_bitmap.h"
-#include "df_window_manager.h"
+#include "df_window.h"
 
 
 Widget::Widget(char const *name, Widget *parent, int w, int h)
@@ -158,10 +158,10 @@ char *Widget::ExecuteCommand(char const *object, char const *command, char const
 
 void Widget::DrawFilledBoxHoriGrad(int x, int y, int w, int h)
 {
-	RGBAColour const &col1 = g_guiManager->m_frameColour1;
-	RGBAColour const &col3 = g_guiManager->m_frameColour3;
-	RGBAColour const &col5 = g_guiManager->m_frameColour5;
-	RGBAColour const &col6 = col5 - Colour(30,30,30,0);
+	DfColour const &col1 = g_guiManager->m_frameColour1;
+	DfColour const &col3 = g_guiManager->m_frameColour3;
+	DfColour const &col5 = g_guiManager->m_frameColour5;
+	DfColour const &col6 = col5 - Colour(30,30,30,0);
 	
 	DrawOutlineBox(x, y, w, h, col6);
 	
@@ -177,7 +177,7 @@ void Widget::DrawFilledBoxHoriGrad(int x, int y, int w, int h)
 	
 	for (int i = 1; i < w-1; i++)
 	{
-		RGBAColour col = AddWithSaturate(col1, Colour(deltaR * i, deltaG * i, deltaB * i));
+		DfColour col = RgbaAddWithSaturate(col1, Colour(deltaR * i, deltaG * i, deltaB * i));
 		VLine(g_window->bmp, x + i, y, h, col);
 	}
 }
@@ -185,10 +185,10 @@ void Widget::DrawFilledBoxHoriGrad(int x, int y, int w, int h)
 
 void Widget::DrawFilledBoxVertGrad(int x, int y, int w, int h)
 {
-	RGBAColour const &col1 = g_guiManager->m_frameColour1;
-	RGBAColour const &col3 = g_guiManager->m_frameColour3;
-	RGBAColour const &col5 = g_guiManager->m_frameColour5;
-	RGBAColour const &col6 = col5 - Colour(30,30,30,0);
+	DfColour const &col1 = g_guiManager->m_frameColour1;
+	DfColour const &col3 = g_guiManager->m_frameColour3;
+	DfColour const &col5 = g_guiManager->m_frameColour5;
+	DfColour const &col6 = col5 - Colour(30,30,30,0);
 	
 	DrawOutlineBox(x, y, w, h, col6);
 	
@@ -204,7 +204,7 @@ void Widget::DrawFilledBoxVertGrad(int x, int y, int w, int h)
 	
 	for (int i = 1; i < h-1; i++)
 	{
-		RGBAColour col = AddWithSaturate(col1, Colour(deltaR * i, deltaG * i, deltaB * i));
+		DfColour col = RgbaAddWithSaturate(col1, Colour(deltaR * i, deltaG * i, deltaB * i));
 		HLine(g_window->bmp, x, y + i, w, col);
 	}
 }

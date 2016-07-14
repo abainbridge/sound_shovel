@@ -9,10 +9,10 @@
 #include "gui/file_dialog.h"
 #include "gui/widget_history.h"
 #include "df_bitmap.h"
-#include "df_hi_res_time.h"
+#include "df_time.h"
 #include "df_input.h"
-#include "df_text_renderer.h"
-#include "df_window_manager.h"
+#include "df_font.h"
+#include "df_window.h"
 
 // Platform headers
 #define WIN32_LEAN_AND_MEAN
@@ -30,7 +30,7 @@ bool g_canSleep = true;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	CreateWin(1000, 600, WT_WINDOWED, APPLICATION_NAME);
-    g_defaultTextRenderer = CreateTextRenderer("Lucida Console", 10, 4);
+    g_defaultFont = CreateTextRenderer("Lucida Console", 10, 4);
 
     g_soundSystem = new SoundSystem;
 

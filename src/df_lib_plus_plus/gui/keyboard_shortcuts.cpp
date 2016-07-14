@@ -36,7 +36,7 @@ KeyboardShortcut::KeyboardShortcut()
 
 bool KeyboardShortcut::IsActiveThisFrame(unsigned char qualifierFlags)
 {
-	if (g_inputManager.keyDowns[m_key])
+	if (g_input.keyDowns[m_key])
 	{
 		if (m_key == KEY_SHIFT || m_key == KEY_ALT || m_key == KEY_CONTROL)
 		{
@@ -240,9 +240,9 @@ void KeyboardShortcutManager::Advance()
 {
 	unsigned char qualifierFlags = 0;
 
-	if (g_inputManager.keys[KEY_SHIFT]) qualifierFlags |= KeyboardShortcut::SHIFT;
-	if (g_inputManager.keys[KEY_CONTROL]) qualifierFlags |= KeyboardShortcut::CTRL;
-	if (g_inputManager.keys[KEY_ALT]) qualifierFlags |= KeyboardShortcut::ALT;
+	if (g_input.keys[KEY_SHIFT]) qualifierFlags |= KeyboardShortcut::SHIFT;
+	if (g_input.keys[KEY_CONTROL]) qualifierFlags |= KeyboardShortcut::CTRL;
+	if (g_input.keys[KEY_ALT]) qualifierFlags |= KeyboardShortcut::ALT;
 
 	// Go through all the shortcuts once. If they should be active,
 	// and they are to be sent to a widget and that widget has
@@ -266,7 +266,7 @@ void KeyboardShortcutManager::Advance()
 			{
                 if (!(shortcut->m_flags & KeyboardShortcut::PASS_THROUGH))
                 {
-                    g_inputManager.keyDowns[shortcut->m_key] = 0;
+                    g_input.keyDowns[shortcut->m_key] = 0;
                     UntypeKey(shortcut->m_key);
                 }
 
@@ -300,9 +300,9 @@ void KeyboardShortcutManager::Advance()
 	}
 
     // Now send 'normal' keypresses that the user has just typed
-	for (int i = 0; i < g_inputManager.numKeysTyped; ++i)
+	for (int i = 0; i < g_input.numKeysTyped; ++i)
 	{
-        char key[] = { g_inputManager.keysTyped[i], '\0' };
+        char key[] = { g_input.keysTyped[i], '\0' };
         g_commandSender.SendCommandNoRV("KeyboardShortcutManager",
                                         g_guiManager->m_focussedWidget->m_name,
                                         "insert_text",

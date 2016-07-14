@@ -2,7 +2,7 @@
 
 
 // Contrib headers
-#include "df_rgba_colour.h"
+#include "df_colour.h"
 
 // Project headers
 #include "cursor_manager.h"
@@ -14,7 +14,7 @@
 
 
 class ContainerVert;
-typedef struct _TextRenderer TextRenderer;
+typedef struct _DfFont DfFont;
 
 
 class GuiManagerBase: public Widget
@@ -26,21 +26,21 @@ private:
 	Widget *m_previouslyFocussedWidget;	// Only used when a modal widget is present
 
 public:
-	RGBAColour	m_backgroundColour;
-	RGBAColour	m_frameColour1;                 // Darkest
-	RGBAColour	m_frameColour2;
-	RGBAColour	m_frameColour3;
-	RGBAColour	m_frameColour4;
-	RGBAColour	m_frameColour5;                 // Brightest
-	RGBAColour	m_selectionBlockColour;
-	RGBAColour  m_selectionBlockUnfocussedColour;
-	RGBAColour  m_highlightColour;
-	RGBAColour  m_strongHighlightColour;
-	RGBAColour	m_textColourNormal;
-	RGBAColour	m_textColourFrame;
-	RGBAColour  m_focusBoxColour;
+	DfColour m_backgroundColour;
+	DfColour m_frameColour1;                 // Darkest
+	DfColour m_frameColour2;
+	DfColour m_frameColour3;
+	DfColour m_frameColour4;
+	DfColour m_frameColour5;                 // Brightest
+	DfColour m_selectionBlockColour;
+	DfColour m_selectionBlockUnfocussedColour;
+	DfColour m_highlightColour;
+	DfColour m_strongHighlightColour;
+	DfColour m_textColourNormal;
+	DfColour m_textColourFrame;
+	DfColour m_focusBoxColour;
 
-    TextRenderer *m_propFont;    // Proportional width font used by Menus, status bar etc.
+    DfFont *m_propFont;    // Proportional width font used by Menus, status bar etc.
 
 	CursorManager m_cursorManager;
 	Widget *m_focussedWidget;
@@ -48,10 +48,11 @@ public:
 	bool m_exitAtEndOfFrame;	// True if something has requested that the application quit
 
     char *m_aboutString;
+    bool m_highlightFocussedWidget;
 
 private:
-	RGBAColour	GetColour(char const *name, RGBAColour const &defaultColour);
-	bool		StringToColour(char const *str, RGBAColour *col);	// Returns true on success
+	DfColour	GetColour(char const *name, DfColour const &defaultColour);
+	bool		StringToColour(char const *str, DfColour *col);	// Returns true on success
 	void		SetColours();
 
 public:

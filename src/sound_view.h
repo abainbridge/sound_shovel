@@ -2,7 +2,7 @@
 
 
 // Contrib headers
-#include "df_rgba_colour.h"
+#include "df_colour.h"
 #include "gui/widget.h"
 
 // Standard headers
@@ -12,7 +12,7 @@
 #define SOUND_VIEW_NAME "SoundView"
 
 
-struct BitmapRGBA;
+struct DfBitmap;
 class Sound;
 
 
@@ -26,10 +26,10 @@ private:
     void AdvanceSelection();
     void AdvancePlaybackPos();
 
-    void RenderMarker(BitmapRGBA *bmp, int64_t sample_idx, RGBAColour col);
+    void RenderMarker(DfBitmap *bmp, int64_t sample_idx, DfColour col);
 
-    void RenderWaveform(BitmapRGBA *bmp, double v_zoom_ratio);
-    void RenderSelection(BitmapRGBA *bmp);
+    void RenderWaveform(DfBitmap *bmp, double v_zoom_ratio);
+    void RenderSelection(DfBitmap *bmp);
 
 public:
     Sound *m_sound;

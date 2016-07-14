@@ -14,7 +14,7 @@
 #include "gui/container_vert.h"
 #include "gui/menu.h"
 #include "gui/status_bar.h"
-#include "df_window_manager.h"
+#include "df_window.h"
 
 
 AppGuiManager::AppGuiManager()

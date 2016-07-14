@@ -15,11 +15,11 @@
 
 // Contrib headers
 #include "df_bitmap.h"
-#include "df_rgba_colour.h"
+#include "df_colour.h"
 #include "df_input.h"
 #include "df_message_dialog.h"
-#include "df_text_renderer.h"
-#include "df_window_manager.h"
+#include "df_font.h"
+#include "df_window.h"
 
 
 GuiManagerBase *g_guiManager = NULL;
@@ -54,17 +54,18 @@ GuiManagerBase::GuiManagerBase()
     ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
 
     m_aboutString = "";
+    m_highlightFocussedWidget = false;
 
     g_commandSender.RegisterReceiver(this);
 
     // Register the mouse update handler function with the input manager
-    //    g_inputManager.RegisterMouseUpdateCallback(&MouseUpdateHandler);  // TODO - Implement RegisterMouseUpdateCallback
+    //    g_input.RegisterMouseUpdateCallback(&MouseUpdateHandler);  // TODO - Implement RegisterMouseUpdateCallback
 }
 
 
-RGBAColour GuiManagerBase::GetColour(char const *name, RGBAColour const &defaultC)
+DfColour GuiManagerBase::GetColour(char const *name, DfColour const &defaultC)
 {
-    RGBAColour rv = defaultC;
+    DfColour rv = defaultC;
 
     char const *str = NULL;// g_prefs->GetString(name); // TODO - re-enable the prefs system
 
@@ -112,7 +113,7 @@ void GuiManagerBase::About()
 }
 
 
-bool GuiManagerBase::StringToColour(char const *str, RGBAColour *col)
+bool GuiManagerBase::StringToColour(char const *str, DfColour *col)
 {
     col->r = atoi(str);
     str = strchr(str, ',');
@@ -250,10 +251,10 @@ void GuiManagerBase::Advance()
         // Update which widget is highlighted
         MenuBar *menu = (MenuBar*)GetWidgetByName(MENU_BAR_NAME);
         DebugAssert(menu);
-        if ((g_inputManager.lmbClicked || g_inputManager.rmbClicked)
+        if ((g_input.lmbClicked || g_input.rmbClicked)
             && !menu->DoesClickHitMenu())
         {
-            Widget *hit = GetWidgetAtPos(g_inputManager.mouseX, g_inputManager.mouseY);
+            Widget *hit = GetWidgetAtPos(g_input.mouseX, g_input.mouseY);
             if (hit && hit->m_highlightable)
             {
                 m_focussedWidget = hit;
@@ -291,20 +292,22 @@ void GuiManagerBase::Render()
     m_profileWindow->Render();
 #endif
 
-    // Draw a box around the highlighted widget, unless it is the menu bar
+    if (m_highlightFocussedWidget)
     {
+        // Draw a box around the highlighted widget, unless it is the menu bar
+
         Widget const *hw = m_focussedWidget;
-        // TODO - implement g_inputManager.m_windowHasFocus
-//         if (g_inputManager.m_windowHasFocus && hw &&
-//             stricmp(MENU_BAR_NAME, hw->m_name) != 0)
-//         {
-//             DrawOutlineBox(hw->m_left - 2, hw->m_top - 2,
-//                 hw->m_width + 4, hw->m_height + 4,
-//                 m_frameColour5);
-//             DrawOutlineBox(hw->m_left - 1, hw->m_top - 1,
-//                 hw->m_width + 2, hw->m_height + 2,
-//                 m_focusBoxColour);
-//         }
+
+        if (g_input.windowHasFocus && hw &&
+            stricmp(MENU_BAR_NAME, hw->m_name) != 0)
+        {
+            DrawOutlineBox(hw->m_left - 2, hw->m_top - 2,
+                hw->m_width + 4, hw->m_height + 4,
+                m_frameColour5);
+            DrawOutlineBox(hw->m_left - 1, hw->m_top - 1,
+                hw->m_width + 2, hw->m_height + 2,
+                m_focusBoxColour);
+        }
     }
 
 
@@ -319,7 +322,7 @@ void GuiManagerBase::Render()
     g_tooltipManager.Render();
 
     // Cursor
-    g_guiManager->m_cursorManager.Render(g_inputManager.mouseX, g_inputManager.mouseY);
+    g_guiManager->m_cursorManager.Render(g_input.mouseX, g_input.mouseY);
 }
 
 

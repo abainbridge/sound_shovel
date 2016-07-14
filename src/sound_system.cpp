@@ -7,7 +7,7 @@
 #include "sound/sound_device.h"
 
 // Contrib includes
-#include "df_hi_res_time.h"
+#include "df_time.h"
 
 // Standard headers
 #include <memory.h>

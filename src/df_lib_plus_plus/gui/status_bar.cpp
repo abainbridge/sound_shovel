@@ -8,11 +8,11 @@
 
 // Contrib headers
 #include "df_bitmap.h"
-#include "df_hi_res_time.h"
+#include "df_time.h"
 #include "df_input.h"
-#include "df_rgba_colour.h"
-#include "df_text_renderer.h"
-#include "df_window_manager.h"
+#include "df_colour.h"
+#include "df_font.h"
+#include "df_window.h"
 
 #include "andy_string.h"
 #include "filesys_utils.h"
@@ -49,7 +49,7 @@ void StatusBar::ShowMessage(char const *fmt, ...)
     va_list ap;
     va_start(ap, fmt);
     _vsnprintf(m_messageBuffer, MAX_MESSAGE_LEN, fmt, ap);
-	m_messageStartTime = GetHighResTime();
+	m_messageStartTime = DfGetTime();
 	m_messageIsError = false;
 }
 
@@ -59,7 +59,7 @@ void StatusBar::ShowError(char const *fmt, ...)
     va_list ap;
     va_start (ap, fmt);
     _vsnprintf(m_messageBuffer, MAX_MESSAGE_LEN, fmt, ap);
-	m_messageStartTime = GetHighResTime();
+	m_messageStartTime = DfGetTime();
 	m_messageIsError = true;
 }
 
@@ -82,15 +82,15 @@ void StatusBar::SetRightString(char const *fmt, ...)
 
 void StatusBar::Advance()
 {
-	if (GetHighResTime() > (m_messageStartTime + 1.0f))
+	if (DfGetTime() > (m_messageStartTime + 1.0f))
 	{
-		if (g_inputManager.lmbUnClicked || g_inputManager.mmbUnClicked || g_inputManager.rmbUnClicked)
+		if (g_input.lmbUnClicked || g_input.mmbUnClicked || g_input.rmbUnClicked)
 		{
 			m_messageBuffer[0] = '\0';
 		}
 	}
 
-	if (GetHighResTime() > m_messageStartTime + 10.0f)
+	if (DfGetTime() > m_messageStartTime + 10.0f)
 	{
 		m_messageBuffer[0] = '\0';
 	}
@@ -111,7 +111,7 @@ void StatusBar::Render()
 			RectFill(g_window->bmp, x, y, w, h, Colour(200,0,0));
 		else
 			RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour5);
-		DrawTextSimple(g_defaultTextRenderer, g_colourWhite, g_window->bmp, x + 10, y, m_messageBuffer);
+		DrawTextSimple(g_defaultFont, g_colourWhite, g_window->bmp, x + 10, y, m_messageBuffer);
 		return;
 	}
 
