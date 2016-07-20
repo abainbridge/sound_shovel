@@ -101,7 +101,7 @@ void ContainerHori::AdvanceResizing()
 
 void ContainerHori::Advance()
 {
-    if (IsPointInBounds(g_input.mouseX, g_input.mouseY))
+    if (IsMouseInBounds())
     {
         AdvanceResizing();
     }

@@ -36,7 +36,7 @@ public:
     virtual ~Widget();
 
 	virtual void SetRect(int x=-1, int y=-1, int w=-1, int h=-1);
-	bool IsPointInBounds(int x, int y);
+	bool IsMouseInBounds();
 	virtual Widget *GetWidgetAtPos(int x, int y);	// Recursively search all child widgets - return the deepest Widget that hits the specified point
     virtual Widget *GetWidgetByName(char const *name); // Recursively finds a widget
 

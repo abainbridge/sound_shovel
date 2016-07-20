@@ -54,11 +54,13 @@ void Widget::SetRect(int x, int y, int w, int h)
 }
 
 
-bool Widget::IsPointInBounds(int x, int y)
+bool Widget::IsMouseInBounds()
 {
     if (m_ghosted || m_hideState == HideStateHidden)
         return false;
 
+    int x = g_input.mouseX;
+    int y = g_input.mouseY;
 	if (x >= m_left && x < m_left + m_width &&
 		y >= m_top && y < m_top + m_height)
 	{
@@ -71,9 +73,13 @@ bool Widget::IsPointInBounds(int x, int y)
 
 Widget *Widget::GetWidgetAtPos(int x, int y)
 {
-	if (m_hideState != HideStateHidden && IsPointInBounds(x, y))
+	if (m_hideState != HideStateHidden)
 	{
-		return this;
+        if (x >= m_left && x < m_left + m_width &&
+            y >= m_top && y < m_top + m_height)
+        {
+            return this;
+        }
 	}
 
 	return NULL;

@@ -175,6 +175,11 @@ void SoundView::Advance()
         m_targetHOffset -= g_input.mouseVelX * m_hZoomRatio * 50.0;
     }
 
+    if (g_input.lmbClicked && IsMouseInBounds())
+    { 
+        m_sound->m_playbackIdx = GetSampleIndexFromScreenPos(g_input.mouseX);
+    }
+
 
     //
     // Take keyboard input

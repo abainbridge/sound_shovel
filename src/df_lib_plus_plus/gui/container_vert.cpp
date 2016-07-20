@@ -121,7 +121,7 @@ void ContainerVert::AdvanceResizing()
 
 void ContainerVert::Advance()
 {
-    if (IsPointInBounds(g_input.mouseX, g_input.mouseY))
+    if (IsMouseInBounds())
     {
         AdvanceResizing();
     }
