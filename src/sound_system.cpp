@@ -45,7 +45,7 @@ void SoundSystem::Advance()
 
 void SoundSystem::DeviceCallback(StereoSample *buf, unsigned int numSamples)
 {
-    if (!m_soundWidget || !m_soundWidget->m_sound)
+    if (!m_soundWidget || !m_soundWidget->m_sound || !m_soundWidget->m_isPlaying)
     {
         memset(buf, 0, numSamples * sizeof(StereoSample));
         return;

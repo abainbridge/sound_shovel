@@ -5,6 +5,9 @@
 #include "string_utils.h"
 #include "containers/llist.h"
 
+// Standard headers
+#include <string.h>
+
 
 class Mutex;
 
