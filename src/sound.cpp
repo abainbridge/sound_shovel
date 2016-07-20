@@ -24,7 +24,6 @@ Sound::Sound()
     m_channels = NULL;
     m_numChannels = 0;
     m_cachedLength = -1;
-    m_playbackIdx = -1;
     m_filename = "";
 }
 
@@ -118,6 +117,8 @@ bool Sound::LoadWav(char const *filename)
 
     return true;
 }
+
+// Moved the playback index out of Sound into SoundWidget because I'm about to implement the ability to pause and unpause sound playback.That really doesn't feel like it belongs in Sound
 
 
 bool Sound::SaveWav()

@@ -5,7 +5,6 @@
 #include "main.h"
 #include "sound.h"
 #include "sound_widget.h"
-#include "sound_system.h"
 
 // Contrib headers
 #include "gui/container_vert.h"
@@ -31,11 +30,6 @@ void AppGuiManager::Initialise()
     //     if (files.Size() == 0)
     //         return -1;
 
-    Sound *sound = new Sound;
-    //    sound.LoadWav(files[0].c_str());
-    sound->LoadWav("C:/users/andy/desktop/andante.wav");
-    g_soundSystem->PlaySound(sound, 0);
-
     // Create main container
     m_mainContainer = new ContainerVert("MainContainer", this);
     int SCREEN_X = 0;
@@ -49,7 +43,7 @@ void AppGuiManager::Initialise()
     m_mainContainer->AddWidget(menuBar);
     menuBar->Initialise();
 
-    SoundWidget *soundView = new SoundWidget(sound, m_mainContainer);
+    SoundWidget *soundView = new SoundWidget(m_mainContainer);
     m_mainContainer->AddWidget(soundView);
 
     // Create StatusBar

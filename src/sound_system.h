@@ -4,21 +4,21 @@
 #include <stdint.h>
 
 
-class Sound;
+class SoundWidget;
 class StereoSample;
 
 
 class SoundSystem
 {
 public:
-    Sound *m_sound;
+    SoundWidget *m_soundWidget;
 
 	SoundSystem();
 
 	void Advance();
 	void DeviceCallback(StereoSample *buf, unsigned int numSamples);
 
-    void PlaySound(Sound *sound, int64_t startSampleIdx);
+    void PlaySound(SoundWidget *SoundWidget);
 };
 
 
