@@ -78,7 +78,7 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\gui\sound_view.cpp">
+    <ClCompile Include="..\..\src\gui\sound_widget.cpp">
       <Filter>gui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -189,7 +189,7 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\gui\sound_view.h">
+    <ClInclude Include="..\..\src\gui\sound_widget.h">
       <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>

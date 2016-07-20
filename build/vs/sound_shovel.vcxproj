@@ -43,7 +43,7 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\text_stream_readers.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\threading.cpp" />
     <ClCompile Include="..\..\src\gui\app_gui_manager.cpp" />
-    <ClCompile Include="..\..\src\gui\sound_view.cpp" />
+    <ClCompile Include="..\..\src\gui\sound_widget.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\sample_block.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
@@ -78,7 +78,7 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\text_stream_readers.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\threading.h" />
     <ClInclude Include="..\..\src\gui\app_gui_manager.h" />
-    <ClInclude Include="..\..\src\gui\sound_view.h" />
+    <ClInclude Include="..\..\src\gui\sound_widget.h" />
     <ClInclude Include="..\..\src\main.h" />
     <ClInclude Include="..\..\src\sample_block.h" />
     <ClInclude Include="..\..\src\sound.h" />

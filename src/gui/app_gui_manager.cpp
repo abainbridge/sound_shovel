@@ -4,11 +4,8 @@
 // Project headers
 #include "main.h"
 #include "sound.h"
-#include "sound_view.h"
+#include "sound_widget.h"
 #include "sound_system.h"
-
-// Project headers
-#include "sound_view.h"
 
 // Contrib headers
 #include "gui/container_vert.h"
@@ -52,7 +49,7 @@ void AppGuiManager::Initialise()
     m_mainContainer->AddWidget(menuBar);
     menuBar->Initialise();
 
-    SoundView *soundView = new SoundView(sound, m_mainContainer);
+    SoundWidget *soundView = new SoundWidget(sound, m_mainContainer);
     m_mainContainer->AddWidget(soundView);
 
     // Create StatusBar
@@ -67,7 +64,7 @@ void AppGuiManager::Initialise()
 
 void AppGuiManager::Advance()
 {
-    SoundView *sv = (SoundView*)GetWidgetByName(SOUND_VIEW_NAME);
+    SoundWidget *sv = (SoundWidget*)GetWidgetByName(SOUND_VIEW_NAME);
     if (sv)
     {
         g_statusBar->SetRightString("Zoom: %.1f", sv->m_hZoomRatio);
