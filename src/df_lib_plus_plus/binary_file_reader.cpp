@@ -13,49 +13,14 @@
 
 BinaryFileReader::BinaryFileReader(char const *filename)
 {
-    strncpy(m_filename, filename, sizeof(m_filename) - 1);
     m_file = fopen(filename, "rb");
 }
 
 
 BinaryFileReader::~BinaryFileReader()
 {
-	if (m_file)
-		fclose(m_file);
-}
-
-
-bool BinaryFileReader::IsOpen()
-{
-	return !!m_file;
-}
-
-
-bool BinaryFileReader::IsEof()
-{
-    return !!feof(m_file);
-}
-
-
-int8_t BinaryFileReader::ReadS8()
-{
-	return fgetc(m_file);
-}
-
-
-int16_t BinaryFileReader::ReadS16()
-{
-    int16_t val;
-    fread((void*)&val, 2, 1, m_file);
-	return val;
-}
-
-
-int32_t BinaryFileReader::ReadS32()
-{
-    int32_t val;
-    fread((void*)&val, 4, 1, m_file);
-	return val;
+    if (m_file)
+        fclose(m_file);
 }
 
 
@@ -87,13 +52,49 @@ unsigned BinaryFileReader::ReadBytes(unsigned count, unsigned char *buffer)
 }
 
 
-int BinaryFileReader::Seek(int offset, int origin)
+
+// ***************************************************************************
+// BinaryFileWriter
+// ***************************************************************************
+
+BinaryFileWriter::BinaryFileWriter(char const *filename)
 {
-	return fseek(m_file, offset, origin);
+    m_file = fopen(filename, "wb");
 }
 
 
-int BinaryFileReader::Tell()
+BinaryFileWriter::~BinaryFileWriter()
 {
-	return ftell(m_file);
+    if (m_file)
+        fclose(m_file);
+}
+
+
+bool BinaryFileWriter::WriteU8(uint8_t val)
+{
+    return fputc(val, m_file) != EOF;
+}
+
+
+bool BinaryFileWriter::WriteU16(uint16_t val)
+{
+    return fwrite((void*)&val, 2, 1, m_file) == 1;
+}
+
+
+bool BinaryFileWriter::WriteU32(uint32_t val)
+{
+    return fwrite((void*)&val, 4, 1, m_file) == 1;
+}
+
+
+bool BinaryFileWriter::WriteBytes(char const *buf, unsigned count)
+{
+    return fwrite(buf, 1, count, m_file) == count;
+}
+
+
+bool BinaryFileWriter::WriteUBytes(unsigned char const *buf, unsigned count)
+{
+    return fwrite(buf, 1, count, m_file) == count;
 }

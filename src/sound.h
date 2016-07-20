@@ -16,10 +16,12 @@ public:
     SoundChannel **m_channels;
     int64_t m_playbackIdx;
     int m_numChannels;
+    char *m_filename;
 
     Sound();
 
     bool LoadWav(char const *filename);
+    bool SaveWav();
 
     int64_t GetLength();
 };

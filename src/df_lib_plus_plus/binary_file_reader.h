@@ -7,28 +7,32 @@
 
 class BinaryFileReader
 {
-private:
-    FILE *m_file;
-
 public:
-    char m_filename[256];
+    FILE *m_file;
 
     BinaryFileReader(char const *filename);
     ~BinaryFileReader();
-
-    bool IsOpen();
-    bool IsEof();
-
-    int8_t ReadS8();
-    int16_t ReadS16();
-    int32_t ReadS32();
 
     uint8_t ReadU8();
     uint16_t ReadU16();
     uint32_t ReadU32();
 
-    unsigned ReadBytes(unsigned count, unsigned char *buffer);
+    unsigned ReadBytes(unsigned count, unsigned char *buf);
+};
 
-    int Seek(int offset, int origin);
-    int Tell();
+
+class BinaryFileWriter
+{
+public:
+    FILE *m_file;
+
+    BinaryFileWriter(char const *filename);
+    ~BinaryFileWriter();
+
+    bool WriteU8(uint8_t val);
+    bool WriteU16(uint16_t val);
+    bool WriteU32(uint32_t val);
+
+    bool WriteBytes(char const *buf, unsigned count);
+    bool WriteUBytes(unsigned char const *buf, unsigned count);
 };
