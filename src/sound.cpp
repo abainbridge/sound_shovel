@@ -116,15 +116,13 @@ bool Sound::LoadWav(char const *filename)
 
     delete[] buf;
 
-    SaveWav();
-
     return true;
 }
 
 
 bool Sound::SaveWav()
 {
-    BinaryFileWriter f("m_filename.wav");
+    BinaryFileWriter f(m_filename);
     if (!f.m_file)
         return false;
     
