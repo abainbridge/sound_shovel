@@ -29,6 +29,11 @@ void SoundWidget::AdvanceSelection()
     if (g_input.lmbClicked)
     {
         m_selectionStart = GetSampleIndexFromScreenPos(g_input.mouseX);
+        m_selectionEnd = -1;
+    }
+    else if (g_input.lmb)
+    {
+        m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
     }
 }
 
@@ -94,7 +99,18 @@ void SoundWidget::RenderWaveform(DfBitmap *bmp, double vZoomRatio)
 
 void SoundWidget::RenderSelection(DfBitmap *bmp)
 {
-    RenderMarker(bmp, m_selectionStart, Colour(255, 255, 50, 90));
+    DfColour col = Colour(255, 255, 50, 90);
+
+    if (m_selectionEnd >= 0)
+    {
+        double x1 = GetScreenPosFromSampleIndex(m_selectionStart);
+        double x2 = GetScreenPosFromSampleIndex(m_selectionEnd);
+        RectFill(bmp, x1, m_top, x2 - x1 + 1, m_height, col);
+    }
+    else
+    {
+        RenderMarker(bmp, m_selectionStart, col);
+    }
 }
 
 

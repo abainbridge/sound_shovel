@@ -30,7 +30,7 @@ bool g_canSleep = true;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	CreateWin(1000, 600, WT_WINDOWED, APPLICATION_NAME);
-    g_defaultFont = CreateTextRenderer("Lucida Console", 10, 4);
+    g_defaultFont = DfCreateFont("Lucida Console", 10, 4);
 
     g_soundSystem = new SoundSystem;
 
