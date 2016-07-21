@@ -2,6 +2,7 @@
 #include "sound_widget.h"
 
 // Project headers
+#include "app_gui_manager.h"
 #include "main.h"
 #include "sound.h"
 #include "sound_channel.h"
@@ -26,14 +27,17 @@
 
 void SoundWidget::AdvanceSelection()
 {
-    if (g_input.lmbClicked)
+    if (g_guiManager->m_focussedWidget == this)
     {
-        m_selectionStart = GetSampleIndexFromScreenPos(g_input.mouseX);
-        m_selectionEnd = -1;
-    }
-    else if (g_input.lmb)
-    {
-        m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
+        if (g_input.lmbClicked)
+        {
+            m_selectionStart = GetSampleIndexFromScreenPos(g_input.mouseX);
+            m_selectionEnd = -1;
+        }
+        else if (g_input.lmb)
+        {
+            m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
+        }
     }
 }
 
@@ -103,8 +107,16 @@ void SoundWidget::RenderSelection(DfBitmap *bmp)
 
     if (m_selectionEnd >= 0)
     {
-        double x1 = GetScreenPosFromSampleIndex(m_selectionStart);
-        double x2 = GetScreenPosFromSampleIndex(m_selectionEnd);
+        int64_t selectionStart = m_selectionStart;
+        int64_t selectionEnd = m_selectionEnd;
+        if (selectionEnd < selectionStart)
+        {
+            selectionStart = m_selectionEnd;
+            selectionEnd = m_selectionStart;
+        }
+
+        double x1 = GetScreenPosFromSampleIndex(selectionStart);
+        double x2 = GetScreenPosFromSampleIndex(selectionEnd);
         RectFill(bmp, x1, m_top, x2 - x1 + 1, m_height, col);
     }
     else
@@ -138,6 +150,42 @@ SoundWidget::SoundWidget(Widget *parent)
     m_playbackIdx = 0;
     m_isPlaying = true;
     g_soundSystem->PlaySound(this);
+}
+
+
+void SoundWidget::GetSelectionBlock(int64_t *startIdx, int64_t *endIdx)
+{
+    if (m_selectionStart < m_selectionEnd)
+    {
+        *startIdx = m_selectionStart;
+        *endIdx = m_selectionEnd;
+    }
+    else
+    {
+        *startIdx = m_selectionEnd;
+        *endIdx = m_selectionStart;
+    }
+}
+
+
+void SoundWidget::FadeIn()
+{
+    int64_t startIdx, endIdx;
+    GetSelectionBlock(&startIdx, &endIdx);
+    m_sound->FadeIn(startIdx, endIdx);
+}
+
+
+void SoundWidget::FadeOut()
+{
+    int64_t startIdx, endIdx;
+    GetSelectionBlock(&startIdx, &endIdx);
+    m_sound->FadeOut(startIdx, endIdx);
+}
+
+
+void SoundWidget::Normalize()
+{
 }
 
 
@@ -332,7 +380,10 @@ void SoundWidget::Render()
 
 char *SoundWidget::ExecuteCommand(char const *object, char const *command, char const *arguments)
 {
-    if (COMMAND_IS("TogglePlay")) m_isPlaying = !m_isPlaying;
+    if (COMMAND_IS("FadeIn"))           FadeIn();
+    else if (COMMAND_IS("FadeOut"))     FadeOut();
+    else if (COMMAND_IS("Normalize"))   Normalize();
+    else if (COMMAND_IS("TogglePlay")) m_isPlaying = !m_isPlaying;
 
     return NULL;
 }

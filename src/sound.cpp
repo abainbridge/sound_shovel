@@ -28,6 +28,66 @@ Sound::Sound()
 }
 
 
+void Sound::FadeIn(int64_t start_idx, int64_t end_idx)
+{
+    if (end_idx <= start_idx)
+        return;
+
+    int64_t len = end_idx - start_idx + 1;
+
+    for (int j = 0; j < m_numChannels; j++)
+    {
+        SoundChannel *chan = m_channels[j];
+        SoundChannel::SoundPos pos = chan->GetSoundPosFromSampleIdx(start_idx);
+        SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
+        for (int64_t i = 0; i < len; i++)
+        {
+            double vol = (double)i / (double)len;
+            block->m_samples[pos.m_sampleIdx] *= vol;          
+
+            SampleBlock *nextBlock = chan->IncrementSoundPos(&pos, 1);
+            if (nextBlock != block)
+                block->RecalcLuts();
+            if (!nextBlock)
+                break;
+            block = nextBlock;
+        }
+
+        block->RecalcLuts();
+    }
+}
+
+
+void Sound::FadeOut(int64_t start_idx, int64_t end_idx)
+{
+    if (end_idx <= start_idx)
+        return;
+
+    int64_t len = end_idx - start_idx + 1;
+
+    for (int j = 0; j < m_numChannels; j++)
+    {
+        SoundChannel *chan = m_channels[j];
+        SoundChannel::SoundPos pos = chan->GetSoundPosFromSampleIdx(start_idx);
+        SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
+        for (int64_t i = 0; i < len; i++)
+        {
+            double vol = (double)(len - i) / (double)len;
+            block->m_samples[pos.m_sampleIdx] *= vol;
+
+            SampleBlock *nextBlock = chan->IncrementSoundPos(&pos, 1);
+            if (nextBlock != block)
+                block->RecalcLuts();
+            if (!nextBlock)
+                break;
+            block = nextBlock;
+        }
+
+        block->RecalcLuts();
+    }
+}
+
+
 bool Sound::LoadWav(char const *filename)
 {
     BinaryFileReader f(filename);
@@ -117,8 +177,6 @@ bool Sound::LoadWav(char const *filename)
 
     return true;
 }
-
-// Moved the playback index out of Sound into SoundWidget because I'm about to implement the ability to pause and unpause sound playback.That really doesn't feel like it belongs in Sound
 
 
 bool Sound::SaveWav()

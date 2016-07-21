@@ -24,14 +24,16 @@
 # differently. If you have a specific question about this aspect, you should
 # ask a question on the forums on the deadfrog.co.uk website.
 
-menu=File label=New                     object=DocViewManager   command=New
-menu=File label=Open...                 object=DocViewManager   command=OpenDialog
-menu=File label=Close                   object=DocViewManager   command=Close
-menu=File label="Close All"             object=DocViewManager   key=-1 command=CloseAll
+menu=File label=New                     object=SoundWidget      command=New
+menu=File label=Open...                 object=SoundWidget      command=OpenDialog
+menu=File label=Close                   object=SoundWidget      command=Close
 menu=File label=separator
-menu=File label=Save                    object=DocViewManager   command=Save
-menu=File label="Save As..."            object=DocViewManager   key=5 command=SaveAsWithDialog
+menu=File label=Save                    object=SoundWidget      command=Save
 menu=File label=separator
 menu=File label=Exit                    object=GuiManager       key=1 command=exit
+
+menu=Process label="Fade in"            object=SoundWidget      command=FadeIn
+menu=Process label="Fade out"           object=SoundWidget      command=FadeOut
+menu=Process label="Normalize -0.3dB"   object=SoundWidget      command=Normalize
 
 menu=Help label=About                   object=GuiManager       command=About

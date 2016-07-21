@@ -23,6 +23,9 @@ private:
     double m_targetHOffset;
     double m_playbackPos;       // This value smoothly tracks m_playbackIdx. The point is to hide the fact that m_playbackIdx is advanced in audio-buffer sized steps, which looks jerky when zoomed in.
 
+    int64_t m_selectionStart;
+    int64_t m_selectionEnd;        // Set to -1 if no selection.
+
     void AdvanceSelection();
     void AdvancePlaybackPos();
 
@@ -43,10 +46,13 @@ public:
     int16_t *m_displayMins;    // An array of length m_width.
     int16_t *m_displayMaxes;   // An array of length m_width.
 
-    int64_t m_selectionStart;
-    int64_t m_selectionEnd;        // Set to -1 if no selection.
-
     SoundWidget(Widget *parent);
+
+    void GetSelectionBlock(int64_t *startIdx, int64_t *endIdx);
+
+    void FadeIn();
+    void FadeOut();
+    void Normalize();
 
     // Overridden Widget functions
     void SetRect(int x = -1, int y = -1, int w = -1, int h = -1);

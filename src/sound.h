@@ -19,6 +19,9 @@ public:
 
     Sound();
 
+    void FadeIn(int64_t start_idx, int64_t end_idx);
+    void FadeOut(int64_t start_idx, int64_t end_idx);
+
     bool LoadWav(char const *filename);
     bool SaveWav();
 
