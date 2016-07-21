@@ -39,7 +39,7 @@ void SoundWidget::AdvancePlaybackPos()
     if (targetIdx < 0)
         return;
 
-    if (targetIdx > m_playbackPos + 10000.0)
+    if (fabs(targetIdx - m_playbackPos) > 10000.0)
     {
         m_playbackPos = targetIdx;
     }

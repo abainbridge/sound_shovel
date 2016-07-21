@@ -21,7 +21,7 @@ class SoundWidget: public Widget
 private:
     double m_targetHZoomRatio;
     double m_targetHOffset;
-    double m_playbackPos;
+    double m_playbackPos;       // This value smoothly tracks m_playbackIdx. The point is to hide the fact that m_playbackIdx is advanced in audio-buffer sized steps, which looks jerky when zoomed in.
 
     void AdvanceSelection();
     void AdvancePlaybackPos();
