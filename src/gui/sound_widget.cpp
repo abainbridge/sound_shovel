@@ -103,7 +103,7 @@ void SoundWidget::RenderWaveform(DfBitmap *bmp, double vZoomRatio)
 
 void SoundWidget::RenderSelection(DfBitmap *bmp)
 {
-    DfColour col = Colour(255, 255, 50, 90);
+    DfColour col = Colour(255, 40, 59, 63);
 
     if (m_selectionEnd >= 0)
     {
@@ -383,7 +383,8 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
     if (COMMAND_IS("FadeIn"))           FadeIn();
     else if (COMMAND_IS("FadeOut"))     FadeOut();
     else if (COMMAND_IS("Normalize"))   Normalize();
-    else if (COMMAND_IS("TogglePlay")) m_isPlaying = !m_isPlaying;
+    else if (COMMAND_IS("Save"))        m_sound->SaveWav();
+    else if (COMMAND_IS("TogglePlay"))  m_isPlaying = !m_isPlaying;
 
     return NULL;
 }

@@ -18,6 +18,7 @@
 
 key=alt+f4          object=GuiManager       command=Exit               focus=global
 
+key=Ctrl+s          object=SoundWidget      command=Save
 key=Space           object=SoundWidget      command=TogglePlay
 
 key=Esc             object=MenuBar          command=LooseFocus
