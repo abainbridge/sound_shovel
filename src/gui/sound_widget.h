@@ -50,6 +50,10 @@ public:
 
     void GetSelectionBlock(int64_t *startIdx, int64_t *endIdx);
 
+    void TogglePlayback();
+    void Play();
+    void Pause();
+
     void FadeIn();
     void FadeOut();
     void Normalize();

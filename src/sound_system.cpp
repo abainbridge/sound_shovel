@@ -70,7 +70,7 @@ void SoundSystem::DeviceCallback(StereoSample *buf, unsigned int numSamples)
         buf[i].m_right = blocks[1]->m_samples[idx];
 
         idx++;
-        if (idx > blocks[0]->m_len)
+        if (idx >= blocks[0]->m_len)
         {
             idx = 0;
             poses[0].m_blockIdx++;
@@ -80,6 +80,7 @@ void SoundSystem::DeviceCallback(StereoSample *buf, unsigned int numSamples)
             {
                 memset(buf + i + 1, 0, (numSamples - (i + 1)) * sizeof(StereoSample));
                 m_soundWidget->m_playbackIdx = -1;
+                m_soundWidget->Pause();
                 return;
             }
 

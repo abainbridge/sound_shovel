@@ -168,6 +168,24 @@ void SoundWidget::GetSelectionBlock(int64_t *startIdx, int64_t *endIdx)
 }
 
 
+void SoundWidget::TogglePlayback()
+{
+    m_isPlaying = !m_isPlaying;
+}
+
+
+void SoundWidget::Play()
+{
+    m_isPlaying = true;
+}
+
+
+void SoundWidget::Pause()
+{
+    m_isPlaying = false;
+}
+
+
 void SoundWidget::FadeIn()
 {
     int64_t startIdx, endIdx;
@@ -244,7 +262,7 @@ void SoundWidget::Advance()
         m_targetHOffset -= g_input.mouseVelX * m_hZoomRatio * 50.0;
     }
 
-    if (g_input.lmbClicked && IsMouseInBounds())
+    if (IsMouseInBounds() && g_input.lmbClicked && IsMouseInBounds())
     { 
         m_playbackIdx = GetSampleIndexFromScreenPos(g_input.mouseX);
     }
@@ -383,8 +401,10 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
     if (COMMAND_IS("FadeIn"))           FadeIn();
     else if (COMMAND_IS("FadeOut"))     FadeOut();
     else if (COMMAND_IS("Normalize"))   Normalize();
+    else if (COMMAND_IS("Play"))        Play();
+    else if (COMMAND_IS("Pause"))       Pause();
     else if (COMMAND_IS("Save"))        m_sound->SaveWav();
-    else if (COMMAND_IS("TogglePlay"))  m_isPlaying = !m_isPlaying;
+    else if (COMMAND_IS("TogglePlay"))  TogglePlayback();
 
     return NULL;
 }
@@ -392,7 +412,10 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
 
 int64_t SoundWidget::GetSampleIndexFromScreenPos(int screenX)
 {
-    return m_hOffset + (double)screenX * m_hZoomRatio + 0.5;
+    int64_t rv = m_hOffset + (double)screenX * m_hZoomRatio + 0.5;
+    if (rv < 0 || rv > m_sound->GetLength()) 
+        rv = -1;
+    return rv;
 }
 
 
