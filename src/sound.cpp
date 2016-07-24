@@ -19,6 +19,51 @@
 #include <stdlib.h>
 
 
+int const MAX_SAMPLE_VALUE = 32767;
+int const MIN_SAMPLE_VALUE = -32768;
+
+
+// ****************************************************************************
+// Private Functions
+// ****************************************************************************
+
+void Sound::SetVolumeHelper(int64_t startIdx, int64_t endIdx, double startVol, double endVol)
+{
+    if (endIdx <= startIdx)
+        return;
+
+    int64_t len = endIdx - startIdx + 1;
+    double volIncrement = (endVol - startVol) / (double)len;
+
+    for (int j = 0; j < m_numChannels; j++)
+    {
+        SoundChannel *chan = m_channels[j];
+        SoundChannel::SoundPos pos = chan->GetSoundPosFromSampleIdx(startIdx);
+        SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
+        for (int64_t i = 0; i < len; i++)
+        {
+            double vol = startVol + (double)i * volIncrement;
+            double newSampleValue = block->m_samples[pos.m_sampleIdx] * vol;
+            ClampDouble(newSampleValue, MIN_SAMPLE_VALUE, MAX_SAMPLE_VALUE);
+            block->m_samples[pos.m_sampleIdx] = newSampleValue;
+
+            SampleBlock *nextBlock = chan->IncrementSoundPos(&pos, 1);
+            if (nextBlock != block)
+                block->RecalcLuts();
+            if (!nextBlock)
+                break;
+            block = nextBlock;
+        }
+
+        block->RecalcLuts();
+    }
+}
+
+
+// ****************************************************************************
+// Public Functions
+// ****************************************************************************
+
 Sound::Sound()
 {
     m_channels = NULL;
@@ -28,63 +73,49 @@ Sound::Sound()
 }
 
 
-void Sound::FadeIn(int64_t start_idx, int64_t end_idx)
+void Sound::FadeIn(int64_t startIdx, int64_t endIdx)
 {
-    if (end_idx <= start_idx)
-        return;
-
-    int64_t len = end_idx - start_idx + 1;
-
-    for (int j = 0; j < m_numChannels; j++)
-    {
-        SoundChannel *chan = m_channels[j];
-        SoundChannel::SoundPos pos = chan->GetSoundPosFromSampleIdx(start_idx);
-        SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
-        for (int64_t i = 0; i < len; i++)
-        {
-            double vol = (double)i / (double)len;
-            block->m_samples[pos.m_sampleIdx] *= vol;          
-
-            SampleBlock *nextBlock = chan->IncrementSoundPos(&pos, 1);
-            if (nextBlock != block)
-                block->RecalcLuts();
-            if (!nextBlock)
-                break;
-            block = nextBlock;
-        }
-
-        block->RecalcLuts();
-    }
+    SetVolumeHelper(startIdx, endIdx, 0.0, 1.0);
 }
 
 
-void Sound::FadeOut(int64_t start_idx, int64_t end_idx)
+void Sound::FadeOut(int64_t startIdx, int64_t endIdx)
 {
-    if (end_idx <= start_idx)
+    SetVolumeHelper(startIdx, endIdx, 1.0, 0.0);
+}
+
+
+void Sound::Normalize(int64_t startIdx, int64_t endIdx)
+{
+    if (endIdx <= startIdx)
         return;
 
-    int64_t len = end_idx - start_idx + 1;
+    int64_t len = endIdx - startIdx + 1;
+    int64_t maxAbsSample = 0;
 
     for (int j = 0; j < m_numChannels; j++)
     {
         SoundChannel *chan = m_channels[j];
-        SoundChannel::SoundPos pos = chan->GetSoundPosFromSampleIdx(start_idx);
+        SoundChannel::SoundPos pos = chan->GetSoundPosFromSampleIdx(startIdx);
         SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
+        
         for (int64_t i = 0; i < len; i++)
         {
-            double vol = (double)(len - i) / (double)len;
-            block->m_samples[pos.m_sampleIdx] *= vol;
+            int64_t sample = block->m_samples[pos.m_sampleIdx];
+            sample = abs(sample);
+            if (sample > maxAbsSample)
+                maxAbsSample = sample;
 
-            SampleBlock *nextBlock = chan->IncrementSoundPos(&pos, 1);
-            if (nextBlock != block)
-                block->RecalcLuts();
-            if (!nextBlock)
+            block = chan->IncrementSoundPos(&pos, 1);
+            if (!block)
                 break;
-            block = nextBlock;
         }
 
         block->RecalcLuts();
     }
+
+    double volChange = (double)MAX_SAMPLE_VALUE / (double)maxAbsSample;
+    SetVolumeHelper(startIdx, endIdx, volChange, volChange);
 }
 
 

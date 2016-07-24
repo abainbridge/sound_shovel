@@ -204,6 +204,9 @@ void SoundWidget::FadeOut()
 
 void SoundWidget::Normalize()
 {
+    int64_t startIdx, endIdx;
+    GetSelectionBlock(&startIdx, &endIdx);
+    m_sound->Normalize(startIdx, endIdx);
 }
 
 

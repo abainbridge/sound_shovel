@@ -11,6 +11,7 @@ class Sound
 {
 private:
     int64_t m_cachedLength;
+    void SetVolumeHelper(int64_t startIdx, int64_t endIdx, double startVol, double endVol);
 
 public:
     SoundChannel **m_channels;
@@ -19,8 +20,9 @@ public:
 
     Sound();
 
-    void FadeIn(int64_t start_idx, int64_t end_idx);
-    void FadeOut(int64_t start_idx, int64_t end_idx);
+    void FadeIn(int64_t startIdx, int64_t endIdx);
+    void FadeOut(int64_t startIdx, int64_t endIdx);
+    void Normalize(int64_t startIdx, int64_t endIdx);
 
     bool LoadWav(char const *filename);
     bool SaveWav();
