@@ -265,7 +265,7 @@ void SoundWidget::Advance()
         m_targetHOffset -= g_input.mouseVelX * m_hZoomRatio * 50.0;
     }
 
-    if (IsMouseInBounds() && g_input.lmbClicked && IsMouseInBounds())
+    if (g_input.lmbClicked && IsMouseInBounds() && m_isPlaying)
     { 
         m_playbackIdx = GetSampleIndexFromScreenPos(g_input.mouseX);
     }
