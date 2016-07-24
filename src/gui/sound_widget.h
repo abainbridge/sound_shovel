@@ -48,6 +48,10 @@ public:
 
     SoundWidget(Widget *parent);
 
+    bool Open(char const *filename);
+    bool OpenDialog();
+    void Close();
+
     void GetSelectionBlock(int64_t *startIdx, int64_t *endIdx);
 
     void TogglePlayback();

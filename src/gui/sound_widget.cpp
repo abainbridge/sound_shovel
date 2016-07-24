@@ -8,6 +8,9 @@
 #include "sound_channel.h"
 #include "sound_system.h"
 
+#include "df_lib_plus_plus/gui/file_dialog.h"
+#include "df_lib_plus_plus/gui/status_bar.h"
+
 // Contrib headers
 #include "df_bitmap.h"
 #include "df_common.h"
@@ -133,23 +136,65 @@ void SoundWidget::RenderSelection(DfBitmap *bmp)
 SoundWidget::SoundWidget(Widget *parent)
     : Widget(SOUND_VIEW_NAME, parent)
 {
+    m_sound = NULL;
+    m_displayMins = NULL;
+    m_displayMaxes = NULL;
+
+    Close();
+
+    g_soundSystem->PlaySound(this);
+}
+
+
+bool SoundWidget::Open(char const *filename)
+{
+    Close();
+    m_sound = new Sound();
+    return m_sound->LoadWav("C:/users/andy/desktop/andante.wav");
+}
+
+
+bool SoundWidget::OpenDialog()
+{
+    DArray <String> filenames = FileDialogOpen("C:/users/andy/desktop");
+    if (filenames.Size() == 0)
+        return false;
+    
+    if (filenames.Size() > 1)
+    {
+        g_statusBar->ShowError("Too many files selected");
+        return false;
+    }
+    
+    bool ok = Open(filenames[0].c_str());
+    if (ok)
+        g_statusBar->ShowMessage("Opened %s", filenames[0]);
+    else
+        g_statusBar->ShowError("Couldn't open %s", filenames[0]);
+
+    return ok;
+}
+
+
+void SoundWidget::Close()
+{
+    if (m_sound)
+    {
+        delete m_sound;
+        m_sound = NULL;
+    }
+
     m_hOffset = 0.0;
     m_targetHOffset = 0.0;
     m_hZoomRatio = m_targetHZoomRatio = -1.0;
 
     m_playbackPos = -1.0;
 
-    m_displayMins = NULL;
-    m_displayMaxes = NULL;
-
     m_selectionStart = -1.0;
     m_selectionEnd = -1.0;
 
-    m_sound = new Sound;
-    m_sound->LoadWav("C:/users/andy/desktop/andante.wav");
     m_playbackIdx = 0;
-    m_isPlaying = true;
-    g_soundSystem->PlaySound(this);
+    m_isPlaying = false;
 }
 
 
@@ -170,24 +215,28 @@ void SoundWidget::GetSelectionBlock(int64_t *startIdx, int64_t *endIdx)
 
 void SoundWidget::TogglePlayback()
 {
+    if (!m_sound) return;
     m_isPlaying = !m_isPlaying;
 }
 
 
 void SoundWidget::Play()
 {
+    if (!m_sound) return;
     m_isPlaying = true;
 }
 
 
 void SoundWidget::Pause()
 {
+    if (!m_sound) return;
     m_isPlaying = false;
 }
 
 
 void SoundWidget::FadeIn()
 {
+    if (!m_sound) return;
     int64_t startIdx, endIdx;
     GetSelectionBlock(&startIdx, &endIdx);
     m_sound->FadeIn(startIdx, endIdx);
@@ -196,6 +245,7 @@ void SoundWidget::FadeIn()
 
 void SoundWidget::FadeOut()
 {
+    if (!m_sound) return;
     int64_t startIdx, endIdx;
     GetSelectionBlock(&startIdx, &endIdx);
     m_sound->FadeOut(startIdx, endIdx);
@@ -204,6 +254,7 @@ void SoundWidget::FadeOut()
 
 void SoundWidget::Normalize()
 {
+    if (!m_sound) return;
     int64_t startIdx, endIdx;
     GetSelectionBlock(&startIdx, &endIdx);
     m_sound->Normalize(startIdx, endIdx);
@@ -234,6 +285,8 @@ void SoundWidget::SetRect(int x /* = -1 */, int y /* = -1 */, int w /* = -1 */, 
 
 void SoundWidget::Advance()
 {
+    if (!m_sound) return;
+
     if (m_hZoomRatio < 0.0)
         return;
 
@@ -383,6 +436,8 @@ void SoundWidget::Advance()
 
 void SoundWidget::Render()
 {
+    if (!m_sound) return;
+
     if (m_hZoomRatio < 0.0)
     {
         m_hZoomRatio = (double)m_sound->GetLength() / (double)m_width;
@@ -401,9 +456,12 @@ void SoundWidget::Render()
 
 char *SoundWidget::ExecuteCommand(char const *object, char const *command, char const *arguments)
 {
-    if (COMMAND_IS("FadeIn"))           FadeIn();
+    if (0);
+    else if (COMMAND_IS("Close"))       Close();
+    else if (COMMAND_IS("FadeIn"))      FadeIn();
     else if (COMMAND_IS("FadeOut"))     FadeOut();
     else if (COMMAND_IS("Normalize"))   Normalize();
+    else if (COMMAND_IS("OpenDialog"))  OpenDialog();
     else if (COMMAND_IS("Play"))        Play();
     else if (COMMAND_IS("Pause"))       Pause();
     else if (COMMAND_IS("Save"))        m_sound->SaveWav();
@@ -415,6 +473,8 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
 
 int64_t SoundWidget::GetSampleIndexFromScreenPos(int screenX)
 {
+    if (!m_sound) return 0;
+
     int64_t rv = m_hOffset + (double)screenX * m_hZoomRatio + 0.5;
     if (rv < 0 || rv > m_sound->GetLength()) 
         rv = -1;
@@ -424,5 +484,7 @@ int64_t SoundWidget::GetSampleIndexFromScreenPos(int screenX)
 
 double SoundWidget::GetScreenPosFromSampleIndex(int64_t sampleIdx)
 {
+    if (!m_sound) return 0.0;
+
     return m_left + ((double)sampleIdx - m_hOffset) / m_hZoomRatio;
 }

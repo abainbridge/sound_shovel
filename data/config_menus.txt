@@ -24,7 +24,6 @@
 # differently. If you have a specific question about this aspect, you should
 # ask a question on the forums on the deadfrog.co.uk website.
 
-menu=File label=New                     object=SoundWidget      command=New
 menu=File label=Open...                 object=SoundWidget      command=OpenDialog
 menu=File label=Close                   object=SoundWidget      command=Close
 menu=File label=separator

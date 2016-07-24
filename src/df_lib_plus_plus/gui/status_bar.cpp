@@ -110,7 +110,7 @@ void StatusBar::Render()
 		if (m_messageIsError)
 			RectFill(g_window->bmp, x, y, w, h, Colour(200,0,0));
 		else
-			RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour5);
+			RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour3);
 		DrawTextSimple(g_defaultFont, g_colourWhite, g_window->bmp, x + 10, y, m_messageBuffer);
 		return;
 	}
