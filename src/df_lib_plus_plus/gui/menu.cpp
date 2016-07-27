@@ -884,7 +884,7 @@ void MenuBar::Render()
     {
         DrawFilledBox(m_highlightedMenu->m_left - HIGHLIGHT_BOX_BORDER, 2,
             (m_highlightedMenu->m_right - m_highlightedMenu->m_left) + HIGHLIGHT_BOX_BORDER * 2, m_height + 3,
-            g_guiManager->m_selectionBlockColour);
+            g_guiManager->m_frameColour4);
     }
 
     // Draw the menu titles
@@ -894,17 +894,9 @@ void MenuBar::Render()
 		DfColour underlineColour = g_guiManager->m_textColourFrame;
 
 		// Title text
-        if (menu == m_highlightedMenu)
-        {
-            DrawTextSimple(g_propFont, g_guiManager->m_textColourNormal, g_window->bmp, menu->m_left, 3, menu->m_name);
-			underlineColour = g_guiManager->m_textColourNormal;
-        }
-        else
-        {
-		    DrawTextSimple(g_propFont, g_guiManager->m_textColourFrame, g_window->bmp, menu->m_left, 3, menu->m_name);
-        }
+        DrawTextSimple(g_propFont, g_guiManager->m_textColourNormal, g_window->bmp, menu->m_left, 3, menu->m_name);
 
-		// Underline first character of title text
+        // Underline first character of title text
 		int width = GetTextWidth(g_propFont, menu->m_name, 1);
 		DrawHLine(menu->m_left, g_propFont->charHeight + 2, width, underlineColour);
 	}
