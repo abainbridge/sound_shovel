@@ -6,7 +6,7 @@
 #include "string_utils.h"
 
 // Platform headers
-#ifdef WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #include <direct.h>
 #include <windows.h>
