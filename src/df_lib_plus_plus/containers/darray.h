@@ -31,7 +31,7 @@ public:
     void Empty			();						// Resets the array to empty
 	void EmptyAndDelete ();						// Same as Empty() but deletes the elements that are pointed to as well
 
-    inline T operator [] (unsigned int index);
+    inline T &operator [] (unsigned int index);
 	inline const T operator [] (unsigned int index) const;
 };
 

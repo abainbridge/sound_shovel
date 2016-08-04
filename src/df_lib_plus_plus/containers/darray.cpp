@@ -169,7 +169,7 @@ inline T *DArray<T>::GetPointer(unsigned int index) const
 
 
 template <class T>
-inline T DArray<T>::operator [] (unsigned int index)
+inline T &DArray<T>::operator [] (unsigned int index)
 {
     DebugAssert(index < m_nextIndex);
     return m_array[index];
