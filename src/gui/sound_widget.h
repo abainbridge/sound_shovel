@@ -52,6 +52,8 @@ public:
     bool OpenDialog();
     void Close();
 
+    void Delete();
+
     void GetSelectionBlock(int64_t *startIdx, int64_t *endIdx);
 
     void TogglePlayback();

@@ -141,6 +141,9 @@ SoundWidget::SoundWidget(Widget *parent)
     m_displayMaxes = NULL;
 
     Close();
+//     Open("c:/users/andy/desktop/andante.wav");
+//     m_selectionStart = 2e6;
+//     m_selectionEnd = 4e6;
 
     g_soundSystem->PlaySound(this);
 }
@@ -150,7 +153,7 @@ bool SoundWidget::Open(char const *filename)
 {
     Close();
     m_sound = new Sound();
-    return m_sound->LoadWav("C:/users/andy/desktop/andante.wav");
+    return m_sound->LoadWav(filename);
 }
 
 
@@ -195,6 +198,15 @@ void SoundWidget::Close()
 
     m_playbackIdx = 0;
     m_isPlaying = false;
+}
+
+
+void SoundWidget::Delete()
+{
+    int64_t startIdx, endIdx;
+    GetSelectionBlock(&startIdx, &endIdx);
+    m_sound->Delete(startIdx, endIdx);
+    m_selectionEnd = -1;
 }
 
 
@@ -318,7 +330,7 @@ void SoundWidget::Advance()
         m_targetHOffset -= g_input.mouseVelX * m_hZoomRatio * 50.0;
     }
 
-    if (g_input.lmbClicked && IsMouseInBounds() && m_isPlaying)
+    if (g_input.lmbClicked && IsMouseInBounds())
     { 
         m_playbackIdx = GetSampleIndexFromScreenPos(g_input.mouseX);
     }
@@ -458,6 +470,7 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
 {
     if (0);
     else if (COMMAND_IS("Close"))       Close();
+    else if (COMMAND_IS("Delete"))      Delete();
     else if (COMMAND_IS("FadeIn"))      FadeIn();
     else if (COMMAND_IS("FadeOut"))     FadeOut();
     else if (COMMAND_IS("Normalize"))   Normalize();

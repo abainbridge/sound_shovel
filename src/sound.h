@@ -20,6 +20,8 @@ public:
 
     Sound();
 
+    void Delete(int64_t startIdx, int64_t endIdx);
+
     void FadeIn(int64_t startIdx, int64_t endIdx);
     void FadeOut(int64_t startIdx, int64_t endIdx);
     void Normalize(int64_t startIdx, int64_t endIdx);

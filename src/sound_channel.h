@@ -42,5 +42,7 @@ public:
 
     unsigned GetLength();
 
+    void Delete(int64_t startIdx, int64_t endIdx);
+
     void CalcDisplayData(int startSampleIdx, int16_t *mins, int16_t *maxes, unsigned widthInPixels, double samplesPerPixel);
 };

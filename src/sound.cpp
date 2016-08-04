@@ -73,6 +73,15 @@ Sound::Sound()
 }
 
 
+void Sound::Delete(int64_t startIdx, int64_t endIdx)
+{
+    for (int i = 0; i < m_numChannels; i++)
+        m_channels[i]->Delete(startIdx, endIdx);
+
+    m_cachedLength = m_channels[0]->GetLength();
+}
+
+
 void Sound::FadeIn(int64_t startIdx, int64_t endIdx)
 {
     SetVolumeHelper(startIdx, endIdx, 0.0, 1.0);

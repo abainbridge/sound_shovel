@@ -6,6 +6,7 @@
 
 // Standard headers
 #include <math.h>
+#include <memory.h>
 #include <stdlib.h>
 
 
@@ -15,6 +16,70 @@ unsigned SoundChannel::GetLength()
     for (int i = 0; i < m_blocks.Size(); i++)
         len += m_blocks[i]->m_len;
     return len;
+}
+
+
+void SoundChannel::Delete(int64_t startIdx, int64_t endIdx)
+{
+    int64_t numSamplesToDelete = endIdx - startIdx + 1;
+    SoundPos pos = GetSoundPosFromSampleIdx(startIdx);
+    while (pos.m_blockIdx < m_blocks.Size())
+    {
+        SampleBlock *block = m_blocks[pos.m_blockIdx];
+        int64_t numSamplesToDeleteFromThisBlock = numSamplesToDelete;
+        int numSamplesLeftInThisBlock = block->m_len - pos.m_sampleIdx;
+        if (numSamplesToDeleteFromThisBlock > numSamplesLeftInThisBlock)
+        {
+            // Delete up to the end of the block
+            block->m_len = pos.m_sampleIdx;
+            pos.m_sampleIdx = 0;
+
+            numSamplesToDelete -= numSamplesLeftInThisBlock;
+
+            block->RecalcLuts();
+        }
+        else
+        {
+            // Delete a bit from the middle (or maybe the start) of the block
+            int numSamplesToCopy = block->m_len - (pos.m_sampleIdx + numSamplesToDeleteFromThisBlock);
+            int16_t *whereToCopyFrom = block->m_samples + pos.m_sampleIdx + numSamplesToDeleteFromThisBlock;
+            memcpy(block->m_samples + pos.m_sampleIdx,
+                whereToCopyFrom,
+                numSamplesToCopy);
+            block->m_len -= numSamplesToDeleteFromThisBlock;
+
+            block->RecalcLuts();
+
+            break;
+        }
+
+        pos.m_blockIdx++;
+    }
+
+    // Now remove any empty blocks
+    {
+        int i = 0;
+        int j = 0;
+
+        // i keeps track of the position in the input array (m_blocks)
+        // j keeps track of the position in the output array (also m_blocks)
+        // Each time when find a block to be deleted, i increments, while j stays the same.
+
+        for (i = 0; i < m_blocks.Size(); i++)
+        {
+            if (m_blocks[i]->m_len > 0)
+            {
+                m_blocks[j] = m_blocks[i];
+                j++;
+            }
+        }
+
+        while (i > j)
+        {
+            m_blocks.Pop();
+            j++;
+        }
+    }
 }
 
 
@@ -96,6 +161,8 @@ void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned numSamples, int16_
         unsigned numSlowSamples = numSamplesToNextLutItemBoundary;
         if (numSlowSamples > numSamples)
             numSlowSamples = numSamples;
+        if (numSlowSamples > block->m_len)
+            numSlowSamples = block->m_len;
 
         unsigned idx = pos->m_sampleIdx;
         unsigned end_idx = idx + numSlowSamples;
@@ -150,7 +217,7 @@ void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned numSamples, int16_
     }
 
     // Do the slow bit at the end of the range.
-    if (block)
+    while (block && numSamples)
     {
         // We are not at end of block and numSamples is less than next LUT item boundary.
         // Cases:
@@ -162,6 +229,8 @@ void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned numSamples, int16_
         if (end_idx > block->m_len)
             end_idx = block->m_len;
 
+        unsigned numSamplesThisIteration = end_idx - idx;
+        
         while (idx < end_idx)
         {
             _min = SAMPLE_MIN(block->m_samples[idx], _min);
@@ -169,7 +238,8 @@ void SoundChannel::CalcMinMaxForRange(SoundPos *pos, unsigned numSamples, int16_
             idx++;
         }
 
-        block = IncrementSoundPos(pos, numSamples);
+        block = IncrementSoundPos(pos, numSamplesThisIteration);
+        numSamples -= numSamplesThisIteration;
     }
 
     *resultMin = _min;

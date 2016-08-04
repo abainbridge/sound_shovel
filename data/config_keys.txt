@@ -22,5 +22,6 @@ key=Ctrl+o          object=SoundWidget      command=OpenDialog
 key=Ctrl+f4         object=SoundWidget      command=Close
 key=Ctrl+s          object=SoundWidget      command=Save
 key=Space           object=SoundWidget      command=TogglePlay
+key=Del             object=SoundWidget      command=Delete
 
 key=Esc             object=MenuBar          command=LooseFocus

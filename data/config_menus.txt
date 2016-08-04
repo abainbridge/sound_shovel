@@ -31,6 +31,8 @@ menu=File label=Save                    object=SoundWidget      command=Save
 menu=File label=separator
 menu=File label=Exit                    object=GuiManager       key=1 command=exit
 
+menu=Edit label=Delete                  object=SoundWidget      command=Delete
+
 menu=Process label="Fade in"            object=SoundWidget      command=FadeIn
 menu=Process label="Fade out"           object=SoundWidget      command=FadeOut
 menu=Process label="Normalize -0.3dB"   object=SoundWidget      command=Normalize
