@@ -208,8 +208,7 @@ bool Sound::LoadWav(char const *filename)
             DebugAssert(block->m_len > 0);
             chan->m_blocks.Push(block);
 
-            if (block->m_len != SampleBlock::MAX_SAMPLES)
-                DebugAssert(blockCount + 1 == numBlocks);
+            DebugAssert((block->m_len == SampleBlock::MAX_SAMPLES) || (blockCount + 1 == numBlocks));
         }
     }
 
