@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 
+class BinaryStreamReader;
 class SoundChannel;
 
 
@@ -19,6 +20,7 @@ public:
     char *m_filename;
 
     Sound();
+    ~Sound();
 
     void Delete(int64_t startIdx, int64_t endIdx);
 
@@ -26,7 +28,7 @@ public:
     void FadeOut(int64_t startIdx, int64_t endIdx);
     void Normalize(int64_t startIdx, int64_t endIdx);
 
-    bool LoadWav(char const *filename);
+    bool LoadWav(BinaryStreamReader *stream);
     bool SaveWav();
 
     int64_t GetLength();

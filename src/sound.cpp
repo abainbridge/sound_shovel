@@ -1,12 +1,12 @@
 #include "sound.h"
 
-
 // Own header
 #include "sound.h"
 
 // Project headers
 #include "sound_channel.h"
-#include "df_lib_plus_plus/binary_file_reader.h"
+#include "df_lib_plus_plus/binary_stream_readers.h"
+#include "df_lib_plus_plus/binary_stream_writers.h"
 #include "df_lib_plus_plus/string_utils.h"
 
 // Contrib headers
@@ -73,6 +73,15 @@ Sound::Sound()
 }
 
 
+Sound::~Sound()
+{
+    for (int i = 0; i < m_numChannels; i++)
+        delete m_channels[i];
+    delete[] m_channels;
+    delete[] m_filename;
+}
+
+
 void Sound::Delete(int64_t startIdx, int64_t endIdx)
 {
     for (int i = 0; i < m_numChannels; i++)
@@ -128,53 +137,55 @@ void Sound::Normalize(int64_t startIdx, int64_t endIdx)
 }
 
 
-bool Sound::LoadWav(char const *filename)
+bool Sound::LoadWav(BinaryStreamReader *f)
 {
-    BinaryFileReader f(filename);
-    if (!f.m_file)
+    if (!f->IsOpen())
         return false;
 
-    m_filename = StringDuplicate(filename);
+    m_filename = StringDuplicate(f->m_filename);
 
 
     // 
     // Read header
 
     unsigned char buf1[4];
-    if (f.ReadBytes(4, buf1) != 4 || memcmp(buf1, "RIFF", 4) != 0)
+    if (f->ReadBytes(4, buf1) != 4 || memcmp(buf1, "RIFF", 4) != 0)
         return false;
 
-    unsigned chunkSize = f.ReadU32();
+    unsigned chunkSize = f->ReadU32();
 
-    if (f.ReadBytes(4, buf1) != 4 || memcmp(buf1, "WAVE", 4) != 0)
+    if (f->ReadBytes(4, buf1) != 4 || memcmp(buf1, "WAVE", 4) != 0)
         return false;
 
     //
     // Read fmt chunk
 
-    if (f.ReadBytes(4, buf1) != 4 || memcmp(buf1, "fmt ", 4) != 0)
+    if (f->ReadBytes(4, buf1) != 4 || memcmp(buf1, "fmt ", 4) != 0)
         return false;
-    unsigned fmtChunkSize = f.ReadU32();
-    unsigned audioFormat = f.ReadU16();
-    m_numChannels = f.ReadU16();
-    unsigned sampleRate = f.ReadU32();
-    unsigned byteRate = f.ReadU32();
-    unsigned bytesPerGroup = f.ReadU16();
-    unsigned bitsPerSample = f.ReadU16();
+    unsigned fmtChunkSize = f->ReadU32();
+    unsigned audioFormat = f->ReadU16();
+    m_numChannels = f->ReadU16();
+    unsigned sampleRate = f->ReadU32();
+    unsigned byteRate = f->ReadU32();
+    unsigned bytesPerGroup = f->ReadU16();
+    unsigned bitsPerSample = f->ReadU16();
 
-    ReleaseAssert(audioFormat == 1, "File '%s' unsupported format", filename);
-    ReleaseAssert(m_numChannels == 2, "File '%s' is not stereo", filename);
-    ReleaseAssert(bytesPerGroup == 4, "File '%s' unsupported block alignment", filename);
-    ReleaseAssert(bitsPerSample == 16, "File '%s' is not 16 bits sample depth", filename);
+    ReleaseAssert(audioFormat == 1, "File '%s' unsupported format", m_filename);
+    ReleaseAssert(m_numChannels == 2, "File '%s' is not stereo", m_filename);
+    ReleaseAssert(bytesPerGroup == 4, "File '%s' unsupported block alignment", m_filename);
+    ReleaseAssert(bitsPerSample == 16, "File '%s' is not 16 bits sample depth", m_filename);
+
+    if (fmtChunkSize == 20)
+        f->ReadU32(); // Skip extra 4 bytes of data that isn't normally present and isn't useful.
 
 
     //
     // Read data chunk
 
-    if (f.ReadBytes(4, buf1) != 4 || memcmp(buf1, "data", 4) != 0)
+    if (f->ReadBytes(4, buf1) != 4 || memcmp(buf1, "data", 4) != 0)
         return false;
-    unsigned dataChunkSize = f.ReadU32();
-    ReleaseAssert(dataChunkSize % bytesPerGroup == 0, "File '%s' ends with half a sample", filename);
+    unsigned dataChunkSize = f->ReadU32();
+    ReleaseAssert(dataChunkSize % bytesPerGroup == 0, "File '%s' ends with half a sample", m_filename);
     unsigned numGroups = dataChunkSize / bytesPerGroup;
     unsigned numBlocks = numGroups / SampleBlock::MAX_SAMPLES;
     if (numGroups % SampleBlock::MAX_SAMPLES != 0)
@@ -191,7 +202,7 @@ bool Sound::LoadWav(char const *filename)
         unsigned bytesToRead = bytesPerGroup * SampleBlock::MAX_SAMPLES;
         if (blockCount + 1 == numBlocks)
             bytesToRead = (numGroups % SampleBlock::MAX_SAMPLES) * bytesPerGroup;
-        size_t bytesRead = f.ReadBytes(bytesToRead, (unsigned char *)buf);
+        size_t bytesRead = f->ReadBytes(bytesToRead, (unsigned char *)buf);
         size_t groupsRead = bytesRead / bytesPerGroup;
 
         for (int chan_idx = 0; chan_idx < m_numChannels; chan_idx++)

@@ -1,56 +1,14 @@
 // Own header
-#include "binary_file_reader.h"
+#include "binary_stream_writers.h"
 
 // Platform headers
 #ifdef WIN32
-#include <io.h>
+//#include <io.h>
 #endif
 
 // Standard headers
 #include <stdio.h>
 #include <string.h>
-
-
-BinaryFileReader::BinaryFileReader(char const *filename)
-{
-    m_file = fopen(filename, "rb");
-}
-
-
-BinaryFileReader::~BinaryFileReader()
-{
-    if (m_file)
-        fclose(m_file);
-}
-
-
-uint8_t BinaryFileReader::ReadU8()
-{
-    return fgetc(m_file);
-}
-
-
-uint16_t BinaryFileReader::ReadU16()
-{
-    uint16_t val;
-    fread((void*)&val, 2, 1, m_file);
-    return val;
-}
-
-
-uint32_t BinaryFileReader::ReadU32()
-{
-    uint32_t val;
-    fread((void*)&val, 4, 1, m_file);
-    return val;
-}
-
-
-unsigned BinaryFileReader::ReadBytes(unsigned count, unsigned char *buffer)
-{
-	return fread(buffer, 1, count, m_file);
-}
-
 
 
 // ***************************************************************************

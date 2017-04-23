@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp" />
-    <ClCompile Include="..\..\src\df_lib_plus_plus\binary_file_reader.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\binary_stream_readers.cpp" />
+    <ClCompile Include="..\..\src\df_lib_plus_plus\binary_stream_writers.cpp" />
+
     <ClCompile Include="..\..\src\df_lib_plus_plus\filesys_utils.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\command.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\container.cpp" />
@@ -52,7 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
-    <ClInclude Include="..\..\src\df_lib_plus_plus\binary_file_reader.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\binary_stream_readers.h" />
+    <ClInclude Include="..\..\src\df_lib_plus_plus\binary_stream_writers.h" />
+
     <ClInclude Include="..\..\src\df_lib_plus_plus\containers\darray.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\containers\hash_table.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\containers\llist.h" />
@@ -234,6 +238,7 @@
       <AdditionalIncludeDirectories>../../../deadfrog-lib/src;../../src;../../src/df_lib_plus_plus</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4018;4244;4577;4800;4996</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

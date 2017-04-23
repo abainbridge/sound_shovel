@@ -8,6 +8,7 @@
 #include "sound_channel.h"
 #include "sound_system.h"
 
+#include "df_lib_plus_plus/binary_stream_readers.h"
 #include "df_lib_plus_plus/gui/file_dialog.h"
 #include "df_lib_plus_plus/gui/status_bar.h"
 
@@ -153,7 +154,8 @@ bool SoundWidget::Open(char const *filename)
 {
     Close();
     m_sound = new Sound();
-    return m_sound->LoadWav(filename);
+    BinaryFileReader binFileReader(filename);
+    return m_sound->LoadWav(&binFileReader);
 }
 
 
