@@ -42,7 +42,7 @@ DArray<T>::~DArray()
 
 
 template <class T>
-inline void DArray<T>::SetSize(unsigned int newsize)
+inline void DArray<T>::Reserve(unsigned int newsize)
 {
 	if (newsize > m_arraySize)
 	{
@@ -76,17 +76,17 @@ inline void DArray<T>::SetSize(unsigned int newsize)
 
 
 template <class T>
+inline void DArray<T>::SetSize(unsigned int newSize)
+{
+    Reserve(newSize);
+    m_nextIndex = newSize;
+}
+
+
+template <class T>
 inline void DArray<T>::Grow()
 {
-	// Double array size
-	if (m_arraySize == 0)
-	{
-		SetSize(1);
-	}
-	else
-	{
-		SetSize(m_arraySize * 2);
-	}
+	Reserve(1 + (int)(m_arraySize * 1.5));
 }
 
 

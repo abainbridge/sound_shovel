@@ -17,7 +17,8 @@ public:
     DArray(DArray <T> const &other);
     ~DArray();
 
-	inline void SetSize(unsigned int newSize);
+    inline void Reserve(unsigned int newCapacity);
+    inline void SetSize(unsigned int newSize);
 
 	inline T GetData	(unsigned int index) const;
 	inline T *GetPointer(unsigned int index) const;
