@@ -38,11 +38,13 @@ public:
     SoundPos GetSoundPosFromSampleIdx(int64_t sampleIdx);
     SampleBlock *IncrementSoundPos(SoundPos *pos, int64_t numSamples);
 
+    // Each block has at most N samples (where N is probably 2^17). Any two adjacent blocks that total <= N samples will be merged.
     DArray <SampleBlock *> m_blocks;
 
     unsigned GetLength();
 
     void Delete(int64_t startIdx, int64_t endIdx);
+    void Insert(int64_t dstIdx, SoundChannel *src); // Takes ownership of src.
 
     void CalcDisplayData(int startSampleIdx, int16_t *mins, int16_t *maxes, unsigned widthInPixels, double samplesPerPixel);
 };

@@ -15,7 +15,13 @@ private:
     void SetVolumeHelper(int64_t startIdx, int64_t endIdx, double startVol, double endVol);
 
 public:
-    SoundChannel **m_channels;
+    enum
+    {
+        ERROR_NO_ERROR,
+        ERROR_WRONG_NUMBER_OF_CHANNELS
+    };
+
+    SoundChannel **m_channels;  // All the channels contain the same number of samples.
     int m_numChannels;
     char *m_filename;
 
@@ -23,6 +29,7 @@ public:
     ~Sound();
 
     void Delete(int64_t startIdx, int64_t endIdx);
+    int Insert(int64_t startIdx, Sound *sound);
 
     void FadeIn(int64_t startIdx, int64_t endIdx);
     void FadeOut(int64_t startIdx, int64_t endIdx);

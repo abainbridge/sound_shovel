@@ -83,6 +83,51 @@ void SoundChannel::Delete(int64_t startIdx, int64_t endIdx)
 }
 
 
+void SoundChannel::Insert(int64_t dstIdx, SoundChannel *src)
+{
+    SoundPos dstPos = GetSoundPosFromSampleIdx(dstIdx);
+    
+    int numBlocksToMove = m_blocks.Size() - dstPos.m_blockIdx - 1;
+
+    int numExtraBlocksNeeded = src->m_blocks.Size();
+    numExtraBlocksNeeded++; // We probably need to split a block where we 
+                            // insert, so we need an extra block.
+
+    m_blocks.SetSize(m_blocks.Size() + numExtraBlocksNeeded);
+
+    // We are going to start by pretending we are inserting on a block 
+    // boundary.
+
+    // Make a gap.
+    int firstBlockToMoveIdx = dstPos.m_blockIdx + 1;
+    int firstIndexAfterMove = firstBlockToMoveIdx + src->m_blocks.Size() + 1;
+    for (int i = 0; i < numBlocksToMove; i++)
+        m_blocks[firstIndexAfterMove + i] = m_blocks[firstBlockToMoveIdx + i];
+
+    // Insert blocks from src into the gap.
+    for (int i = 0; i < src->m_blocks.Size(); i++)
+        m_blocks[firstBlockToMoveIdx + i] = src->m_blocks[i];
+
+    // Split the block we inserted into.
+    SampleBlock *blockToSplit = m_blocks[dstPos.m_blockIdx];
+    SampleBlock *newBlock = new SampleBlock;
+    newBlock->m_len = blockToSplit->m_len - dstPos.m_sampleIdx;
+    memcpy(newBlock->m_samples, blockToSplit->m_samples + dstPos.m_sampleIdx, 
+        newBlock->m_len * sizeof(int16_t));
+    m_blocks[firstIndexAfterMove - 1] = newBlock;
+    newBlock->RecalcLuts();
+
+    blockToSplit->m_len = dstPos.m_sampleIdx + 1;
+    blockToSplit->RecalcLuts();
+
+    // Merge any blocks we can.
+	// TODO
+
+    // Free the parts of src that we don't need.
+    delete src;
+}
+
+
 SoundChannel::SoundPos SoundChannel::GetSoundPosFromSampleIdx(int64_t sampleIdx)
 {
     int blockIdx = 0;

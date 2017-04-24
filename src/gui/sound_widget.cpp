@@ -9,6 +9,7 @@
 #include "sound_system.h"
 
 #include "df_lib_plus_plus/binary_stream_readers.h"
+#include "df_lib_plus_plus/clipboard.h"
 #include "df_lib_plus_plus/gui/file_dialog.h"
 #include "df_lib_plus_plus/gui/status_bar.h"
 
@@ -21,6 +22,7 @@
 #include "df_window.h"
 
 // Standard headers
+#include <limits.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -209,6 +211,18 @@ void SoundWidget::Delete()
     GetSelectionBlock(&startIdx, &endIdx);
     m_sound->Delete(startIdx, endIdx);
     m_selectionEnd = -1;
+}
+
+
+void SoundWidget::Paste()
+{
+    void *wavData = g_clipboard.GetData(Clipboard::TYPE_WAV);
+    if (!wavData)
+        return;
+    BinaryDataReader dataReader((unsigned char *)wavData, INT_MAX, "clipboard");
+    Sound *s = new Sound;
+    s->LoadWav(&dataReader);
+    m_sound->Insert(m_selectionStart, s);   // Ownership of s transfers to Insert().
 }
 
 
@@ -477,8 +491,9 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
     else if (COMMAND_IS("FadeOut"))     FadeOut();
     else if (COMMAND_IS("Normalize"))   Normalize();
     else if (COMMAND_IS("OpenDialog"))  OpenDialog();
-    else if (COMMAND_IS("Play"))        Play();
+    else if (COMMAND_IS("Paste"))       Paste();
     else if (COMMAND_IS("Pause"))       Pause();
+    else if (COMMAND_IS("Play"))        Play();
     else if (COMMAND_IS("Save"))        m_sound->SaveWav();
     else if (COMMAND_IS("TogglePlay"))  TogglePlayback();
 

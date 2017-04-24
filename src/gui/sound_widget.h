@@ -53,6 +53,7 @@ public:
     void Close();
 
     void Delete();
+    void Paste();
 
     void GetSelectionBlock(int64_t *startIdx, int64_t *endIdx);
 

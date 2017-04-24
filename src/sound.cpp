@@ -91,6 +91,21 @@ void Sound::Delete(int64_t startIdx, int64_t endIdx)
 }
 
 
+int Sound::Insert(int64_t startIdx, Sound *sound)
+{
+    if (sound->m_numChannels != m_numChannels)
+        return ERROR_WRONG_NUMBER_OF_CHANNELS;
+    
+    for (int i = 0; i < m_numChannels; i++) {
+        SoundChannel *srcChan = sound->m_channels[i];
+        SoundChannel *dstChan = m_channels[i];
+        dstChan->Insert(startIdx, srcChan);
+    }
+
+    return ERROR_NO_ERROR;
+}
+
+
 void Sound::FadeIn(int64_t startIdx, int64_t endIdx)
 {
     SetVolumeHelper(startIdx, endIdx, 0.0, 1.0);

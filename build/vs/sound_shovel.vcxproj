@@ -22,7 +22,7 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\andy_string.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\binary_stream_readers.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\binary_stream_writers.cpp" />
-
+    <ClCompile Include="..\..\src\df_lib_plus_plus\clipboard.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\filesys_utils.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\command.cpp" />
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\container.cpp" />
@@ -56,7 +56,7 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\andy_string.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\binary_stream_readers.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\binary_stream_writers.h" />
-
+    <ClInclude Include="..\..\src\df_lib_plus_plus\clipboard.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\containers\darray.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\containers\hash_table.h" />
     <ClInclude Include="..\..\src\df_lib_plus_plus\containers\llist.h" />
