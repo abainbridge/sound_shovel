@@ -31,6 +31,13 @@
 // Private Methods
 // ***************************************************************************
 
+static bool NearlyEqual(double a, double b)
+{
+    double diff = fabs(a - b);
+    return diff < 1e-5;
+}
+
+
 void SoundWidget::AdvanceSelection()
 {
     if (g_guiManager->m_focussedWidget == this)
@@ -54,14 +61,23 @@ void SoundWidget::AdvancePlaybackPos()
     if (targetIdx < 0)
         return;
 
-    if (fabs(targetIdx - m_playbackPos) > 10000.0)
+    float advanceTime = g_window->advanceTime;
+    if (advanceTime > 0.1)
     {
         m_playbackPos = targetIdx;
     }
     else
     {
-        m_playbackPos = targetIdx * 0.1 + m_playbackPos * 0.9;
+        for (int i = 0; i < 10; i++) 
+        {
+            float dampingFactor = g_window->advanceTime * 4.0;
+            m_playbackPos = targetIdx * dampingFactor + m_playbackPos * (1.0 - dampingFactor);
+        }
     }
+
+    float pixelDistanceToTarget = fabs(targetIdx - m_playbackPos) / m_hZoomRatio;
+    if (!NearlyEqual(pixelDistanceToTarget, 0))
+        g_canSleep = false;
 }
 
 
@@ -289,13 +305,6 @@ void SoundWidget::Normalize()
 }
 
 
-static bool NearlyEqual(double a, double b)
-{
-    double diff = fabs(a - b);
-    return diff < 1e-5;
-}
-
-
 void SoundWidget::SetRect(int x /* = -1 */, int y /* = -1 */, int w /* = -1 */, int h /* = -1 */)
 {  
     if (w != m_width)
@@ -349,6 +358,7 @@ void SoundWidget::Advance()
     if (g_input.lmbClicked && IsMouseInBounds())
     { 
         m_playbackIdx = GetSampleIndexFromScreenPos(g_input.mouseX);
+        m_playbackPos = m_playbackIdx;
     }
 
 
