@@ -144,7 +144,7 @@ SoundWidget::SoundWidget(Widget *parent)
     m_displayMaxes = NULL;
 
     Close();
-//     Open("c:/users/andy/desktop/andante.wav");
+    Open("c:/users/andy/desktop/andante.wav");
 //     m_selectionStart = 2e6;
 //     m_selectionEnd = 4e6;
 
@@ -506,8 +506,10 @@ int64_t SoundWidget::GetSampleIndexFromScreenPos(int screenX)
     if (!m_sound) return 0;
 
     int64_t rv = m_hOffset + (double)screenX * m_hZoomRatio + 0.5;
-    if (rv < 0 || rv > m_sound->GetLength()) 
-        rv = -1;
+    if (rv < 0)
+        rv = 0;
+    else if (rv >= m_sound->GetLength())
+        rv = m_sound->GetLength() - 1;
     return rv;
 }
 
