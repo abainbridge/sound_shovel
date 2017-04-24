@@ -93,7 +93,7 @@ void SoundWidget::RenderWaveform(DfBitmap *bmp, double vZoomRatio)
 
         for (unsigned x = 0; x < m_width; x++)
         {
-            int vline_len = RoundToInt(m_displayMaxes[x] - m_displayMins[x]) * vZoomRatio;
+            int vline_len = ceil((m_displayMaxes[x] - m_displayMins[x]) * vZoomRatio);
             int y = ceil(yMid - m_displayMaxes[x] * vZoomRatio);
             if (vline_len == 0)
                 PutPix(bmp, m_left + x, y, soundColour);
