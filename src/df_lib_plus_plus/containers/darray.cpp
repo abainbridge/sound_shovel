@@ -1,4 +1,4 @@
-// Own header
+// Project headers
 #include "df_common.h"
 
 // Standard headers
@@ -8,8 +8,8 @@
 template <class T>
 DArray<T>::DArray()
 {
-    m_arraySize = 0;
-    m_nextIndex = 0;
+    m_capacity = 0;
+    m_size = 0;
     m_array = NULL;
 }
 
@@ -17,15 +17,13 @@ DArray<T>::DArray()
 template <class T>
 DArray<T>::DArray(DArray <T> const &other)
 {
-    m_arraySize = other.m_arraySize;
-    m_nextIndex = other.m_nextIndex;
-    if (m_arraySize > 0)
+    m_capacity = other.m_capacity;
+    m_size = other.m_size;
+    if (m_capacity > 0)
     {
-        m_array = new T[m_arraySize];
-        for (int i = 0; i < m_arraySize; i++)
-        {
+        m_array = new T[m_capacity];
+        for (int i = 0; i < m_capacity; i++)
             m_array[i] = other.m_array[i];
-        }
     }
     else
     {
@@ -35,83 +33,62 @@ DArray<T>::DArray(DArray <T> const &other)
 
 
 template <class T>
-DArray<T>::~DArray()
+inline void DArray<T>::SetCapacity(unsigned newCapacity)
 {
-    Empty();
-}
-
-
-template <class T>
-inline void DArray<T>::Reserve(unsigned int newsize)
-{
-	if (newsize > m_arraySize)
+	if (newCapacity > m_capacity)
 	{
-		unsigned int oldArraySize = m_arraySize;
+		unsigned oldCapacity = m_capacity;
+		m_capacity = newCapacity;
+		T *tempArray = new T[m_capacity];
 
-		m_arraySize = newsize;
-		T *tempArray = new T[m_arraySize];
-
-		for (unsigned int a = 0; a < oldArraySize; ++a)
-		{
+		for (unsigned a = 0; a < oldCapacity; a++)
 			tempArray[a] = m_array[a];
-		}
 
-		delete [] m_array;
+		delete[] m_array;
 		m_array = tempArray;
 	}
-	else if (newsize < m_arraySize)
+	else if (newCapacity < m_capacity)
 	{
-		m_arraySize = newsize;
-		T *tempArray = new T[m_arraySize];
+		m_capacity = newCapacity;
+		T *tempArray = new T[m_capacity];
 
-		for (unsigned int a = 0; a < m_arraySize; ++a)
-		{
+		for (unsigned a = 0; a < m_capacity; a++)
 			tempArray[a] = m_array[a];
-		}
 
-		delete [] m_array;
+		delete[] m_array;
 		m_array = tempArray;
 	}
 }
 
 
 template <class T>
-inline void DArray<T>::SetSize(unsigned int newSize)
+inline void DArray<T>::Resize(unsigned newSize)
 {
-    Reserve(newSize);
-    m_nextIndex = newSize;
+    SetCapacity(newSize);
+    m_size = newSize;
 }
 
 
 template <class T>
-inline void DArray<T>::Grow()
+inline unsigned DArray<T>::Push(const T &newData)
 {
-	Reserve(1 + (int)(m_arraySize * 1.5));
-}
-
-
-template <class T>
-inline unsigned int DArray<T>::Push(const T &newdata)
-{
-    if (m_nextIndex == m_arraySize)			// Must resize the array
-	{
+    if (m_size == m_capacity)
 		Grow();
-    }
 
-    m_array[m_nextIndex] = newdata;
-    m_nextIndex++;
+    m_array[m_size] = newData;
+    m_size++;
 
-    return m_nextIndex - 1;
+    return m_size - 1;
 }
 
 
 template <class T>
 inline T DArray<T>::Pop()
 {
-	if (m_nextIndex > 0)
+	if (m_size > 0)
 	{
-		m_nextIndex--;
-		return m_array[m_nextIndex];
+		m_size--;
+		return m_array[m_size];
 	}
 
 	return T();
@@ -121,10 +98,8 @@ inline T DArray<T>::Pop()
 template <class T>
 inline T DArray<T>::Top()
 {
-	if (m_nextIndex > 0)
-	{
-		return m_array[m_nextIndex-1];
-	}
+	if (m_size > 0)
+		return m_array[m_size-1];
 
 	return T();
 }
@@ -133,43 +108,25 @@ inline T DArray<T>::Top()
 template <class T>
 void DArray<T>::Empty()
 {
-    delete [] m_array;
+    delete[] m_array;
     m_array = NULL;
-    m_arraySize = 0;
-	m_nextIndex = 0;
+    m_capacity = 0;
+	m_size = 0;
 }
 
 
 template <class T>
 void DArray<T>::EmptyAndDelete()
 {
-	for (unsigned int i = 0; i < m_nextIndex; ++i)
-	{
+	for (unsigned i = 0; i < m_size; i++)
 		delete m_array[i];
-	}
 
 	Empty();
 }
 
 
 template <class T>
-inline T DArray<T>::GetData(unsigned int index) const
-{
-	DebugAssert(index < m_nextIndex);
-	return m_array[index];
-}
-
-
-template <class T>
-inline T *DArray<T>::GetPointer(unsigned int index) const
-{
-    DebugAssert(index < m_nextIndex);
-    return &(m_array[index]);
-}
-
-
-template <class T>
-inline T &DArray<T>::operator [] (unsigned int index)
+inline T &DArray<T>::operator[] (unsigned index)
 {
     DebugAssert(index < m_nextIndex);
     return m_array[index];
@@ -177,15 +134,8 @@ inline T &DArray<T>::operator [] (unsigned int index)
 
 
 template <class T>
-inline const T DArray<T>::operator [] (unsigned int index) const
+inline const T &DArray<T>::operator[] (unsigned index) const
 {
     DebugAssert(index < m_nextIndex);
     return m_array[index];
-}
-
-
-template <class T>
-inline unsigned int DArray<T>::Size() const
-{
-    return m_nextIndex;
 }

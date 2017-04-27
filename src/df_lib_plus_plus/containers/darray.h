@@ -1,39 +1,49 @@
 #pragma once
 
-// Like std::vector but doesn't use exceptions.
+// Like std::vector but:
+// * Doesn't use exceptions.
+// * Doesn't support a custom allocator.
+// * Doesn't support iterators.
+// * The empty() function empties the array, unlike with std::vector, where it
+//   indicates if it is empty. With std::vector it is easy to call empty() 
+//   believing it will empty the array. With DArray, if you call empty() 
+//   expecting a result indicating whether the array is empty, you'll get a 
+//   compile error (because the return type is void).
+// * Capitalized function names.
+// * Doesn't use the std namespace.
+// * Resize can be used to reduce the capacity. No need for shrink_to_fit().
+// * Generates smaller code.
+// * Gives slightly better compile errors.
 
 template <class T>
 class DArray
 {
 protected:
-    unsigned int	m_arraySize;
-	unsigned int	m_nextIndex;				// One greater than the head item
-    T				*m_array;
+    unsigned m_capacity;        // Size of m_array.
+    unsigned m_size;            // Number of valid items in m_array.
+    T       *m_array;
 
-	inline void Grow			();
+    inline void Grow() { SetCapacity(1 + (unsigned)(m_capacity * 1.5)); }
 
 public:
     DArray();
     DArray(DArray <T> const &other);
-    ~DArray();
+    ~DArray() { Empty(); }
 
-    inline void Reserve(unsigned int newCapacity);
-    inline void SetSize(unsigned int newSize);
+    void SetCapacity(unsigned newCapacity);
+    inline void Resize(unsigned newSize);
 
-	inline T GetData	(unsigned int index) const;
-	inline T *GetPointer(unsigned int index) const;
+    inline unsigned Push(const T &newData); // Returns index used.
+    inline T Pop();                         // Returns head item and removes it.
+    inline T Top();                         // Returns head item.
 
-    inline unsigned int Push	(const T &newdata);		// Returns index used
-	inline T Pop				();						// Returns head item and removes it
-	inline T Top				();						// Returns head item
+    inline unsigned Size() const { return m_size; } // Returns the number of used entries.
 
-    inline unsigned int Size() const;					// Returns the number of used entries
+    void Empty();                           // Resets the array to empty.
+    void EmptyAndDelete();                  // Same as Empty() but deletes the elements that are pointed to as well.
 
-    void Empty			();						// Resets the array to empty
-	void EmptyAndDelete ();						// Same as Empty() but deletes the elements that are pointed to as well
-
-    inline T &operator [] (unsigned int index);
-	inline const T operator [] (unsigned int index) const;
+    inline T &operator[] (unsigned index);
+    inline const T &operator[] (unsigned index) const;
 };
 
 

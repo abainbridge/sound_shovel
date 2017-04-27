@@ -93,7 +93,7 @@ void SoundChannel::Insert(int64_t dstIdx, SoundChannel *src)
     numExtraBlocksNeeded++; // We probably need to split a block where we 
                             // insert, so we need an extra block.
 
-    m_blocks.SetSize(m_blocks.Size() + numExtraBlocksNeeded);
+    m_blocks.Resize(m_blocks.Size() + numExtraBlocksNeeded);
 
     // We are going to start by pretending we are inserting on a block 
     // boundary.
