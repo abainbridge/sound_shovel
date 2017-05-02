@@ -128,7 +128,7 @@ void DArray<T>::EmptyAndDelete()
 template <class T>
 inline T &DArray<T>::operator[] (unsigned index)
 {
-    DebugAssert(index < m_nextIndex);
+    DebugAssert(index < m_size);
     return m_array[index];
 }
 
@@ -136,6 +136,6 @@ inline T &DArray<T>::operator[] (unsigned index)
 template <class T>
 inline const T &DArray<T>::operator[] (unsigned index) const
 {
-    DebugAssert(index < m_nextIndex);
+    DebugAssert(index < m_size);
     return m_array[index];
 }
