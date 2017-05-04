@@ -5,6 +5,7 @@
 
 
 class BinaryStreamReader;
+class BinaryStreamWriter;
 class SoundChannel;
 
 
@@ -36,7 +37,8 @@ public:
     void Normalize(int64_t startIdx, int64_t endIdx);
 
     bool LoadWav(BinaryStreamReader *stream);
-    bool SaveWav();
+    bool SaveWav(); // Wrapper of BinaryStreamWriter overload. Saves to file called m_filename.
+    bool SaveWav(BinaryStreamWriter *stream, int64_t startIdx, int64_t endIdx);
 
     int64_t GetLength();
 };

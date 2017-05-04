@@ -44,9 +44,6 @@ void Clipboard::ReleaseData(void *data)
 
 void Clipboard::SetData(int type, void *data, int dataSize)
 {
-    if (type == TYPE_WAV)
-        return; // TODO.
-
     if (!OpenClipboard(NULL))
         return;
 

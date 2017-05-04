@@ -9,6 +9,7 @@
 #include "sound_system.h"
 
 #include "df_lib_plus_plus/binary_stream_readers.h"
+#include "df_lib_plus_plus/binary_stream_writers.h"
 #include "df_lib_plus_plus/clipboard.h"
 #include "df_lib_plus_plus/gui/file_dialog.h"
 #include "df_lib_plus_plus/gui/status_bar.h"
@@ -230,6 +231,14 @@ void SoundWidget::Delete()
 }
 
 
+void SoundWidget::Copy()
+{
+	BinaryDataWriter dataWriter;
+    m_sound->SaveWav(&dataWriter, m_selectionStart, m_selectionEnd);
+    g_clipboard.SetData(Clipboard::TYPE_WAV, dataWriter.m_data, dataWriter.m_dataLen);
+}
+
+
 void SoundWidget::Paste()
 {
     void *wavData = g_clipboard.GetData(Clipboard::TYPE_WAV);
@@ -239,6 +248,7 @@ void SoundWidget::Paste()
     Sound *s = new Sound;
     s->LoadWav(&dataReader);
     m_sound->Insert(m_selectionStart, s);   // Ownership of s transfers to Insert().
+    g_clipboard.ReleaseData(wavData);
 }
 
 
@@ -496,6 +506,7 @@ char *SoundWidget::ExecuteCommand(char const *object, char const *command, char 
 {
     if (0);
     else if (COMMAND_IS("Close"))       Close();
+    else if (COMMAND_IS("Copy"))        Copy();
     else if (COMMAND_IS("Delete"))      Delete();
     else if (COMMAND_IS("FadeIn"))      FadeIn();
     else if (COMMAND_IS("FadeOut"))     FadeOut();

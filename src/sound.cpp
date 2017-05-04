@@ -249,58 +249,72 @@ bool Sound::SaveWav()
     BinaryFileWriter f(m_filename);
     if (!f.m_file)
         return false;
-    
+
+    return SaveWav(&f, 0, -1);
+}
+
+
+bool Sound::SaveWav(BinaryStreamWriter *f, int64_t startIdx, int64_t endIdx)
+{
+    if (endIdx < 0)
+        endIdx = GetLength() - 1;
+	
+    unsigned const SIZE_OF_HEADERS = 36;
+    unsigned const BYTES_PER_GROUP = m_numChannels * 2;
+    unsigned const NUM_SAMPLES_TO_OUTPUT = (endIdx - startIdx + 1);
+    unsigned const SIZE_OF_DATA = NUM_SAMPLES_TO_OUTPUT * BYTES_PER_GROUP;
+    f->Reserve(SIZE_OF_HEADERS + SIZE_OF_DATA + 8);
+
+
     // 
     // Write header
 
-    f.WriteBytes("RIFF", 4);
-
-    unsigned const SIZE_OF_HEADERS = 36;
-    unsigned const BYTES_PER_GROUP = m_numChannels * 2;
-    unsigned const SIZE_OF_DATA = GetLength() * BYTES_PER_GROUP;
-    f.WriteU32(SIZE_OF_HEADERS + SIZE_OF_DATA);    // Chunk size
-    f.WriteBytes("WAVE", 4);
+    f->WriteBytes("RIFF", 4);
+    f->WriteU32(SIZE_OF_HEADERS + SIZE_OF_DATA);    // Chunk size
+    f->WriteBytes("WAVE", 4);
 
 
     //
     // Write fmt chunk
 
-    f.WriteBytes("fmt ", 4);
+    f->WriteBytes("fmt ", 4);
 
-    f.WriteU32(16);                         // fmtChunkSize
-    f.WriteU16(1);                          // Audio format. 1=PCM.
-    f.WriteU16(m_numChannels);
-    f.WriteU32(44100);                      // Sample rate
-    f.WriteU32(44100 * BYTES_PER_GROUP);    // Byte rate
-    f.WriteU16(BYTES_PER_GROUP);
-    f.WriteU16(16);                         // Bits per sample
+    f->WriteU32(16);                         // fmtChunkSize
+    f->WriteU16(1);                          // Audio format. 1=PCM.
+    f->WriteU16(m_numChannels);
+    f->WriteU32(44100);                      // Sample rate
+    f->WriteU32(44100 * BYTES_PER_GROUP);    // Byte rate
+    f->WriteU16(BYTES_PER_GROUP);
+    f->WriteU16(16);                         // Bits per sample
 
 
     //
     // Write data chunk
 
-    f.WriteBytes("data", 4);
-    f.WriteU32(SIZE_OF_DATA);               // Data chunk size
+    f->WriteBytes("data", 4);
+    f->WriteU32(SIZE_OF_DATA);               // Data chunk size
 
     int16_t *buf = new int16_t[SampleBlock::MAX_SAMPLES * m_numChannels];
 
-    int numBlocks = m_channels[0]->m_blocks.Size();
-    for (int blockIdx = 0; blockIdx < numBlocks; blockIdx++)
+    SoundChannel::SoundPos pos = m_channels[0]->GetSoundPosFromSampleIdx(startIdx);
+    int64_t samplesLeftToOutput = NUM_SAMPLES_TO_OUTPUT;
+    while (samplesLeftToOutput > 0)
     {
-        int samplesToWrite = SampleBlock::MAX_SAMPLES;
-        if (blockIdx == numBlocks - 1)
-            samplesToWrite = GetLength() % SampleBlock::MAX_SAMPLES;
-        
+        int len = m_channels[0]->m_blocks[pos.m_blockIdx]->m_len;
+        if (len > samplesLeftToOutput)
+            len = samplesLeftToOutput;
+
         for (int chan_idx = 0; chan_idx < m_numChannels; chan_idx++)
         {
             SoundChannel *chan = m_channels[chan_idx];
-            SampleBlock *block = chan->m_blocks[blockIdx];
+            SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
 
-            for (size_t i = 0; i < samplesToWrite; i++)
+            for (size_t i = 0; i < len; i++)
                 buf[i * m_numChannels + chan_idx] = block->m_samples[i];
         }
 
-        f.WriteBytes((char *)buf, samplesToWrite * BYTES_PER_GROUP);
+        f->WriteBytes((char *)buf, len * BYTES_PER_GROUP);
+        samplesLeftToOutput -= len;
     }
 
     delete[] buf;

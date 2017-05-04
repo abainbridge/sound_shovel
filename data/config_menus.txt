@@ -32,6 +32,7 @@ menu=File label=separator
 menu=File label=Exit                    object=GuiManager       key=1 command=exit
 
 menu=Edit label=Delete                  object=SoundWidget      command=Delete
+menu=Edit label=Copy                    object=SoundWidget      command=Copy
 menu=Edit label=Paste                   object=SoundWidget      command=Paste
 
 menu=Process label="Fade in"            object=SoundWidget      command=FadeIn

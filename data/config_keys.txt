@@ -23,6 +23,7 @@ key=Ctrl+f4         object=SoundWidget      command=Close
 key=Ctrl+s          object=SoundWidget      command=Save
 key=Space           object=SoundWidget      command=TogglePlay
 key=Del             object=SoundWidget      command=Delete
+key=Ctrl+c          object=SoundWidget      command=Copy
 key=Ctrl+v          object=SoundWidget      command=Paste
 
 key=Esc             object=MenuBar          command=LooseFocus
