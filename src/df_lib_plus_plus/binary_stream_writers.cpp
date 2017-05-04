@@ -46,13 +46,87 @@ bool BinaryFileWriter::WriteU32(uint32_t val)
 }
 
 
-bool BinaryFileWriter::WriteBytes(char const *buf, unsigned count)
+bool BinaryFileWriter::WriteBytes(char const *buf, int64_t count)
 {
     return fwrite(buf, 1, count, m_file) == count;
 }
 
 
-bool BinaryFileWriter::WriteUBytes(unsigned char const *buf, unsigned count)
+// ***************************************************************************
+// BinaryDataWriter
+// ***************************************************************************
+
+
+BinaryDataWriter::BinaryDataWriter(int64_t numBytes)
 {
-    return fwrite(buf, 1, count, m_file) == count;
+	m_dataLen = numBytes;
+	m_data = new uint8_t[m_dataLen];
+	m_pos = 0;
+}
+
+
+void BinaryDataWriter::Reserve(int64_t numBytes)
+{
+	if (numBytes > m_dataLen)
+	{
+		uint8_t *newData = new uint8_t[numBytes];
+		memcpy(newData, m_data, m_dataLen);
+		m_dataLen = numBytes;
+		delete[] m_data;
+		m_data = newData;
+	}
+}
+
+
+bool BinaryDataWriter::WriteU8(uint8_t val)
+{
+	if (m_pos < m_dataLen)
+	{
+		m_data[m_pos] = val;
+		m_pos++;
+		return true;
+	}
+
+	return false;
+}
+
+
+bool BinaryDataWriter::WriteU16(uint16_t val)
+{
+	if (m_pos + 1 < m_dataLen)
+	{
+		uint16_t *data = (uint16_t*)(m_data + m_pos);
+		*data = val;
+		m_pos += 2;
+		return true;
+	}
+
+	return false;
+}
+
+
+bool BinaryDataWriter::WriteU32(uint32_t val)
+{
+	if (m_pos + 3 < m_dataLen)
+	{
+		uint32_t *data = (uint32_t*)(m_data + m_pos);
+		*data = val;
+		m_pos += 4;
+		return true;
+	}
+
+	return false;
+}
+
+
+bool BinaryDataWriter::WriteBytes(char const *buf, int64_t count)
+{
+	if (m_pos + count <= m_dataLen)
+	{
+		memcpy(m_data + m_pos, buf, count);
+		m_pos += count;
+		return true;
+	}
+
+	return false;
 }
