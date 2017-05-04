@@ -84,6 +84,9 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\binary_stream_writers.cpp">
       <Filter>df_lib_plus_plus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\clipboard.cpp">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="df_lib_plus_plus">
@@ -196,6 +199,9 @@
       <Filter>df_lib_plus_plus</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\binary_stream_writers.h">
+      <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\clipboard.h">
       <Filter>df_lib_plus_plus</Filter>
     </ClInclude>
   </ItemGroup>
