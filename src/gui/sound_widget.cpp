@@ -41,7 +41,7 @@ static bool NearlyEqual(double a, double b)
 
 void SoundWidget::AdvanceSelection()
 {
-    if (g_guiManager->m_focussedWidget == this)
+    if (g_guiManager->m_focussedWidget == this && IsMouseInBounds())
     {
         if (g_input.lmbClicked)
         {
