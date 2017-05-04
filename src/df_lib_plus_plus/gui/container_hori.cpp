@@ -44,7 +44,7 @@ void ContainerHori::AdvanceResizing()
 			(g_input.mouseX <= (x + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
-		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorHoriDrag);
+		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
             if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
@@ -90,7 +90,7 @@ void ContainerHori::AdvanceResizing()
     }
 
     if (m_resizingWidget)
-        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorHoriDrag);
+        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
 
     if (setRectNeeded)
     {

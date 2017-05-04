@@ -37,19 +37,6 @@ void CursorManager::RequestCursorType(int type)
 
 void CursorManager::Render(int x, int y)
 {
-    switch(m_type)
-    {
-        case CursorMain:
-            SetCursor(LoadCursor(NULL, IDC_ARROW));
-            break;
-        case CursorText:
-            SetCursor(LoadCursor(NULL, IDC_IBEAM));
-            break;
-        case CursorHoriDrag:
-            SetCursor(LoadCursor(NULL, IDC_SIZEWE));
-            break;
-        case CursorVertDrag:
-            SetCursor(LoadCursor(NULL, IDC_SIZENS));
-            break;
-    }
+    static char *CURSOR_NAMES[] = { IDC_ARROW, IDC_IBEAM, IDC_SIZEWE, IDC_SIZENS, IDC_SIZEALL };
+    SetCursor(LoadCursor(NULL, CURSOR_NAMES[m_type]));
 }

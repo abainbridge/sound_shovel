@@ -11,6 +11,7 @@
 #include "df_lib_plus_plus/binary_stream_readers.h"
 #include "df_lib_plus_plus/binary_stream_writers.h"
 #include "df_lib_plus_plus/clipboard.h"
+#include "df_lib_plus_plus/gui/cursor_manager.h"
 #include "df_lib_plus_plus/gui/file_dialog.h"
 #include "df_lib_plus_plus/gui/status_bar.h"
 
@@ -357,6 +358,7 @@ void SoundWidget::Advance()
 
     if (g_input.mmb)
     {
+        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragBoth);
         m_hOffset -= g_input.mouseVelX * m_hZoomRatio;
         m_targetHOffset = m_hOffset - g_input.mouseVelX * m_hZoomRatio;
     }

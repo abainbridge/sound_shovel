@@ -64,7 +64,7 @@ void ContainerVert::AdvanceResizing()
 			(g_input.mouseY <= (y + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
-		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorVertDrag);
+		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
             if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
@@ -110,7 +110,7 @@ void ContainerVert::AdvanceResizing()
     }
 
     if (m_resizingWidget)
-        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorVertDrag);
+        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
 
     if (setRectNeeded)
     {

@@ -18,8 +18,9 @@ public:
 	{
 		CursorMain,
 		CursorText,
-		CursorHoriDrag,
-        CursorVertDrag,
+		CursorDragHori,
+        CursorDragVert,
+        CursorDragBoth,
 		CursorNumCursors
 	};
 
