@@ -52,6 +52,7 @@ void SoundWidget::AdvanceSelection()
         else if (g_input.lmb)
         {
             m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
+            g_canSleep = false;
         }
     }
 }
