@@ -255,7 +255,7 @@ void SoundWidget::Paste()
 
 void SoundWidget::GetSelectionBlock(int64_t *startIdx, int64_t *endIdx)
 {
-    if (m_selectionStart < m_selectionEnd)
+    if (m_selectionStart < m_selectionEnd || m_selectionEnd < 0)
     {
         *startIdx = m_selectionStart;
         *endIdx = m_selectionEnd;

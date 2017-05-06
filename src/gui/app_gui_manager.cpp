@@ -61,6 +61,9 @@ void AppGuiManager::Advance()
     SoundWidget *sv = (SoundWidget*)GetWidgetByName(SOUND_VIEW_NAME);
     if (sv)
     {
+        int64_t startIdx, endIdx;
+        sv->GetSelectionBlock(&startIdx, &endIdx);
+        g_statusBar->SetLeftString("Pos: %.0f", (double)startIdx);
         g_statusBar->SetRightString("Zoom: %.1f", sv->m_hZoomRatio);
     }
 
