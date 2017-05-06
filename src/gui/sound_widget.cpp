@@ -361,6 +361,7 @@ void SoundWidget::Advance()
         g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragBoth);
         m_hOffset -= g_input.mouseVelX * m_hZoomRatio;
         m_targetHOffset = m_hOffset - g_input.mouseVelX * m_hZoomRatio;
+        g_canSleep = false;
     }
     else if (g_input.mmbUnClicked)
     {
