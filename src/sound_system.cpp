@@ -64,7 +64,7 @@ void SoundSystem::DeviceCallback(StereoSample *buf, unsigned int numSamples)
     {
         SampleBlock *blocks[2];
         blocks[0] = sound->m_channels[0]->m_blocks[poses[0].m_blockIdx];
-        blocks[1] = sound->m_channels[0]->m_blocks[poses[1].m_blockIdx];
+        blocks[1] = sound->m_channels[1]->m_blocks[poses[1].m_blockIdx];
 
         buf[i].m_left = blocks[0]->m_samples[idx];
         buf[i].m_right = blocks[1]->m_samples[idx];
