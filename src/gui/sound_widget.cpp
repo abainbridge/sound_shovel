@@ -347,6 +347,15 @@ void SoundWidget::Advance()
 
     double advanceTime = g_window->advanceTime;
 
+    // If we are asleep, advanceTime will be large. If the user gave input 
+    // that will wake us in this frame then we will end up using the large
+    // time step for the first frame of the physics advance. This makes zoom
+    // and scroll actions appear to start with a jolt, which looks 
+    // unpleasant. Simply setting a fake small advanceTime for frames that
+    // start in sleep fixes this.
+    if (g_canSleep)
+        advanceTime = 0.01;
+
 
     //
     // Take mouse input
