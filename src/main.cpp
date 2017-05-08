@@ -37,21 +37,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     g_guiManager = new AppGuiManager;
     g_guiManager->Initialise();
 
-    while (!g_guiManager->m_exitAtEndOfFrame)
+    while (1)
     {
-        ClearBitmap(g_window->bmp, Colour(44, 51, 59));
-        InputManagerAdvance();
+        g_canSleep = true;
+        for (int i = 0; i < 500 && g_canSleep; i++)
+        {
+            DfSleepMillisec(1);
 
-        g_guiManager->Advance();
+            InputManagerAdvance();
+            g_guiManager->Advance();
+
+            if (g_guiManager->m_exitAtEndOfFrame)
+                return 0;
+
+            g_soundSystem->Advance();
+        }
+
+        ClearBitmap(g_window->bmp, Colour(44, 51, 59));
         g_guiManager->Render();
 
-        g_soundSystem->Advance();
         UpdateWin();
-
-//         if (g_canSleep)
-//             SleepMillisec(50);
-
-        g_canSleep = true;
     }
 
     return 0;
