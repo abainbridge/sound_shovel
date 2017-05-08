@@ -60,27 +60,27 @@ void SoundWidget::AdvanceSelection()
 
 void SoundWidget::AdvancePlaybackPos()
 {
-    double targetIdx = m_playbackIdx;
-    if (targetIdx < 0)
+    if (m_playbackIdx < 0)
         return;
 
+    float pixelDistanceToTarget = fabs(m_playbackIdx - m_playbackPos) / m_hZoomRatio;
+    if (NearlyEqual(pixelDistanceToTarget, 0.0))
+        return;
+
+    g_canSleep = false;
     float advanceTime = g_window->advanceTime;
     if (advanceTime > 0.1)
     {
-        m_playbackPos = targetIdx;
+        m_playbackPos = m_playbackIdx;
     }
     else
     {
         for (int i = 0; i < 10; i++) 
         {
             float dampingFactor = g_window->advanceTime * 4.0;
-            m_playbackPos = targetIdx * dampingFactor + m_playbackPos * (1.0 - dampingFactor);
+            m_playbackPos = m_playbackIdx * dampingFactor + m_playbackPos * (1.0 - dampingFactor);
         }
     }
-
-    float pixelDistanceToTarget = fabs(targetIdx - m_playbackPos) / m_hZoomRatio;
-    if (!NearlyEqual(pixelDistanceToTarget, 0))
-        g_canSleep = false;
 }
 
 
