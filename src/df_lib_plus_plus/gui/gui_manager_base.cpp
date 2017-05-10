@@ -45,6 +45,7 @@ GuiManagerBase::GuiManagerBase()
     m_mainContainer(NULL),
     m_exitRequested(false),
     m_exitAtEndOfFrame(false),
+    m_canSleep(true),
     Widget(GUI_MANAGER_NAME, NULL)
 {
     g_keyboardShortcutManager = new KeyboardShortcutManager("data/config_keys.txt");

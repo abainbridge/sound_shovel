@@ -184,7 +184,7 @@ void Menu::Advance()
 			int itemNum = IsMouseOverItem();
 			if (itemNum != -1 && itemNum != m_highlightedItem)
 			{
-//				g_app->DisableIdling(); // TODO - Make DisableIdling a feature of df_window
+                g_guiManager->m_canSleep = false;
 				m_highlightedItem = itemNum;
 			}
 		}
@@ -681,7 +681,7 @@ void MenuBar::AdvanceNoHighlight()
 	Menu *newHighlightedMenu = GetMenuTitleUnderMouseCursor();
 	if (newHighlightedMenu)
 	{
-//		g_app->DisableIdling(); // TODO
+		g_guiManager->m_canSleep = false;
 		m_highlightedMenu = newHighlightedMenu;
 	}
 }
@@ -704,9 +704,7 @@ void MenuBar::AdvanceWithHighlight()
 
 	Menu *const menu = GetMenuTitleUnderMouseCursor();
 	if (menu && menu != m_highlightedMenu)
-	{
-//		g_app->DisableIdling(); TODO
-	}
+        g_guiManager->m_canSleep = false;
 
 	// Is keyboard active
 	if (g_guiManager->m_focussedWidget == this)

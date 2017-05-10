@@ -46,6 +46,7 @@ public:
 	Widget *m_focussedWidget;
 	ContainerVert *m_mainContainer;
 	bool m_exitAtEndOfFrame;	// True if something has requested that the application quit
+    bool m_canSleep;
 
     char *m_aboutString;
     bool m_highlightFocussedWidget;

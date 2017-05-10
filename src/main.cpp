@@ -23,9 +23,6 @@
 #include <stdint.h>
 
 
-bool g_canSleep = true;
-
-
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	CreateWin(1000, 600, WT_WINDOWED, APPLICATION_NAME);
@@ -39,8 +36,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     while (1)
     {
-        g_canSleep = true;
-        for (int i = 0; i < 500 && g_canSleep; i++)
+        g_guiManager->m_canSleep = true;
+        for (int i = 0; i < 500 && g_guiManager->m_canSleep; i++)
         {
             DfSleepMillisec(1);
 

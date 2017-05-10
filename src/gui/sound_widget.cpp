@@ -52,7 +52,7 @@ void SoundWidget::AdvanceSelection()
         else if (g_input.lmb)
         {
             m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
-            g_canSleep = false;
+            g_guiManager->m_canSleep = false;
         }
     }
 }
@@ -67,7 +67,7 @@ void SoundWidget::AdvancePlaybackPos()
     if (NearlyEqual(pixelDistanceToTarget, 0.0))
         return;
 
-    g_canSleep = false;
+    g_guiManager->m_canSleep = false;
     float advanceTime = g_window->advanceTime;
     if (advanceTime > 0.1)
     {
@@ -353,7 +353,7 @@ void SoundWidget::Advance()
     // and scroll actions appear to start with a jolt, which looks 
     // unpleasant. Simply setting a fake small advanceTime for frames that
     // start in sleep fixes this.
-    if (g_canSleep)
+    if (g_guiManager->m_canSleep)
         advanceTime = 0.01;
 
 
@@ -371,7 +371,7 @@ void SoundWidget::Advance()
         g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragBoth);
         m_hOffset -= g_input.mouseVelX * m_hZoomRatio;
         m_targetHOffset = m_hOffset - g_input.mouseVelX * m_hZoomRatio;
-        g_canSleep = false;
+        g_guiManager->m_canSleep = false;
     }
     else if (g_input.mmbUnClicked)
     {
@@ -488,7 +488,7 @@ void SoundWidget::Advance()
     if (!NearlyEqual(m_hZoomRatio, m_targetHZoomRatio) ||
         !NearlyEqual(m_hOffset, m_targetHOffset))
     {
-        g_canSleep = false;
+        g_guiManager->m_canSleep = false;
     }
 
     AdvancePlaybackPos();
