@@ -235,9 +235,13 @@ void SoundWidget::Delete()
 
 void SoundWidget::Copy()
 {
-	BinaryDataWriter dataWriter;
-    m_sound->SaveWav(&dataWriter, m_selectionStart, m_selectionEnd);
-    g_clipboard.SetData(Clipboard::TYPE_WAV, dataWriter.m_data, dataWriter.m_dataLen);
+    int64_t selectionStart, selectionEnd;
+    GetSelectionBlock(&selectionStart, &selectionEnd);
+    if (selectionEnd > 0) {
+        BinaryDataWriter dataWriter;
+        m_sound->SaveWav(&dataWriter, selectionStart, selectionEnd);
+        g_clipboard.SetData(Clipboard::TYPE_WAV, dataWriter.m_data, dataWriter.m_dataLen);
+    }
 }
 
 

@@ -23,8 +23,8 @@ private:
     double m_targetHOffset;
     double m_playbackPos;       // This value smoothly tracks m_playbackIdx. The point is to hide the fact that m_playbackIdx is advanced in audio-buffer sized steps, which looks jerky when zoomed in.
 
-    int64_t m_selectionStart;
-    int64_t m_selectionEnd;        // Set to -1 if no selection.
+    int64_t m_selectionStart;   // These two can be in any order. Call GetSelectionBlock() to get a guarantee of start < end
+    int64_t m_selectionEnd;     // Set to -1 if no selection.
 
     void AdvanceSelection();
     void AdvancePlaybackPos();
