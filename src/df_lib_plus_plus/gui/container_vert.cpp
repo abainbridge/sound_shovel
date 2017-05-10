@@ -4,7 +4,7 @@
 // Project headers
 #include "andy_string.h"
 #include "gui/cursor_manager.h"
-#include "gui/gui_manager_base.h"
+#include "gui/gui_base.h"
 #include "gui/menu.h"
 #include "gui/widget_history.h"
 
@@ -64,7 +64,7 @@ void ContainerVert::AdvanceResizing()
 			(g_input.mouseY <= (y + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
-		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
+		    g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
             if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
@@ -110,7 +110,7 @@ void ContainerVert::AdvanceResizing()
     }
 
     if (m_resizingWidget)
-        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
+        g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
 
     if (setRectNeeded)
     {
@@ -146,7 +146,7 @@ void ContainerVert::Render()
 		if (w->m_hideState == HideStateHidden) continue;
 		if (stricmp(w->m_name, MENU_BAR_NAME) != 0)
 		{
-			g_guiManager->DrawFrame(w->m_left, w->m_top, w->m_width, w->m_height);
+			g_gui->DrawFrame(w->m_left, w->m_top, w->m_width, w->m_height);
 //			ClipRect cr(w->m_left, w->m_top, w->m_width, w->m_height); // TODO implement cliprect
 			w->Render();
 		}

@@ -1,5 +1,5 @@
 // Own header
-#include "gui_manager_base.h"
+#include "gui_base.h"
 
 // Project headers
 #include "preferences.h"
@@ -22,23 +22,23 @@
 #include "df_window.h"
 
 
-GuiManagerBase *g_guiManager = NULL;
+GuiBase *g_gui = NULL;
 
 
 // ****************************************************************************
-//  Class GuiManager
+//  Class GuiBase
 // ****************************************************************************
 
 void MouseUpdateHandler(int x, int y)
 {
-    if (g_guiManager)
+    if (g_gui)
     {
-        g_guiManager->m_cursorManager.Render(x, y);
+        g_gui->m_cursorManager.Render(x, y);
     }
 }
 
 
-GuiManagerBase::GuiManagerBase()
+GuiBase::GuiBase()
 :   m_modalWidget(NULL),
     m_previouslyFocussedWidget(NULL),
     m_focussedWidget(NULL),
@@ -64,7 +64,7 @@ GuiManagerBase::GuiManagerBase()
 }
 
 
-DfColour GuiManagerBase::GetColour(char const *name, DfColour const &defaultC)
+DfColour GuiBase::GetColour(char const *name, DfColour const &defaultC)
 {
     DfColour rv = defaultC;
 
@@ -77,7 +77,7 @@ DfColour GuiManagerBase::GetColour(char const *name, DfColour const &defaultC)
 }
 
 
-void GuiManagerBase::SetColours()
+void GuiBase::SetColours()
 {
     m_backgroundColour = GetColour("GuiWindowBackgroundColour", Colour(50,50,50));
 
@@ -102,19 +102,19 @@ void GuiManagerBase::SetColours()
 
 unsigned long __stdcall AboutProc(void *data)
 {
-    MessageDialog("About", g_guiManager->m_aboutString, MsgDlgTypeOk);
+    MessageDialog("About", g_gui->m_aboutString, MsgDlgTypeOk);
 
     return 0;
 }
 
 
-void GuiManagerBase::About()
+void GuiBase::About()
 {
     StartThread(AboutProc, NULL);
 }
 
 
-bool GuiManagerBase::StringToColour(char const *str, DfColour *col)
+bool GuiBase::StringToColour(char const *str, DfColour *col)
 {
     col->r = atoi(str);
     str = strchr(str, ',');
@@ -130,7 +130,7 @@ bool GuiManagerBase::StringToColour(char const *str, DfColour *col)
 }
 
 
-void GuiManagerBase::FillBackground(int x, int y, int w, int h, bool highlighted) const
+void GuiBase::FillBackground(int x, int y, int w, int h, bool highlighted) const
 {
     DrawOutlineBox(x, y, w, h, m_frameColour5);
     x++; y++;
@@ -139,7 +139,7 @@ void GuiManagerBase::FillBackground(int x, int y, int w, int h, bool highlighted
 }
 
 
-void GuiManagerBase::DrawFrame(int x, int y, int w, int h) const
+void GuiBase::DrawFrame(int x, int y, int w, int h) const
 {
     RectFill(g_window->bmp, x-3, y-3, w+8, 3, m_frameColour2);
     RectFill(g_window->bmp, x-3, y+h, w+8, 4, m_frameColour2);
@@ -148,7 +148,7 @@ void GuiManagerBase::DrawFrame(int x, int y, int w, int h) const
 }
 
 
-char *GuiManagerBase::ExecuteCommand(char const *object, char const *command, char const *arguments)
+char *GuiBase::ExecuteCommand(char const *object, char const *command, char const *arguments)
 {
     if (COMMAND_IS("About"))               About();
     else if (COMMAND_IS("Exit"))           RequestExit();
@@ -157,7 +157,7 @@ char *GuiManagerBase::ExecuteCommand(char const *object, char const *command, ch
 }
 
 
-void GuiManagerBase::SetRect(int x, int y, int w, int h)
+void GuiBase::SetRect(int x, int y, int w, int h)
 {
     if (x != m_left || y != m_top || m_width != w || m_height != h)
     {
@@ -176,13 +176,13 @@ void GuiManagerBase::SetRect(int x, int y, int w, int h)
 }
 
 
-Widget *GuiManagerBase::GetWidgetAtPos(int x, int y)
+Widget *GuiBase::GetWidgetAtPos(int x, int y)
 {
     return m_mainContainer->GetWidgetAtPos(x, y);
 }
 
 
-Widget *GuiManagerBase::GetWidgetByName(char const *name)
+Widget *GuiBase::GetWidgetByName(char const *name)
 {
     // Special case when looking for "CurrentDoc"
     if (m_focussedWidget)
@@ -196,19 +196,19 @@ Widget *GuiManagerBase::GetWidgetByName(char const *name)
 }
 
 
-void GuiManagerBase::Show(char const *widgetToShow)
+void GuiBase::Show(char const *widgetToShow)
 {
     m_mainContainer->Show(widgetToShow);
 }
 
 
-void GuiManagerBase::RequestExit()
+void GuiBase::RequestExit()
 {
     m_exitRequested = true;
 }
 
 
-void GuiManagerBase::SetFocussedWidget(Widget *w)
+void GuiBase::SetFocussedWidget(Widget *w)
 {
     m_focussedWidget = w;
     while (w != this)
@@ -219,12 +219,12 @@ void GuiManagerBase::SetFocussedWidget(Widget *w)
 }
 
 
-void GuiManagerBase::Advance()
+void GuiBase::Advance()
 {
     if (g_window->windowClosed)
     {
         g_window->windowClosed = false;
-        g_guiManager->RequestExit();
+        g_gui->RequestExit();
     }
 
     // g_commandSender.ProcessDeferredCommands();
@@ -278,7 +278,7 @@ void GuiManagerBase::Advance()
 }
 
 
-void GuiManagerBase::Render()
+void GuiBase::Render()
 {
     const int winW = g_window->bmp->width;
     const int winH = g_window->bmp->height;
@@ -314,7 +314,7 @@ void GuiManagerBase::Render()
 
     // Render the menu bar and any context menu
     Widget *menubar = GetWidgetByName(MENU_BAR_NAME);
-    g_guiManager->DrawFrame(menubar->m_left, menubar->m_top, menubar->m_width, menubar->m_height-2);
+    g_gui->DrawFrame(menubar->m_left, menubar->m_top, menubar->m_width, menubar->m_height-2);
     menubar->Render();
 
     if (m_modalWidget)
@@ -323,11 +323,11 @@ void GuiManagerBase::Render()
     g_tooltipManager.Render();
 
     // Cursor
-    g_guiManager->m_cursorManager.Render(g_input.mouseX, g_input.mouseY);
+    g_gui->m_cursorManager.Render(g_input.mouseX, g_input.mouseY);
 }
 
 
-void GuiManagerBase::SetModalWidget(Widget *w)
+void GuiBase::SetModalWidget(Widget *w)
 {
     if (w)
     {

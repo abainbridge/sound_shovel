@@ -4,7 +4,7 @@
 // Project headers
 #include "andy_string.h"
 #include "cursor_manager.h"
-#include "gui_manager_base.h"
+#include "gui_base.h"
 #include "widget_history.h"
 
 // Contrib headers
@@ -44,7 +44,7 @@ void ContainerHori::AdvanceResizing()
 			(g_input.mouseX <= (x + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
-		    g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
+		    g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
             if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
@@ -90,7 +90,7 @@ void ContainerHori::AdvanceResizing()
     }
 
     if (m_resizingWidget)
-        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
+        g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
 
     if (setRectNeeded)
     {
@@ -122,7 +122,7 @@ void ContainerHori::Render()
 	for (int i = 0; i < m_widgets.Size(); ++i)
 	{
 		Widget *w = m_widgets[i];		
-		g_guiManager->DrawFrame(w->m_left, w->m_top, w->m_width, w->m_height);
+		g_gui->DrawFrame(w->m_left, w->m_top, w->m_width, w->m_height);
 //		ClipRect cr(w->m_left, w->m_top, w->m_width, w->m_height); // TODO implement cliprect
 		m_widgets[i]->Render();
 	}

@@ -1,13 +1,13 @@
 #pragma once
 
 
-#include "gui/gui_manager_base.h"
+#include "gui/gui_base.h"
 
 
-class AppGuiManager: public GuiManagerBase
+class AppGui: public GuiBase
 {
 public:
-	AppGuiManager();
+	AppGui();
     void Initialise();
 
     // GuiManagerBase overrides:

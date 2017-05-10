@@ -21,7 +21,7 @@ weird:
 #include "df_lib_plus_plus/filesys_utils.h"
 #include "df_lib_plus_plus/text_stream_readers.h"
 #include "gui/drawing_primitives.h"
-#include "gui/gui_manager_base.h"
+#include "gui/gui_base.h"
 #include "gui/keyboard_shortcuts.h"
 
 // Contrib headers
@@ -41,7 +41,7 @@ weird:
 #define CONFIG_FILE_NAME		"data/config_menus.txt"
 
 
-#define g_propFont g_guiManager->m_propFont
+#define g_propFont g_gui->m_propFont
 
 
 // ****************************************************************************
@@ -69,7 +69,7 @@ void MenuItem::Execute()
 {
 	if (m_objectName == NULL) return;
 
-    MenuBar *menuBar = (MenuBar*)g_guiManager->GetWidgetByName(MENU_BAR_NAME);
+    MenuBar *menuBar = (MenuBar*)g_gui->GetWidgetByName(MENU_BAR_NAME);
 	menuBar->ClearAllState();
 	g_commandSender.SendCommandNoRV("MenuItem", m_objectName, m_commandName, m_arguments);
 }
@@ -151,9 +151,9 @@ int Menu::GetHeightInPixels()
 void Menu::Advance()
 {
 	// Tell the rest of the app that we are capturing mouse clicks
-	if (g_guiManager->m_cursorManager.m_captured == NULL)
+	if (g_gui->m_cursorManager.m_captured == NULL)
 	{
-		g_guiManager->m_cursorManager.m_captured = this;
+		g_gui->m_cursorManager.m_captured = this;
 	}
 
 	// If key up/down, set new highlighted item
@@ -184,7 +184,7 @@ void Menu::Advance()
 			int itemNum = IsMouseOverItem();
 			if (itemNum != -1 && itemNum != m_highlightedItem)
 			{
-                g_guiManager->m_canSleep = false;
+                g_gui->m_canSleep = false;
 				m_highlightedItem = itemNum;
 			}
 		}
@@ -209,7 +209,7 @@ void Menu::Advance()
 	if (m_highlightedItem != -1 &&
 		(g_input.keyDowns[KEY_ENTER] || g_input.lmbUnClicked))
 	{
-        g_guiManager->m_cursorManager.m_captured = NULL;
+        g_gui->m_cursorManager.m_captured = NULL;
 		MenuItem *item = m_items[m_highlightedItem];
 		item->Execute();
 	}
@@ -226,15 +226,15 @@ void Menu::Render()
 	int y = m_top;
 
 	// Draw the menu background
-	DrawRaisedBox(x,   y,   width + 2, height + 2, g_guiManager->m_frameColour1, g_guiManager->m_frameColour4);
-	DrawFilledBox(x+1, y+1, width, height, g_guiManager->m_frameColour2);
+	DrawRaisedBox(x,   y,   width + 2, height + 2, g_gui->m_frameColour1, g_gui->m_frameColour4);
+	DrawFilledBox(x+1, y+1, width, height, g_gui->m_frameColour2);
 
 	// Set mouse cursor if mouse is over menu area
 	if (g_input.mouseX > x && g_input.mouseX < (x + width + 1))
 	{
 		if (g_input.mouseY > y && g_input.mouseY < (y + height + 1))
 		{
-			g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
+			g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
 		}
 	}
 
@@ -244,7 +244,7 @@ void Menu::Render()
 	// Highlight the selected item
 	if (m_highlightedItem >= 0 && m_highlightedItem < m_items.Size())
 	{
-		DrawFilledBox(x + 2, m_items[m_highlightedItem]->m_yPos + y, width - 3, ySize, g_guiManager->m_frameColour1);
+		DrawFilledBox(x + 2, m_items[m_highlightedItem]->m_yPos + y, width - 3, ySize, g_gui->m_frameColour1);
 	}
 
 	// Draw each menu item
@@ -258,7 +258,7 @@ void Menu::Render()
 			// Not a separator
 
 			// Item label text
-			DrawTextSimple(g_propFont, g_guiManager->m_textColourFrame, g_window->bmp, x + 10, item->m_yPos + y, item->m_label);
+			DrawTextSimple(g_propFont, g_gui->m_textColourFrame, g_window->bmp, x + 10, item->m_yPos + y, item->m_label);
 
 			if (item->m_hotKeyIndex >= 0)
 			{
@@ -266,20 +266,20 @@ void Menu::Render()
 				int len = GetTextWidth(g_propFont, item->m_label + item->m_hotKeyIndex, 1);
 
 				// Underline hot key
-				DrawHLine(x + 10 + offset, item->m_yPos + y + g_propFont->charHeight, len, g_guiManager->m_textColourFrame);
+				DrawHLine(x + 10 + offset, item->m_yPos + y + g_propFont->charHeight, len, g_gui->m_textColourFrame);
 			}
 
 			// Shortcut
 			if (item->m_shortcut)
 			{
-				DrawTextRight(g_propFont, g_guiManager->m_textColourFrame, g_window->bmp, x + width - 7, item->m_yPos + y, item->m_shortcut);
+				DrawTextRight(g_propFont, g_gui->m_textColourFrame, g_window->bmp, x + width - 7, item->m_yPos + y, item->m_shortcut);
 			}
 		}
 		else
 		{
 			// Item is a separator
-			DrawHLine(x + 7, item->m_yPos + y + 3, width - 10, g_guiManager->m_frameColour4);
-			DrawHLine(x + 7, item->m_yPos + y + 4, width - 10, g_guiManager->m_frameColour1);
+			DrawHLine(x + 7, item->m_yPos + y + 3, width - 10, g_gui->m_frameColour4);
+			DrawHLine(x + 7, item->m_yPos + y + 4, width - 10, g_gui->m_frameColour1);
 		}
 	}
 }
@@ -391,7 +391,7 @@ void Menu::SetRect(int x/* =-1 */, int y/* =-1 */, int w/* =-1 */, int h/* =-1 *
     m_width = GetWidthInPixels();
     m_height = GetHeightInPixels();
 
-    int maxY = g_guiManager->m_height - m_height;
+    int maxY = g_gui->m_height - m_height;
     if (y > maxY)
     {
         m_top = maxY;
@@ -439,7 +439,7 @@ void MenuBar::LoadConfigFile(char const *filename)
 
 		MenuItem *item = new MenuItem;
 		Menu *menu = NULL;
-		MenuBar *menuBar = (MenuBar*)g_guiManager->GetWidgetByName(MENU_BAR_NAME);
+		MenuBar *menuBar = (MenuBar*)g_gui->GetWidgetByName(MENU_BAR_NAME);
 
 		while (in.TokenAvailable())
 		{
@@ -681,7 +681,7 @@ void MenuBar::AdvanceNoHighlight()
 	Menu *newHighlightedMenu = GetMenuTitleUnderMouseCursor();
 	if (newHighlightedMenu)
 	{
-		g_guiManager->m_canSleep = false;
+		g_gui->m_canSleep = false;
 		m_highlightedMenu = newHighlightedMenu;
 	}
 }
@@ -704,10 +704,10 @@ void MenuBar::AdvanceWithHighlight()
 
 	Menu *const menu = GetMenuTitleUnderMouseCursor();
 	if (menu && menu != m_highlightedMenu)
-        g_guiManager->m_canSleep = false;
+        g_gui->m_canSleep = false;
 
 	// Is keyboard active
-	if (g_guiManager->m_focussedWidget == this)
+	if (g_gui->m_focussedWidget == this)
 	{
 		// Have cursor left/right been pressed?
 		int menuIndex = m_menus.FindData(m_highlightedMenu);
@@ -741,7 +741,7 @@ void MenuBar::AdvanceWithHighlight()
 	bool mouseOverDisplayedMenu = false;
 	if (m_displayed) mouseOverDisplayedMenu = m_highlightedMenu->IsMouseOver();
 
-	if ((g_guiManager->m_focussedWidget == this && g_input.keyUps[KEY_ALT] && m_altState == 1) ||
+	if ((g_gui->m_focussedWidget == this && g_input.keyUps[KEY_ALT] && m_altState == 1) ||
 		(g_input.lmbClicked && menu == NULL && !mouseOverDisplayedMenu) ||
 		(g_input.lmbClicked && m_displayed && menu == m_highlightedMenu))
 	{
@@ -751,7 +751,7 @@ void MenuBar::AdvanceWithHighlight()
 
     if (g_input.keyUps[KEY_ALT] &&
         m_altState == 1 &&
-        g_guiManager->m_focussedWidget != this)
+        g_gui->m_focussedWidget != this)
 	{
 		GrabFocus();
 		m_highlightedMenu = m_menus[0];
@@ -778,7 +778,7 @@ void MenuBar::AdvanceHighlightNoDisplay()
 	}
 
 	// Select a menu to display if a key has been pressed
-    if (g_guiManager->m_focussedWidget == this)
+    if (g_gui->m_focussedWidget == this)
     {
         for (int i = 0; i < g_input.numKeysTyped; i++)
 	    {
@@ -805,26 +805,26 @@ void MenuBar::AdvanceHighlightNoDisplay()
 
 void MenuBar::GrabFocus()
 {
-	if (g_guiManager->m_focussedWidget != this)
+	if (g_gui->m_focussedWidget != this)
 	{
-		m_oldHighlightedWidget = g_guiManager->m_focussedWidget;
-		g_guiManager->m_focussedWidget = this;
+		m_oldHighlightedWidget = g_gui->m_focussedWidget;
+		g_gui->m_focussedWidget = this;
 	}
 }
 
 
 void MenuBar::ClearMenuBarState()
 {
-	if (g_guiManager->m_focussedWidget == this)
+	if (g_gui->m_focussedWidget == this)
 	{
-		g_guiManager->m_focussedWidget = m_oldHighlightedWidget;
+		g_gui->m_focussedWidget = m_oldHighlightedWidget;
 	}
 
-    if (g_guiManager->m_cursorManager.m_captured == this ||
-        g_guiManager->m_cursorManager.m_captured == m_contextMenu ||
-        g_guiManager->m_cursorManager.m_captured == m_highlightedMenu)
+    if (g_gui->m_cursorManager.m_captured == this ||
+        g_gui->m_cursorManager.m_captured == m_contextMenu ||
+        g_gui->m_cursorManager.m_captured == m_highlightedMenu)
 	{
-		g_guiManager->m_cursorManager.m_captured = NULL;
+		g_gui->m_cursorManager.m_captured = NULL;
 	}
 
     m_displayed = false;
@@ -871,28 +871,28 @@ void MenuBar::Render()
 	// Set mouse pointer to CursorMain if it is over the menu bar
 	if (g_input.mouseY < m_height)
 	{
-		g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
+		g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
 	}
 
 	// Draw the menu bar background
-	DrawFilledBox(m_left, m_top, m_width, m_height, g_guiManager->m_frameColour2);
+	DrawFilledBox(m_left, m_top, m_width, m_height, g_gui->m_frameColour2);
 
     // Draw the selection box around the highlighted menu
     if (m_highlightedMenu)
     {
         DrawFilledBox(m_highlightedMenu->m_left - HIGHLIGHT_BOX_BORDER, 2,
             (m_highlightedMenu->m_right - m_highlightedMenu->m_left) + HIGHLIGHT_BOX_BORDER * 2, m_height + 3,
-            g_guiManager->m_frameColour4);
+            g_gui->m_frameColour4);
     }
 
     // Draw the menu titles
 	for (int i = 0; i < m_menus.Size(); ++i)
 	{
 		Menu *menu = m_menus[i];
-		DfColour underlineColour = g_guiManager->m_textColourFrame;
+		DfColour underlineColour = g_gui->m_textColourFrame;
 
 		// Title text
-        DrawTextSimple(g_propFont, g_guiManager->m_textColourNormal, g_window->bmp, menu->m_left, 3, menu->m_name);
+        DrawTextSimple(g_propFont, g_gui->m_textColourNormal, g_window->bmp, menu->m_left, 3, menu->m_name);
 
         // Underline first character of title text
 		int width = GetTextWidth(g_propFont, menu->m_name, 1);
@@ -911,7 +911,7 @@ void MenuBar::Render()
         m_contextMenu->Render();
 
 	// Render the FPS meter
-    DrawTextRight(g_propFont, g_guiManager->m_textColourFrame, g_window->bmp, g_window->bmp->width - 5, y, "FPS: %d", g_window->fps);
+    DrawTextRight(g_propFont, g_gui->m_textColourFrame, g_window->bmp, g_window->bmp->width - 5, y, "FPS: %d", g_window->fps);
 }
 
 

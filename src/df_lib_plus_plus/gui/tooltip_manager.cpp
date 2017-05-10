@@ -1,7 +1,7 @@
 #include "tooltip_manager.h"
 
 #include "drawing_primitives.h"
-#include "gui_manager_base.h"
+#include "gui_base.h"
 #include "menu.h"
 
 #include "df_time.h"
@@ -30,8 +30,8 @@ void TooltipManager::Advance()
 
 void TooltipManager::Render()
 {
-    Widget *menu = g_guiManager->GetWidgetByName(MENU_BAR_NAME);
-    if (g_guiManager->m_focussedWidget == menu)
+    Widget *menu = g_gui->GetWidgetByName(MENU_BAR_NAME);
+    if (g_gui->m_focussedWidget == menu)
         return;
 
 	if (m_buf[0] != '\0')
@@ -41,8 +41,8 @@ void TooltipManager::Render()
 		{
 			int h = g_defaultFont->charHeight;
 			int w = GetTextWidth(g_defaultFont, m_buf);
-			RectFill(g_window->bmp, m_x, m_y, w, h, g_guiManager->m_backgroundColour);
-			DrawOutlineBox(m_x-1, m_y-1, w+2, h+2, g_guiManager->m_frameColour4);
+			RectFill(g_window->bmp, m_x, m_y, w, h, g_gui->m_backgroundColour);
+			DrawOutlineBox(m_x-1, m_y-1, w+2, h+2, g_gui->m_frameColour4);
             DrawTextSimple(g_defaultFont, m_col, g_window->bmp, m_x, m_y, m_buf);
 		}
 	}

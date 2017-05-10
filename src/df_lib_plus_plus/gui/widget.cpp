@@ -3,7 +3,7 @@
 
 // Project headers
 #include "drawing_primitives.h"
-#include "gui_manager_base.h"
+#include "gui_base.h"
 #include "widget_history.h"
 #include "andy_string.h"
 #include "string_utils.h"
@@ -115,7 +115,7 @@ void Widget::ToggleHide()
 	switch (m_hideState)
 	{
 	case HideStateHidden:
-        g_guiManager->Show(m_name);
+        g_gui->Show(m_name);
 		break;
 	case HideStateShown:
 		Hide(); // TODO: make this call g_guiManager->Hide, like Show does
@@ -164,9 +164,9 @@ char *Widget::ExecuteCommand(char const *object, char const *command, char const
 
 void Widget::DrawFilledBoxHoriGrad(int x, int y, int w, int h)
 {
-	DfColour const &col1 = g_guiManager->m_frameColour1;
-	DfColour const &col3 = g_guiManager->m_frameColour3;
-	DfColour const &col5 = g_guiManager->m_frameColour5;
+	DfColour const &col1 = g_gui->m_frameColour1;
+	DfColour const &col3 = g_gui->m_frameColour3;
+	DfColour const &col5 = g_gui->m_frameColour5;
 	DfColour const &col6 = col5 - Colour(30,30,30,0);
 	
 	DrawOutlineBox(x, y, w, h, col6);
@@ -191,9 +191,9 @@ void Widget::DrawFilledBoxHoriGrad(int x, int y, int w, int h)
 
 void Widget::DrawFilledBoxVertGrad(int x, int y, int w, int h)
 {
-	DfColour const &col1 = g_guiManager->m_frameColour1;
-	DfColour const &col3 = g_guiManager->m_frameColour3;
-	DfColour const &col5 = g_guiManager->m_frameColour5;
+	DfColour const &col1 = g_gui->m_frameColour1;
+	DfColour const &col3 = g_gui->m_frameColour3;
+	DfColour const &col5 = g_gui->m_frameColour5;
 	DfColour const &col6 = col5 - Colour(30,30,30,0);
 	
 	DrawOutlineBox(x, y, w, h, col6);

@@ -2,7 +2,7 @@
 #include "status_bar.h"
 
 // Project headers
-#include "gui_manager_base.h"
+#include "gui_base.h"
 
 #include "../preferences.h"
 
@@ -110,15 +110,15 @@ void StatusBar::Render()
 		if (m_messageIsError)
 			RectFill(g_window->bmp, x, y, w, h, Colour(200,0,0));
 		else
-			RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour3);
+			RectFill(g_window->bmp, x, y, w, h, g_gui->m_frameColour3);
 		DrawTextSimple(g_defaultFont, g_colourWhite, g_window->bmp, x + 10, y, m_messageBuffer);
 		return;
 	}
 
 	// Now the usual status bar stuff
-	RectFill(g_window->bmp, x, y, w, h, g_guiManager->m_frameColour2);
-    DrawTextSimple(g_guiManager->m_propFont, g_guiManager->m_textColourFrame, g_window->bmp, x + 5, y, m_leftBuffer);
-    DrawTextRight(g_guiManager->m_propFont, g_guiManager->m_textColourFrame, g_window->bmp, x + w - 5, y, m_rightBuffer);
+	RectFill(g_window->bmp, x, y, w, h, g_gui->m_frameColour2);
+    DrawTextSimple(g_gui->m_propFont, g_gui->m_textColourFrame, g_window->bmp, x + 5, y, m_leftBuffer);
+    DrawTextRight(g_gui->m_propFont, g_gui->m_textColourFrame, g_window->bmp, x + w - 5, y, m_rightBuffer);
 }
 
 

@@ -1,5 +1,5 @@
 // Own header
-#include "app_gui_manager.h"
+#include "app_gui.h"
 
 // Project headers
 #include "main.h"
@@ -13,8 +13,8 @@
 #include "df_window.h"
 
 
-AppGuiManager::AppGuiManager()
-    : GuiManagerBase()
+AppGui::AppGui()
+    : GuiBase()
 {
     m_aboutString =
         "               " APPLICATION_NAME "\n\n"
@@ -24,7 +24,7 @@ AppGuiManager::AppGuiManager()
 }
 
 
-void AppGuiManager::Initialise()
+void AppGui::Initialise()
 {
     //     DArray<String> files = FileDialogOpen();
     //     if (files.Size() == 0)
@@ -56,7 +56,7 @@ void AppGuiManager::Initialise()
 }
 
 
-void AppGuiManager::Advance()
+void AppGui::Advance()
 {
     SoundWidget *sv = (SoundWidget*)GetWidgetByName(SOUND_VIEW_NAME);
     if (sv)
@@ -68,5 +68,5 @@ void AppGuiManager::Advance()
         g_statusBar->SetRightString("Zoom: %.0f", sv->m_hZoomRatio);
     }
 
-    GuiManagerBase::Advance();
+    GuiBase::Advance();
 }

@@ -2,7 +2,7 @@
 #include "sound_widget.h"
 
 // Project headers
-#include "app_gui_manager.h"
+#include "app_gui.h"
 #include "main.h"
 #include "sound.h"
 #include "sound_channel.h"
@@ -42,7 +42,7 @@ static bool NearlyEqual(double a, double b)
 
 void SoundWidget::AdvanceSelection()
 {
-    if (g_guiManager->m_focussedWidget == this && IsMouseInBounds())
+    if (g_gui->m_focussedWidget == this && IsMouseInBounds())
     {
         if (g_input.lmbClicked)
         {
@@ -55,7 +55,7 @@ void SoundWidget::AdvanceSelection()
     if (m_selecting) {
         if (g_input.lmb) {
             m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
-            g_guiManager->m_canSleep = false;
+            g_gui->m_canSleep = false;
         }
         else {
             m_selecting = false;
@@ -73,7 +73,7 @@ void SoundWidget::AdvancePlaybackPos()
     if (NearlyEqual(pixelDistanceToTarget, 0.0))
         return;
 
-    g_guiManager->m_canSleep = false;
+    g_gui->m_canSleep = false;
     float advanceTime = g_window->advanceTime;
     if (advanceTime > 0.1)
     {
@@ -364,7 +364,7 @@ void SoundWidget::Advance()
     // and scroll actions appear to start with a jolt, which looks 
     // unpleasant. Simply setting a fake small advanceTime for frames that
     // start in sleep fixes this.
-    if (g_guiManager->m_canSleep)
+    if (g_gui->m_canSleep)
         advanceTime = 0.01;
 
 
@@ -379,10 +379,10 @@ void SoundWidget::Advance()
 
     if (g_input.mmb)
     {
-        g_guiManager->m_cursorManager.RequestCursorType(CursorManager::CursorDragBoth);
+        g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragBoth);
         m_hOffset -= g_input.mouseVelX * m_hZoomRatio;
         m_targetHOffset = m_hOffset - g_input.mouseVelX * m_hZoomRatio;
-        g_guiManager->m_canSleep = false;
+        g_gui->m_canSleep = false;
     }
     else if (g_input.mmbUnClicked)
     {
@@ -499,7 +499,7 @@ void SoundWidget::Advance()
     if (!NearlyEqual(m_hZoomRatio, m_targetHZoomRatio) ||
         !NearlyEqual(m_hOffset, m_targetHOffset))
     {
-        g_guiManager->m_canSleep = false;
+        g_gui->m_canSleep = false;
     }
 
     AdvancePlaybackPos();

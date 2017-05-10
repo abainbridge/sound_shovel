@@ -2,7 +2,7 @@
 #include "main.h"
 
 // Project headers
-#include "gui/app_gui_manager.h"
+#include "gui/app_gui.h"
 #include "sound_system.h"
 
 // Contrib headers
@@ -31,27 +31,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     g_soundSystem = new SoundSystem;
 
     g_widgetHistory = new WidgetHistory("widget_history.txt");  // TODO - re-introduce the system_info module and make this filename be in the user's home folder.
-    g_guiManager = new AppGuiManager;
-    g_guiManager->Initialise();
+    g_gui = new AppGui;
+    g_gui->Initialise();
 
     while (1)
     {
-        g_guiManager->m_canSleep = true;
-        for (int i = 0; i < 500 && g_guiManager->m_canSleep; i++)
+        g_gui->m_canSleep = true;
+        for (int i = 0; i < 500 && g_gui->m_canSleep; i++)
         {
             DfSleepMillisec(1);
 
             InputManagerAdvance();
-            g_guiManager->Advance();
+            g_gui->Advance();
 
-            if (g_guiManager->m_exitAtEndOfFrame)
+            if (g_gui->m_exitAtEndOfFrame)
                 return 0;
 
             g_soundSystem->Advance();
         }
 
         ClearBitmap(g_window->bmp, Colour(44, 51, 59));
-        g_guiManager->Render();
+        g_gui->Render();
 
         UpdateWin();
     }

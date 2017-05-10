@@ -7,7 +7,7 @@
 //#include "system_info.h"
 #include "text_stream_readers.h"
 #include "gui/command.h"
-#include "gui/gui_manager_base.h"
+#include "gui/gui_base.h"
 
 // Contrib headers
 #include "df_input.h"
@@ -261,7 +261,7 @@ void KeyboardShortcutManager::Advance()
 			// an acceptable match for edit box commands because it has more than zero
 			// edit boxes. (We use this to give the find dialog a chance to send the command
 			// to the appropriate edit box.)
-			Widget *focusMatch = g_guiManager->m_focussedWidget->GetWidgetByName(shortcut->m_focusRequired);
+			Widget *focusMatch = g_gui->m_focussedWidget->GetWidgetByName(shortcut->m_focusRequired);
 			if (focusMatch)
 			{
                 if (!(shortcut->m_flags & KeyboardShortcut::PASS_THROUGH))
@@ -304,7 +304,7 @@ void KeyboardShortcutManager::Advance()
 	{
         char key[] = { g_input.keysTyped[i], '\0' };
         g_commandSender.SendCommandNoRV("KeyboardShortcutManager",
-                                        g_guiManager->m_focussedWidget->m_name,
+                                        g_gui->m_focussedWidget->m_name,
                                         "insert_text",
                                         key);
 	}

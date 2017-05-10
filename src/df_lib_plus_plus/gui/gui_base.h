@@ -17,7 +17,7 @@ class ContainerVert;
 typedef struct _DfFont DfFont;
 
 
-class GuiManagerBase: public Widget
+class GuiBase: public Widget
 {
 private:
 	bool m_exitRequested;
@@ -57,7 +57,7 @@ private:
 	void		SetColours();
 
 public:
-	GuiManagerBase();
+	GuiBase();
     virtual void Initialise() = 0;  // Implement this in a derived class and create and populate m_mainContainer from there.
 
 	void		About();
@@ -81,4 +81,4 @@ public:
 };
 
 
-extern GuiManagerBase *g_guiManager;
+extern GuiBase *g_gui;
