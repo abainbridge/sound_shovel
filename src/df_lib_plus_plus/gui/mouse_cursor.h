@@ -1,18 +1,17 @@
 #pragma once
 
 
-// ***************************************
-// Manages the bitmap for the mouse cursor
-// ***************************************
+// ***********************************************
+// Mainly controls the bitmap for the mouse cursor
+// ***********************************************
 
 
 class Widget;
 
 
-class CursorManager
+class MouseCursor
 {
 public:
-	// Cursor type enum
 	enum
 	{
 		CursorMain,
@@ -29,7 +28,7 @@ private:
 	int		m_type;				// One of CursorMain, CursorText etc
 
 public:
-	CursorManager();
+	MouseCursor();
 	void Advance();
 	void RequestCursorType(int type);
 	void Render(int x, int y);

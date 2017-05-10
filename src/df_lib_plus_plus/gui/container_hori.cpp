@@ -3,7 +3,7 @@
 
 // Project headers
 #include "andy_string.h"
-#include "cursor_manager.h"
+#include "mouse_cursor.h"
 #include "gui_base.h"
 #include "widget_history.h"
 
@@ -44,7 +44,7 @@ void ContainerHori::AdvanceResizing()
 			(g_input.mouseX <= (x + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
-		    g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
+		    g_gui->m_mouseCursor.RequestCursorType(MouseCursor::CursorDragHori);
             if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
@@ -90,7 +90,7 @@ void ContainerHori::AdvanceResizing()
     }
 
     if (m_resizingWidget)
-        g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragHori);
+        g_gui->m_mouseCursor.RequestCursorType(MouseCursor::CursorDragHori);
 
     if (setRectNeeded)
     {

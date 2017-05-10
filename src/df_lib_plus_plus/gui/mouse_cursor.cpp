@@ -1,5 +1,5 @@
 // Own header
-#include "cursor_manager.h"
+#include "mouse_cursor.h"
 
 // Contrib headers
 #include "df_input.h"
@@ -12,14 +12,14 @@
 #include <stdlib.h>
 
 
-CursorManager::CursorManager()
+MouseCursor::MouseCursor()
 :	m_captured(NULL),
 	m_type(CursorMain)
 {
 }
 
 
-void CursorManager::Advance()
+void MouseCursor::Advance()
 {
 	if (g_input.lmbUnClicked) 
 		m_captured = NULL;
@@ -28,14 +28,14 @@ void CursorManager::Advance()
 }
 
 
-void CursorManager::RequestCursorType(int type)
+void MouseCursor::RequestCursorType(int type)
 {
 	if (!m_captured && type != m_type)
 		m_type = type;
 }
 
 
-void CursorManager::Render(int x, int y)
+void MouseCursor::Render(int x, int y)
 {
     static char *CURSOR_NAMES[] = { IDC_ARROW, IDC_IBEAM, IDC_SIZEWE, IDC_SIZENS, IDC_SIZEALL };
     SetCursor(LoadCursor(NULL, CURSOR_NAMES[m_type]));

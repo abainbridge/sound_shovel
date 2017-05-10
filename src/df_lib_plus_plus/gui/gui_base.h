@@ -5,7 +5,7 @@
 #include "df_colour.h"
 
 // Project headers
-#include "cursor_manager.h"
+#include "mouse_cursor.h"
 #include "widget.h"
 
 
@@ -42,7 +42,7 @@ public:
 
     DfFont *m_propFont;    // Proportional width font used by Menus, status bar etc.
 
-	CursorManager m_cursorManager;
+	MouseCursor m_mouseCursor;
 	Widget *m_focussedWidget;
 	ContainerVert *m_mainContainer;
 	bool m_exitAtEndOfFrame;	// True if something has requested that the application quit

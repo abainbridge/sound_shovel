@@ -3,7 +3,7 @@
 
 // Project headers
 #include "andy_string.h"
-#include "gui/cursor_manager.h"
+#include "gui/mouse_cursor.h"
 #include "gui/gui_base.h"
 #include "gui/menu.h"
 #include "gui/widget_history.h"
@@ -64,7 +64,7 @@ void ContainerVert::AdvanceResizing()
 			(g_input.mouseY <= (y + WIDGET_SPACER + 1)) &&
 			w->m_growable && nextW->m_growable && nextW->m_hideState == HideStateShown)
 	    {
-		    g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
+		    g_gui->m_mouseCursor.RequestCursorType(MouseCursor::CursorDragVert);
             if (g_input.lmbClicked)
 		    {
                 m_resizingWidget = w;
@@ -110,7 +110,7 @@ void ContainerVert::AdvanceResizing()
     }
 
     if (m_resizingWidget)
-        g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorDragVert);
+        g_gui->m_mouseCursor.RequestCursorType(MouseCursor::CursorDragVert);
 
     if (setRectNeeded)
     {

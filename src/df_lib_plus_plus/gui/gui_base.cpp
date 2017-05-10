@@ -33,7 +33,7 @@ void MouseUpdateHandler(int x, int y)
 {
     if (g_gui)
     {
-        g_gui->m_cursorManager.Render(x, y);
+        g_gui->m_mouseCursor.Render(x, y);
     }
 }
 
@@ -241,7 +241,7 @@ void GuiBase::Advance()
     m_exitRequested = false;
 
     // Update cursor bitmap
-    m_cursorManager.Advance();
+    m_mouseCursor.Advance();
 
     if (m_modalWidget)
     {
@@ -323,7 +323,7 @@ void GuiBase::Render()
     g_tooltipManager.Render();
 
     // Cursor
-    g_gui->m_cursorManager.Render(g_input.mouseX, g_input.mouseY);
+    g_gui->m_mouseCursor.Render(g_input.mouseX, g_input.mouseY);
 }
 
 

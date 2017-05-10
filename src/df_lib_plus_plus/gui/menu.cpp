@@ -151,9 +151,9 @@ int Menu::GetHeightInPixels()
 void Menu::Advance()
 {
 	// Tell the rest of the app that we are capturing mouse clicks
-	if (g_gui->m_cursorManager.m_captured == NULL)
+	if (g_gui->m_mouseCursor.m_captured == NULL)
 	{
-		g_gui->m_cursorManager.m_captured = this;
+		g_gui->m_mouseCursor.m_captured = this;
 	}
 
 	// If key up/down, set new highlighted item
@@ -209,7 +209,7 @@ void Menu::Advance()
 	if (m_highlightedItem != -1 &&
 		(g_input.keyDowns[KEY_ENTER] || g_input.lmbUnClicked))
 	{
-        g_gui->m_cursorManager.m_captured = NULL;
+        g_gui->m_mouseCursor.m_captured = NULL;
 		MenuItem *item = m_items[m_highlightedItem];
 		item->Execute();
 	}
@@ -234,7 +234,7 @@ void Menu::Render()
 	{
 		if (g_input.mouseY > y && g_input.mouseY < (y + height + 1))
 		{
-			g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
+			g_gui->m_mouseCursor.RequestCursorType(MouseCursor::CursorMain);
 		}
 	}
 
@@ -820,11 +820,11 @@ void MenuBar::ClearMenuBarState()
 		g_gui->m_focussedWidget = m_oldHighlightedWidget;
 	}
 
-    if (g_gui->m_cursorManager.m_captured == this ||
-        g_gui->m_cursorManager.m_captured == m_contextMenu ||
-        g_gui->m_cursorManager.m_captured == m_highlightedMenu)
+    if (g_gui->m_mouseCursor.m_captured == this ||
+        g_gui->m_mouseCursor.m_captured == m_contextMenu ||
+        g_gui->m_mouseCursor.m_captured == m_highlightedMenu)
 	{
-		g_gui->m_cursorManager.m_captured = NULL;
+		g_gui->m_mouseCursor.m_captured = NULL;
 	}
 
     m_displayed = false;
@@ -871,7 +871,7 @@ void MenuBar::Render()
 	// Set mouse pointer to CursorMain if it is over the menu bar
 	if (g_input.mouseY < m_height)
 	{
-		g_gui->m_cursorManager.RequestCursorType(CursorManager::CursorMain);
+		g_gui->m_mouseCursor.RequestCursorType(MouseCursor::CursorMain);
 	}
 
 	// Draw the menu bar background
