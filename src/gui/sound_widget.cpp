@@ -48,11 +48,17 @@ void SoundWidget::AdvanceSelection()
         {
             m_selectionStart = GetSampleIndexFromScreenPos(g_input.mouseX);
             m_selectionEnd = -1;
+            m_selecting = true;
         }
-        else if (g_input.lmb)
-        {
+    }
+
+    if (m_selecting) {
+        if (g_input.lmb) {
             m_selectionEnd = GetSampleIndexFromScreenPos(g_input.mouseX);
             g_guiManager->m_canSleep = false;
+        }
+        else {
+            m_selecting = false;
         }
     }
 }
@@ -166,6 +172,7 @@ SoundWidget::SoundWidget(Widget *parent)
     Open("c:/users/andy/desktop/andante.wav");
 //     m_selectionStart = 2e6;
 //     m_selectionEnd = 4e6;
+    m_selecting = false;
 
     g_soundSystem->PlaySound(this);
 }

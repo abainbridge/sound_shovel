@@ -25,6 +25,7 @@ private:
 
     int64_t m_selectionStart;   // These two can be in any order. Call GetSelectionBlock() to get a guarantee of start < end
     int64_t m_selectionEnd;     // Set to -1 if no selection.
+    bool m_selecting;           // True if the user is currently has LMB held to create a selection block.
 
     void AdvanceSelection();
     void AdvancePlaybackPos();
