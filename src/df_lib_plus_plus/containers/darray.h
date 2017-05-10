@@ -21,11 +21,12 @@ class DArray
 protected:
     unsigned m_capacity;        // Size of m_array.
     unsigned m_size;            // Number of valid items in m_array.
-    T       *m_array;
 
     inline void Grow() { SetCapacity(1 + (unsigned)(m_capacity * 1.5)); }
 
 public:
+    T       *m_array;
+
     DArray();
     DArray(DArray <T> const &other);
     ~DArray() { Empty(); }
