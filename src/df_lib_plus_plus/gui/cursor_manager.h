@@ -1,5 +1,4 @@
-#ifndef INCLUDED_CURSOR_H
-#define INCLUDED_CURSOR_H
+#pragma once
 
 
 // ***************************************
@@ -35,6 +34,3 @@ public:
 	void RequestCursorType(int type);
 	void Render(int x, int y);
 };
-
-
-#endif
