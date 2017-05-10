@@ -63,8 +63,9 @@ void AppGuiManager::Advance()
     {
         int64_t startIdx, endIdx;
         sv->GetSelectionBlock(&startIdx, &endIdx);
-        g_statusBar->SetLeftString("Pos: %.0f", (double)startIdx);
-        g_statusBar->SetRightString("Zoom: %.1f", sv->m_hZoomRatio);
+        g_statusBar->SetLeftString("Pos: %.0f   Selection Size: %.0f", 
+            (double)startIdx, (double)endIdx - startIdx + 1);
+        g_statusBar->SetRightString("Zoom: %.0f", sv->m_hZoomRatio);
     }
 
     GuiManagerBase::Advance();
