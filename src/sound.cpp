@@ -87,7 +87,7 @@ void Sound::Delete(int64_t startIdx, int64_t endIdx)
     for (int i = 0; i < m_numChannels; i++)
         m_channels[i]->Delete(startIdx, endIdx);
 
-    m_cachedLength = m_channels[0]->GetLength();
+    m_cachedLength = -1;
 }
 
 
@@ -101,6 +101,8 @@ int Sound::Insert(int64_t startIdx, Sound *sound)
         SoundChannel *dstChan = m_channels[i];
         dstChan->Insert(startIdx, srcChan);
     }
+
+    m_cachedLength = -1;
 
     return ERROR_NO_ERROR;
 }
