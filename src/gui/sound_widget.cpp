@@ -129,6 +129,23 @@ void SoundWidget::RenderWaveform(DfBitmap *bmp, double vZoomRatio)
         HLine(bmp, m_left, yMid, m_width, Colour(255, 255, 255, 60));
         HLine(bmp, m_left, yMid + 32767 * vZoomRatio, m_width, Colour(255, 255, 255, 60));
     }
+
+#if 0
+    // Render block boundaries
+    SoundChannel *chan = m_sound->m_channels[0];
+    int64_t sampleIdx = GetSampleIndexFromScreenPos(0);
+    SoundChannel::SoundPos soundPos = chan->GetSoundPosFromSampleIdx(sampleIdx);
+    sampleIdx -= soundPos.m_sampleIdx;
+    while (1)
+    {
+        int x = GetScreenPosFromSampleIndex(sampleIdx);
+        if (x > m_width)
+            break;
+        VLine(bmp, x, m_top, 100, g_colourWhite);
+        sampleIdx += chan->m_blocks[soundPos.m_blockIdx]->m_len;
+        soundPos.m_blockIdx++;
+    }
+#endif
 }
 
 
