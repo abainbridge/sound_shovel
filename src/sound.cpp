@@ -303,6 +303,7 @@ bool Sound::SaveWav(BinaryStreamWriter *f, int64_t startIdx, int64_t endIdx)
     while (samplesLeftToOutput > 0)
     {
         int len = m_channels[0]->m_blocks[pos.m_blockIdx]->m_len;
+        len -= pos.m_sampleIdx;
         if (len > samplesLeftToOutput)
             len = samplesLeftToOutput;
 
@@ -312,11 +313,13 @@ bool Sound::SaveWav(BinaryStreamWriter *f, int64_t startIdx, int64_t endIdx)
             SampleBlock *block = chan->m_blocks[pos.m_blockIdx];
 
             for (size_t i = 0; i < len; i++)
-                buf[i * m_numChannels + chan_idx] = block->m_samples[i];
+                buf[i * m_numChannels + chan_idx] = block->m_samples[pos.m_sampleIdx + i];
         }
 
         f->WriteBytes((char *)buf, len * BYTES_PER_GROUP);
         samplesLeftToOutput -= len;
+        pos.m_blockIdx++;
+        pos.m_sampleIdx = 0;
     }
 
     delete[] buf;
