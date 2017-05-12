@@ -101,12 +101,15 @@ void SoundChannel::Insert(int64_t dstIdx, SoundChannel *src)
     // Make a gap.
     int firstBlockToMoveIdx = dstPos.m_blockIdx + 1;
     int firstIndexAfterMove = firstBlockToMoveIdx + src->m_blocks.Size() + 1;
-    for (int i = 0; i < numBlocksToMove; i++)
+    for (int i = numBlocksToMove - 1; i > -1; i--)
         m_blocks[firstIndexAfterMove + i] = m_blocks[firstBlockToMoveIdx + i];
 
     // Insert blocks from src into the gap.
     for (int i = 0; i < src->m_blocks.Size(); i++)
+    {
+        src->m_blocks[i]->RecalcLuts();
         m_blocks[firstBlockToMoveIdx + i] = src->m_blocks[i];
+    }
 
     // Split the block we inserted into.
     SampleBlock *blockToSplit = m_blocks[dstPos.m_blockIdx];
