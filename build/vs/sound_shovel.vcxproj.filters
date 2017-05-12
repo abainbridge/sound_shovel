@@ -39,9 +39,6 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\keyboard_shortcuts.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\cursor_manager.cpp">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\drawing_primitives.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
@@ -69,12 +66,6 @@
     <ClCompile Include="..\..\src\df_lib_plus_plus\gui\menu.cpp">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\gui\app_gui_manager.cpp">
-      <Filter>gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.cpp">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\gui\sound_widget.cpp">
       <Filter>gui</Filter>
     </ClCompile>
@@ -86,6 +77,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\df_lib_plus_plus\clipboard.cpp">
       <Filter>df_lib_plus_plus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gui\app_gui.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\gui_base.cpp">
+      <Filter>df_lib_plus_plus\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\df_lib_plus_plus\gui\mouse_cursor.cpp">
+      <Filter>df_lib_plus_plus\gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,9 +156,6 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\keyboard_shortcuts.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\cursor_manager.h">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\drawing_primitives.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
@@ -186,12 +183,6 @@
     <ClInclude Include="..\..\src\df_lib_plus_plus\gui\menu.h">
       <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\gui\app_gui_manager.h">
-      <Filter>gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_manager_base.h">
-      <Filter>df_lib_plus_plus\gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\gui\sound_widget.h">
       <Filter>gui</Filter>
     </ClInclude>
@@ -203,6 +194,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\df_lib_plus_plus\clipboard.h">
       <Filter>df_lib_plus_plus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gui\app_gui.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\gui_base.h">
+      <Filter>df_lib_plus_plus\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\df_lib_plus_plus\gui\mouse_cursor.h">
+      <Filter>df_lib_plus_plus\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
