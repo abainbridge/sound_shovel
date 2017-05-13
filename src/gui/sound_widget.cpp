@@ -186,9 +186,9 @@ SoundWidget::SoundWidget(Widget *parent)
     m_displayMaxes = NULL;
 
     Close();
-    Open("c:/users/andy/desktop/andante.wav");
-//     m_selectionStart = 2e6;
-//     m_selectionEnd = 4e6;
+//     Open("c:/users/andy/desktop/andante.wav");
+//     m_selectionStart = 3e6;
+//     m_selectionEnd = 3.3e6;
     m_selecting = false;
 
     g_soundSystem->PlaySound(this);
