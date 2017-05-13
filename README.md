@@ -17,3 +17,8 @@ USAGE:
 * Scroll with middle mouse drag or cursor/left right.
 * Page Up/Down and Home and End do stuff too.
 * Copy, Paste and Save might work too, if you are lucky.
+
+BUILDING:
+
+* Builds with Visual Studio. Community edition should be fine.
+* Depends on https://github.com/abainbridge/deadfrog-lib. If you git clone deadfrog-lib and sound_shovel into the same parent folder, then it should build without having to modify the VS project file.
