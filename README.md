@@ -1,3 +1,5 @@
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=-xVune0NEsA" target="_blank"><img src="http://img.youtube.com/vi/-xVune0NEsA/0.jpg" alt="Sound Shovel Demo Video" width="333" height="200" border="1" /></a>
+
 # Sound Shovel
 A simple, fast, light-weight sound editor.
 
