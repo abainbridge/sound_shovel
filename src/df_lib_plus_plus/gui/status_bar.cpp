@@ -49,7 +49,7 @@ void StatusBar::ShowMessage(char const *fmt, ...)
     va_list ap;
     va_start(ap, fmt);
     _vsnprintf(m_messageBuffer, MAX_MESSAGE_LEN, fmt, ap);
-	m_messageStartTime = DfGetTime();
+	m_messageStartTime = GetRealTime();
 	m_messageIsError = false;
 }
 
@@ -59,7 +59,7 @@ void StatusBar::ShowError(char const *fmt, ...)
     va_list ap;
     va_start (ap, fmt);
     _vsnprintf(m_messageBuffer, MAX_MESSAGE_LEN, fmt, ap);
-	m_messageStartTime = DfGetTime();
+	m_messageStartTime = GetRealTime();
 	m_messageIsError = true;
 }
 
@@ -82,7 +82,7 @@ void StatusBar::SetRightString(char const *fmt, ...)
 
 void StatusBar::Advance()
 {
-	if (DfGetTime() > (m_messageStartTime + 1.0f))
+	if (GetRealTime() > (m_messageStartTime + 1.0f))
 	{
 		if (g_input.lmbUnClicked || g_input.mmbUnClicked || g_input.rmbUnClicked)
 		{
@@ -90,7 +90,7 @@ void StatusBar::Advance()
 		}
 	}
 
-	if (DfGetTime() > m_messageStartTime + 10.0f)
+	if (GetRealTime() > m_messageStartTime + 10.0f)
 	{
 		m_messageBuffer[0] = '\0';
 	}

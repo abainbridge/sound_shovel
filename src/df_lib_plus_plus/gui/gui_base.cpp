@@ -51,7 +51,7 @@ GuiBase::GuiBase()
     g_keyboardShortcutManager = new KeyboardShortcutManager("data/config_keys.txt");
 
     SetColours();
-    m_propFont = DfCreateFont("Tahoma", 8, 5);
+    m_propFont = FontCreate("Tahoma", 8, 5);
     ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
 
     m_aboutString = "";

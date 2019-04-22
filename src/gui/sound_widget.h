@@ -12,7 +12,7 @@
 #define SOUND_VIEW_NAME "SoundWidget"
 
 
-struct DfBitmap;
+typedef struct _DfBitmap DfBitmap;
 class Sound;
 
 

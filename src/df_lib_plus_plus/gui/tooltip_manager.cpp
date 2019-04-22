@@ -24,7 +24,7 @@ void TooltipManager::Advance()
 // 	if (mx < m_x || mx > (m_x + m_w) || my < m_y || my > (m_y+m_h))
 // 		m_buf[0] = '\0';
 	if (abs(g_input.mouseVelX) > 1 || abs(g_input.mouseVelY) > 1)
-		m_showTime = DfGetTime() + 1.0f;
+		m_showTime = GetRealTime() + 1.0f;
 }
 
 
@@ -36,7 +36,7 @@ void TooltipManager::Render()
 
 	if (m_buf[0] != '\0')
 	{
-		float now = DfGetTime();
+		float now = GetRealTime();
 		if (now > m_showTime)
 		{
 			int h = g_defaultFont->charHeight;
