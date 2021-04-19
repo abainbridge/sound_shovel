@@ -41,7 +41,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         {
             SleepMillisec(1);
 
-            InputManagerAdvance();
+            InputPoll();
             g_gui->Advance();
 
             if (g_gui->m_exitAtEndOfFrame)
