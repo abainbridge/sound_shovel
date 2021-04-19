@@ -6,11 +6,11 @@
 #include "sound_system.h"
 
 // Contrib headers
+#include "fonts/df_mono.h"
 #include "gui/file_dialog.h"
 #include "gui/widget_history.h"
 #include "df_bitmap.h"
 #include "df_time.h"
-#include "df_input.h"
 #include "df_font.h"
 #include "df_window.h"
 
@@ -26,7 +26,7 @@
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     CreateWin(1000, 600, WT_WINDOWED, APPLICATION_NAME);
-    g_defaultFont = FontCreate("Lucida Console", 10, 4);
+    g_defaultFont = LoadFontFromMemory(deadfrog_mono_7x13, sizeof(deadfrog_mono_7x13));
 
     g_soundSystem = new SoundSystem;
 

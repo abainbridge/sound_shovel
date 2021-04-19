@@ -14,9 +14,9 @@
 #include "gui/widget_history.h"
 
 // Contrib headers
+#include "fonts/df_prop.h"
 #include "df_bitmap.h"
 #include "df_colour.h"
-#include "df_input.h"
 #include "df_message_dialog.h"
 #include "df_font.h"
 #include "df_window.h"
@@ -51,8 +51,7 @@ GuiBase::GuiBase()
     g_keyboardShortcutManager = new KeyboardShortcutManager("data/config_keys.txt");
 
     SetColours();
-    m_propFont = FontCreate("Tahoma", 8, 5);
-    ReleaseAssert((int)m_propFont, "Couldn't load font 'Tahoma'");
+    m_propFont = LoadFontFromMemory(deadfrog_prop_7x13, sizeof(deadfrog_prop_7x13));
 
     m_aboutString = "";
     m_highlightFocussedWidget = false;

@@ -25,7 +25,6 @@ weird:
 #include "gui/keyboard_shortcuts.h"
 
 // Contrib headers
-#include "df_input.h"
 #include "df_bitmap.h"
 #include "df_font.h"
 #include "df_window.h"

@@ -10,7 +10,7 @@
 #include "gui/gui_base.h"
 
 // Contrib headers
-#include "df_input.h"
+#include "df_window.h"
 
 // Standard headers
 #include <ctype.h>
@@ -267,7 +267,7 @@ void KeyboardShortcutManager::Advance()
                 if (!(shortcut->m_flags & KeyboardShortcut::PASS_THROUGH))
                 {
                     g_input.keyDowns[shortcut->m_key] = 0;
-                    UntypeKey(shortcut->m_key);
+//                    UntypeKey(shortcut->m_key);	// TODO, fix this.
                 }
 
 				// Send the command...

@@ -9,7 +9,6 @@
 #include "gui/widget_history.h"
 
 // Contrib headers
-#include "df_input.h"
 #include "df_window.h"
 
 // Standard headers

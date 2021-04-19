@@ -2,7 +2,6 @@
 #include "mouse_cursor.h"
 
 // Contrib headers
-#include "df_input.h"
 #include "df_window.h"
 
 // Platform headers
