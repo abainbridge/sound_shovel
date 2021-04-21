@@ -387,11 +387,17 @@ void SoundWidget::Advance()
     //
     // Take mouse input
 
-    double const ZOOM_INCREMENT = 1.2;
-    if (g_input.mouseVelZ < 0)
-        m_targetHZoomRatio *= ZOOM_INCREMENT;
-    else if (g_input.mouseVelZ > 0)
-        m_targetHZoomRatio /= ZOOM_INCREMENT;
+    double const ZOOM_INCREMENT = 1.3;
+    if (g_input.mouseVelZ < 0) {
+        for (int i = 0; i < -g_input.mouseVelZ; i++) {
+            m_targetHZoomRatio *= ZOOM_INCREMENT;
+        }
+    }
+    else if (g_input.mouseVelZ > 0) {
+        for (int i = 0; i < g_input.mouseVelZ; i++) {
+            m_targetHZoomRatio /= ZOOM_INCREMENT;
+        }
+    }
 
     if (g_input.mmb)
     {
@@ -461,12 +467,12 @@ void SoundWidget::Advance()
     // Do physics
 
     // Zoom
-    double zoomBlendFactor = advanceTime * 8.0;
+    double zoomBlendFactor = advanceTime * 18.0;
     m_hZoomRatio = (1.0 - zoomBlendFactor) * m_hZoomRatio + zoomBlendFactor * m_targetHZoomRatio;
 
     // H offset
     {
-        double factor1 = 3.0 * advanceTime;
+        double factor1 = 10.0 * advanceTime;
         double factor2 = 1.0 - factor1;
         m_hOffset = factor2 * m_hOffset + factor1 * m_targetHOffset;
     }

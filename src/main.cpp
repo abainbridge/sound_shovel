@@ -18,10 +18,6 @@
 #define NOMINMAX
 #include <windows.h>
 
-// Standard headers
-#include <algorithm>
-#include <stdint.h>
-
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -34,26 +30,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     g_gui = new AppGui;
     g_gui->Initialise();
 
-    while (1)
+    while (!g_gui->m_exitAtEndOfFrame)
     {
-        g_gui->m_canSleep = true;
-        for (int i = 0; i < 500 && g_gui->m_canSleep; i++)
-        {
-            SleepMillisec(1);
-
-            InputPoll();
-            g_gui->Advance();
-
-            if (g_gui->m_exitAtEndOfFrame)
-                return 0;
-
-            g_soundSystem->Advance();
-        }
+        InputPoll();
+        g_gui->Advance();
+        g_soundSystem->Advance();
 
         BitmapClear(g_window->bmp, Colour(44, 51, 59));
         g_gui->Render();
 
         UpdateWin();
+        WaitVsync();
     }
 
     return 0;
